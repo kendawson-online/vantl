@@ -1,0 +1,6 @@
+# Ignore Composer vendor directories
+server-tools/vendor/
+vendor/
+
+# OS files
+.DS_Store
