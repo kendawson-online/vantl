@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Timeline JSON Converter - Upload</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:20px;}
+    form{max-width:720px}
+    label{display:block;margin:8px 0 4px}
+    input[type=text],input[type=file],select{width:100%;padding:8px}
+    button{margin-top:12px;padding:8px 12px}
+    pre{background:#f6f8fa;padding:12px;border:1px solid #ddd;overflow:auto}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+  </style>
+</head>
+<body>
+  <h1>Upload Spreadsheet / CSV</h1>
+  <form id="uploadForm" method="POST" action="upload_handler.php" enctype="multipart/form-data">
+    <label>File (CSV or XLS/XLSX)</label>
+    <input type="file" name="file" id="fileInput" accept=".csv,.xls,.xlsx" />
+
+    <label>Or remote URL (CSV or Google Sheets)</label>
+    <input type="text" name="url" id="urlInput" placeholder="https://..." />
+
+    <!-- Metadata fields removed: all configuration should come from the uploaded spreadsheet -->
+
+    <button type="submit">Convert and Preview JSON</button>
+  </form>
+
+  <h2>Result</h2>
+  <div id="result">
+    <p id="status">No request yet.</p>
+    <pre id="jsonOut" style="display:none"></pre>
+    <p id="actions" style="display:none">
+      <a id="downloadLink" href="#">Download JSON</a>
+    </p>
+  </div>
+
+  <!-- This form submits to server/upload_handler.php and will show a Done page with a download link. -->
+</body>
+</html>
+</body>
+</html>

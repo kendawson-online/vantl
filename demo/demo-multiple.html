@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vanilla JS Timeline - Multiple Timelines Demo</title>
+    <link rel="stylesheet" href="css/timeline.css">
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; padding: 20px; background: #f5f5f5; }
+      .wrapper { max-width: 1200px; margin: 0 auto; }
+      h1 { text-align: center; margin-bottom: 40px; }
+      .timeline-section {
+        background: #fff;
+        padding: 30px;
+        margin-bottom: 60px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      .timeline-section h2 {
+        margin-top: 0;
+        margin-bottom: 30px;
+        color: #333;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <h1>Multiple Independent Timelines</h1>
+      
+      <div class="timeline-section">
+        <!-- Timeline heading will be generated from JSON: "This Is Another Timeline" -->
+        <div id="timeline1" class="timeline" data-json-config="sample2.json"></div>
+      </div>
+
+      <div class="timeline-section">
+        <!-- Timeline heading will be generated from JSON: "This Is Another Timeline" -->
+        <div id="timeline2" class="timeline" data-json-config="sample1.json"></div>
+      </div>
+    </div>
+
+    <script src="js/timeline.js"></script>
+
+  </body>
+</html>

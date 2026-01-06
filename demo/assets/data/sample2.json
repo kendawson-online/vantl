@@ -1,0 +1,72 @@
+{
+  "timelineName": "Horizontal Timeline from JSON Config",
+  "layoutMode": "horizontal",
+  "visibleItems": 4,
+  "minWidth": 600,
+  "nodeColor": "#04773B",
+  "lineColor": "#22333B",
+  "navColor": "#07C563",  
+  "lastupdated": "2026-01-05T15:43:01.374Z",  
+  "nodes": [
+    {
+      "id": 1,
+      "title": "Mountain Vista",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. This is some additional text to test the truncation feature which should show a more button when text exceeds the maximum length.",
+      "image": "assets/img/sample1.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Ocean Sunset",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+      "image": "assets/img/sample2.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Forest Path",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Extended content to demonstrate the text truncation and scrolling functionality that maintains the timeline layout integrity.",
+      "image": "assets/img/sample3.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Desert Dunes",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+      "image": "assets/img/sample4.jpg"
+    },
+    {
+      "id": 5,
+      "title": "City Lights",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "image": "assets/img/sample5.jpg"
+    },
+{
+      "id": 6,
+      "title": "Peaceful Meadow",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. This is some additional text to test the truncation feature which should show a more button when text exceeds the maximum length.",
+      "image": "assets/img/sample6.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Surfing Wave",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+      "image": "assets/img/sample7.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Rough Texture",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Extended content to demonstrate the text truncation and scrolling functionality that maintains the timeline layout integrity.",
+      "image": "assets/img/sample8.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Shiny Steel",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+      "image": "assets/img/sample9.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Green Tape",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "image": "assets/img/sample10.jpg"
+    }    
+  ]
+}

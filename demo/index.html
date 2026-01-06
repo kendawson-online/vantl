@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vanilla JS Timeline</title>
+    <link rel="stylesheet" href="../src/css/timeline.css">
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; padding: 20px; }
+      .wrapper { max-width: 1000px; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <div id="vertimeline" class="timeline" 
+        data-mode="horizontal" 
+        data-visible-items="5" 
+        data-force-vertical-mode="600"
+      >
+        <div class="timeline__wrap">
+          <div class="timeline__items"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="../src/js/timeline.js"></script>
+    <script>
+      // initialize on DOMContentLoaded
+      document.addEventListener('DOMContentLoaded', function () {
+        loadDataFromJson('assets/data/sample1.json', '.timeline');
+      });
+    </script>
+
+  </body>
+</html>
