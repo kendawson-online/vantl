@@ -1,8 +1,8 @@
 {
   "timelineName": "Horizontal Timeline from JSON Config",
   "layoutMode": "horizontal",
-  "visibleItems": 4,
-  "minWidth": 600,
+  "visibleItems": 5,
+  "minWidth": 700,
   "nodeColor": "#04773B",
   "lineColor": "#22333B",
   "navColor": "#07C563",  

@@ -1,6 +1,7 @@
 # Ignore Composer vendor directories
 server-tools/vendor/
 vendor/
+demo/test.html
 
 # OS files
 .DS_Store

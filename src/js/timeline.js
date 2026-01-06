@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------
 
 // Character limit in nodes before truncation
-var charlimit = 150; 
+var charlimit = 100; 
 
 function createItemNode(item) {
 
@@ -93,7 +93,58 @@ function createItemNode(item) {
     content.appendChild(wrapper);
   }
   itemEl.appendChild(content);
+  // Toggle expanded state on content click (ignore clicks on the "more" button)
+  content.addEventListener('click', function(e) {
+    if (e.target.closest && e.target.closest('.timeline__more-btn')) return;
+    if (itemEl.classList.contains('timeline__item--expanded')) {
+      collapseItem(itemEl);
+    } else {
+      expandItem(itemEl);
+    }
+  });
+
   return itemEl;
+}
+
+// Expand a timeline item
+function expandItem(itemEl) {
+  // Show full text if truncated
+  var para = itemEl.querySelector('.timeline__text');
+  if (para) {
+    var shortText = para.querySelector('.timeline__text-short');
+    var fullText = para.querySelector('.timeline__text-full');
+    if (shortText && fullText) {
+      shortText.style.display = 'none';
+      fullText.style.display = '';
+    }
+  }
+
+  itemEl.classList.add('timeline__item--expanded');
+  document.body.classList.add('timeline--modal-open');
+}
+
+// Collapse expanded timeline item
+function collapseItem(itemEl) {
+  var para = itemEl.querySelector('.timeline__text');
+  if (para) {
+    var shortText = para.querySelector('.timeline__text-short');
+    var fullText = para.querySelector('.timeline__text-full');
+    if (shortText && fullText) {
+      shortText.style.display = '';
+      fullText.style.display = 'none';
+    }
+  }
+
+  itemEl.classList.remove('timeline__item--expanded');
+  document.body.classList.remove('timeline--modal-open');
+}
+
+// Collapse any expanded items on the page
+function collapseAllExpanded() {
+  var expanded = document.querySelectorAll('.timeline__item--expanded');
+  [].forEach.call(expanded, function(el) {
+    collapseItem(el);
+  });
 }
 
 function applyTimelineColors(container, config) {
@@ -360,11 +411,6 @@ function clearTimelineCache(timelineId) {
   }
 }
 
-// Expose clearTimelineCache globally for developer convenience
-if (typeof window !== 'undefined') {
-  window.clearTimelineCache = clearTimelineCache;
-}
-
 function handleDeepLinking(containerSelector) {
   var urlParams = new URLSearchParams(window.location.search);
   var timelineId = urlParams.get('timeline');
@@ -616,6 +662,17 @@ function timeline(collection, options) {
       settings.startIndex = 0;
     }
 
+    // Collapse expanded nodes when clicking elsewhere on this timeline
+    timelineEl.addEventListener('click', function(e) {
+      var expanded = document.querySelector('.timeline__item--expanded');
+      if (!expanded) return;
+      // if click is inside the expanded content, ignore
+      var expandedContent = expanded.querySelector('.timeline__content');
+      if (expandedContent && expandedContent.contains(e.target)) return;
+      // otherwise collapse
+      collapseAllExpanded();
+    });
+
     timelines.push({
       timelineEl,
       wrap,
@@ -732,34 +789,6 @@ function timeline(collection, options) {
     horizontalDivider.className = 'timeline-divider';
     horizontalDivider.style.top = `${topPosition}px`;
     tl.timelineEl.appendChild(horizontalDivider);
-    
-    // Add progress indicator overlay
-    const progressBar = document.createElement('span');
-    progressBar.className = 'timeline-progress';
-    progressBar.style.top = `${topPosition}px`;
-    tl.timelineEl.appendChild(progressBar);
-    
-    // Initialize progress
-    updateProgress(tl, currentIndex);
-  }
-  
-  // Update progress indicator
-  function updateProgress(tl, index) {
-    const progressBar = tl.timelineEl.querySelector('.timeline-progress');
-    if (!progressBar) return;
-    
-    // Calculate progress width based on current index
-    const itemWidth = tl.items[0].offsetWidth;
-    const progressWidth = (index + 1) * itemWidth;
-    progressBar.style.width = `${progressWidth}px`;
-    
-    // Mark items as completed
-    for (let i = 0; i <= index; i++) {
-      tl.items[i].classList.add('timeline__item--completed');
-    }
-    for (let i = index + 1; i < tl.items.length; i++) {
-      tl.items[i].classList.remove('timeline__item--completed');
-    }
   }
 
   // Calculate the new position of the horizontal timeline
@@ -779,6 +808,8 @@ function timeline(collection, options) {
     [].forEach.call(navArrows, (arrow) => {
       arrow.addEventListener('click', function(e) {
         e.preventDefault();
+        // collapse any expanded node before navigating
+        collapseAllExpanded();
         currentIndex = this.classList.contains('timeline-nav-button--next') ? (currentIndex += moveItems) : (currentIndex -= moveItems);
         if (currentIndex === 0 || currentIndex < 0) {
           currentIndex = 0;
@@ -793,7 +824,6 @@ function timeline(collection, options) {
           arrowNext.disabled = false;
         }
         timelinePosition(tl);
-        updateProgress(tl, currentIndex);
       });
     });
   }
@@ -915,4 +945,9 @@ if (window.jQuery) {
       return this;
     };
   })(window.jQuery);
+}
+
+// Expose clearTimelineCache globally for developer convenience
+if (typeof window !== 'undefined') {
+  window.clearTimelineCache = clearTimelineCache;
 }
