@@ -3,39 +3,102 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla JS Timeline</title>
-    <link rel="stylesheet" href="../src/css/timeline.css">
-    <style>
-      body { font-family: Arial, Helvetica, sans-serif; }
-      .wrapper { max-width: 1800px; margin: 0 auto; }
-    </style>
+    <title>Vanilla JS Timeline - Demos</title>
+    <link rel="stylesheet" href="assets/css/demo.css">
+    <script src="assets/js/demo.js"></script>
   </head>
   <body>
 
     <div class="wrapper">
 
-      <div id="horztimeline" 
-        data-json-config="assets/data/vertical.json" 
-        data-move-items="1" 
-        data-visible-items="4" 
-        data-mode="vertical" 
-        class="timeline"
-      >
-        <div class="timeline__wrap">
-          <div class="timeline__items"></div>
+        <h1 style="margin-bottom: 65px;">Vanilla JS Timeline Demos</h1>
+
+        <div class="cardlayout">
+
+          <div class="card">
+            <div class="container">
+              <h3>Using a JSON File</h3>
+              <img src="assets/img/idx_card_json.png" width="275"/>
+              <p>Learn how to create timelines using an external JSON file to save your data.</p>
+              <p>
+                <button class="btn success" onclick="loadUrl('json/horizontal/')">Horizontal</button>
+                <button class="btn success" onclick="loadUrl('json/vertical/')">Vertical</button>
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="container">
+              <h3>Inline Data Attributes</h3>
+              <img src="assets/img/idx_card_inline.png" width="275"/>
+              <p>Learn how to use inline data attributes in your HTML page element to create a timeline. You still have to load Javascript/CSS library to use.</p>
+              <p>
+                <button class="btn info" onclick="loadUrl('inline/horizontal/')">Horizontal</button>
+                <button class="btn info" onclick="loadUrl('inline/vertical/')">Vertical</button>
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="container">
+              <h3>jQuery Usage</h3>
+              <img src="assets/img/idx_card_jquery.png" width="275"/>
+              <p>Learn how to use Jquery to initialize your timeline. (Assumes you have the jQuery library loaded)</p>
+              <p>
+                <button class="btn warning" onclick="loadUrl('jquery/horizontal/')">Horizontal</button>
+                <button class="btn warning" onclick="loadUrl('jquery/vertical/')">Vertical</button>
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="container">
+              <h3>Plain Javascript</h3>
+              <img src="assets/img/idx_card_js.png" width="275"/>
+              <p>Learn how to use plain vanilla Javascript to initialize your timeline</p>
+              <p>
+                <button class="btn success" onclick="loadUrl('javascript/horizontal/')">Horizontal</button>
+                <button class="btn success" onclick="loadUrl('javascript/vertical/')">Vertical</button>
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="container">
+              <h3>Deep Linking</h3>
+              <img src="assets/img/idx_card_deeplink.png" height="110"/>
+              <p>Learn how to create a link to a specific slide within the slideshow</p>
+              <p>
+                <button class="btn success" onclick="loadUrl('deeplink.html')">Deep Linking</button>
+              </p>
+            </div>
+          </div>  
+          
+          <div class="card">
+            <div class="container">
+              <h3>Multiple Slideshows</h3>
+              <img src="assets/img/two-timelines.png" height="110"/>
+              <p>Learn how to create multiple slideshows on a single page</p>
+              <p>
+                <button class="btn success" onclick="loadUrl('multiple.html')">Multiple Slideshows</button>
+              </p>
+            </div>
+          </div>       
+          
+          <div class="card">
+            <div class="container">
+              <h3>Advanced Usage</h3>
+              <img src="assets/img/advanced.jpg" height="110"/>
+              <p>Use a combination of methods and Javascript to generate timelines. <span class="txtwarning">Requires knowledge of Javascript!</span></p>
+              <p>
+                <button class="btn danger" onclick="loadUrl('advanced.html')">Advanced Usage</button>
+              </p>
+            </div>
+          </div>             
+
         </div>
-      </div>
 
     </div>
 
-    <script src="../src/js/timeline.js"></script>
-
-    <!-- <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        loadDataFromJson('assets/data/horizontal.json', '.timeline');
-      });
-    </script> -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/showscreensize@1.1.0/sss.min.js"></script>
   </body>
 </html>

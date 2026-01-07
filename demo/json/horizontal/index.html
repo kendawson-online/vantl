@@ -3,21 +3,26 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla JS Timeline - Horizontal JSON Demo</title>
-    <link rel="stylesheet" href="css/timeline.css">
-    <style>
-      body { font-family: Arial, Helvetica, sans-serif; padding: 20px; background: #f5f5f5; }
-      .wrapper { max-width: 1200px; margin: 0 auto; }
-      h1 { text-align: center; margin-bottom: 60px; }
-    </style>
+    <title>Vanilla JS Timeline - JSON - Horizontal</title>
+     <!-- load timeline.css styles -->
+    <link rel="stylesheet" href="../../../src/css/timeline.css">
+    <!-- load demo specific styles -->
+    <link rel="stylesheet" href="../../assets/css/demo.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <div id="timeline1" class="timeline" data-json-config="sample2.json"></div>
-    </div>
 
-    <script src="js/timeline.js"></script>
+      <div id="horztimeline" class="timeline" data-json-config="../../assets/data/horizontal.json">
+        <div class="timeline__wrap">
+          <div class="timeline__items"></div>
+        </div>
+      </div>
+
+    </div>
+    
+    <!-- load timeline.js functions -->
+    <script src="../../../src/js/timeline.js"></script>
 
   </body>
 </html>

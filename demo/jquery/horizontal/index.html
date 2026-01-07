@@ -91,14 +91,16 @@
 
     <!-- load timeline.js functions -->
     <script src="../../../src/js/timeline.js"></script>
+    
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        jQuery('.timeline').timeline({
-            mode: 'horizontal',
-            visibleItems: 4,
-            forceVerticalMode: 600
+        // initialize the app with jQuery
+        jQuery(function () {
+            $('.timeline').timeline({
+                mode: 'horizontal',
+                visibleItems: 4,
+                forceVerticalMode: 600
+            });
         });
-      });
     </script>
 
   </body>

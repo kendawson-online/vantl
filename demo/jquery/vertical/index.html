@@ -91,14 +91,15 @@
 
     <!-- load timeline.js functions -->
     <script src="../../../src/js/timeline.js"></script>
+
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        // initialize app after document loads
-        jQuery('.timeline').timeline({
-            verticalStartPosition: 'left',
-            verticalTrigger: '150px'
+        // initialize the app with jQuery
+        jQuery(function () {
+            $('.timeline').timeline({
+                verticalStartPosition: 'left',
+                verticalTrigger: '150px'
+            });
         });
-      });
     </script>
 
   </body>
