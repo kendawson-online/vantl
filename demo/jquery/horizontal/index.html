@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vanilla JS Timeline - jQuery - Horizontal</title>
+    <!-- load timeline.css styles -->
+    <link rel="stylesheet" href="../../../src/css/timeline.css">
+    <!-- load demo specific styles -->
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <div id="jshoriz" class="timeline">
+        <div class="timeline__wrap">
+            <div id="tlitems" class="timeline__items">
+
+                <!-- Begin Timeline Items -->
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2001</h5>
+                        <p>Lorem ipsum dolor sit amet, qui <a href="#">minim</a> labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2002</h5>
+                        <p>Lorem ipsum <a href="#">dolor sit amet</a>, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2003</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2004</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2005</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim <span style="color:red;">labore adipisicing minim sint</span> cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2006</h5>
+                        <p>Lorem <b>ipsum dolor sit amet</b>, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2007</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2008</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore <span style="color:green; font-weight: bold;">adipisicing minim sint</span> cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2009</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <div class="timeline__item">
+                    <div class="timeline__content">
+                        <h5>2010</h5>
+                        <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    </div>
+                </div>
+                <!-- End Timeline Items -->
+
+            </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- load Jquery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- load timeline.js functions -->
+    <script src="../../../src/js/timeline.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        jQuery('.timeline').timeline({
+            mode: 'horizontal',
+            visibleItems: 4,
+            forceVerticalMode: 600
+        });
+      });
+    </script>
+
+  </body>
+</html>

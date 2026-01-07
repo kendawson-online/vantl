@@ -2,12 +2,17 @@
 // timeline.js - a vanilla JS app to display timelines
 // 
 // Originally created in 2018 by Mike Collins (https://github.com/squarechip/timeline)
-// Modified by Ken Dawson (https://github.com/kendawson-online) in 2026
-// Last updated: 01/06/26
+// modified by Ken Dawson (https://github.com/kendawson-online) in 2026
+// last updated: 01/05/26
 //
 // --------------------------------------------------------------------------
 
+// Character limits in nodes before truncation
+var charlimitWithImage = 105; 
+var charlimitWithoutImage = 175;
+
 function createItemNode(item) {
+
   var itemEl = document.createElement('div');
   itemEl.className = 'timeline__item';
   
@@ -16,16 +21,14 @@ function createItemNode(item) {
     itemEl.setAttribute('data-node-id', item.id);
   }
   
-  // Store the full item data for modal display
-  itemEl.setAttribute('data-modal-title', item.title || '');
-  itemEl.setAttribute('data-modal-content', item.content || '');
-  itemEl.setAttribute('data-modal-image', item.image || '');
-  if (item.html) {
-    itemEl.setAttribute('data-modal-html', item.html);
-  }
-  
   var content = document.createElement('div');
   content.className = 'timeline__content';
+  
+  // Mark content as having or not having an image for CSS targeting
+  var hasImage = !!item.image;
+  if (!hasImage) {
+    content.classList.add('timeline__content--no-image');
+  }
   
   // Add image if provided
   if (item.image) {
@@ -36,144 +39,134 @@ function createItemNode(item) {
     content.appendChild(img);
   }
   
-  // Create a text wrapper for stacked layout
-  var textWrapper = document.createElement('div');
-  
   if (item.title) {
     var title = document.createElement('h3');
     title.textContent = item.title;
-    textWrapper.appendChild(title);
+    content.appendChild(title);
   }
   
   if (item.content) {
+    // Use different character limits based on whether there's an image
+    var MAX_LENGTH = item.image ? charlimitWithImage : charlimitWithoutImage;
+    var contentText = item.content;
     var para = document.createElement('p');
-    // Truncate text at 105 characters for timeline display
-    var displayText = item.content;
-    if (displayText.length > 105) {
-      displayText = displayText.substring(0, 105) + '...';
+    para.className = 'timeline__text';
+    
+    if (contentText.length > MAX_LENGTH) {
+      // Create truncated version
+      var truncated = contentText.substring(0, MAX_LENGTH) + '...';
+      para.innerHTML = '<span class="timeline__text-short">' + truncated + '</span>' +
+                       '<span class="timeline__text-full" style="display:none;">' + contentText + '</span>';
+      
+      // Create more/less toggle button
+      var moreBtn = document.createElement('button');
+      moreBtn.className = 'timeline__more-btn';
+      moreBtn.textContent = 'more';
+      moreBtn.setAttribute('aria-expanded', 'false');
+      
+      moreBtn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var shortText = para.querySelector('.timeline__text-short');
+        var fullText = para.querySelector('.timeline__text-full');
+        var isExpanded = this.getAttribute('aria-expanded') === 'true';
+        
+        if (isExpanded) {
+          shortText.style.display = '';
+          fullText.style.display = 'none';
+          this.textContent = 'more';
+          this.setAttribute('aria-expanded', 'false');
+          para.classList.remove('timeline__text--expanded');
+        } else {
+          shortText.style.display = 'none';
+          fullText.style.display = '';
+          this.textContent = 'less';
+          this.setAttribute('aria-expanded', 'true');
+          para.classList.add('timeline__text--expanded');
+        }
+      };
+      
+      content.appendChild(para);
+      content.appendChild(moreBtn);
+    } else {
+      para.textContent = contentText;
+      content.appendChild(para);
     }
-    para.innerHTML = displayText;
-    textWrapper.appendChild(para);
   }
   
   // Optional: allow raw HTML if item.html is provided
   if (item.html) {
     var wrapper = document.createElement('div');
     wrapper.innerHTML = item.html;
-    textWrapper.appendChild(wrapper);
+    content.appendChild(wrapper);
   }
-  
-  content.appendChild(textWrapper);
-  
   itemEl.appendChild(content);
-  
-  // Add click handler to open modal
-  itemEl.addEventListener('click', function(e) {
-    e.preventDefault();
-    openTimelineModal(itemEl);
+  // Toggle expanded state on content click (ignore clicks on the "more" button)
+  content.addEventListener('click', function(e) {
+    if (e.target.closest && e.target.closest('.timeline__more-btn')) return;
+    if (itemEl.classList.contains('timeline__item--expanded')) {
+      collapseItem(itemEl);
+    } else {
+      // Collapse all other expanded items first
+      collapseAllExpanded();
+      expandItem(itemEl);
+    }
   });
-  
+
   return itemEl;
 }
 
-// Modal functionality
-var timelineModal = null;
-var timelineModalOverlay = null;
-
-function createTimelineModal() {
-  if (timelineModal) return; // Already created
-  
-  // Create overlay
-  timelineModalOverlay = document.createElement('div');
-  timelineModalOverlay.className = 'timeline-modal-overlay';
-  timelineModalOverlay.addEventListener('click', closeTimelineModal);
-  
-  // Create modal
-  timelineModal = document.createElement('div');
-  timelineModal.className = 'timeline-modal';
-  timelineModal.innerHTML = `
-    <button class="timeline-modal__close" aria-label="Close modal"></button>
-    <div class="timeline-modal__content">
-      <img class="timeline-modal__image" src="" alt="" style="display: none;">
-      <h2 class="timeline-modal__title"></h2>
-      <div class="timeline-modal__text"></div>
-      <hr class="timeline-modal__divider">
-      <button class="timeline-modal__close-bottom">Close</button>
-    </div>
-  `;
-  
-  // Close button handlers (top X button and bottom Close button)
-  var closeBtn = timelineModal.querySelector('.timeline-modal__close');
-  var closeBottomBtn = timelineModal.querySelector('.timeline-modal__close-bottom');
-  closeBtn.addEventListener('click', closeTimelineModal);
-  closeBottomBtn.addEventListener('click', closeTimelineModal);
-  
-  // Prevent clicks inside modal from closing it
-  timelineModal.addEventListener('click', function(e) {
-    e.stopPropagation();
-  });
-  
-  // Append to body
-  document.body.appendChild(timelineModalOverlay);
-  document.body.appendChild(timelineModal);
-  
-  // ESC key to close
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && timelineModal.classList.contains('timeline-modal-show')) {
-      closeTimelineModal();
+// Expand a timeline item
+function expandItem(itemEl) {
+  // Show full text if truncated
+  var para = itemEl.querySelector('.timeline__text');
+  if (para) {
+    var shortText = para.querySelector('.timeline__text-short');
+    var fullText = para.querySelector('.timeline__text-full');
+    if (shortText && fullText) {
+      shortText.style.display = 'none';
+      fullText.style.display = '';
     }
+  }
+  
+  // Hide the more button in expanded state
+  var moreBtn = itemEl.querySelector('.timeline__more-btn');
+  if (moreBtn) {
+    moreBtn.style.display = 'none';
+  }
+
+  itemEl.classList.add('timeline__item--expanded');
+  document.body.classList.add('timeline--modal-open');
+}
+
+// Collapse expanded timeline item
+function collapseItem(itemEl) {
+  var para = itemEl.querySelector('.timeline__text');
+  if (para) {
+    var shortText = para.querySelector('.timeline__text-short');
+    var fullText = para.querySelector('.timeline__text-full');
+    if (shortText && fullText) {
+      shortText.style.display = '';
+      fullText.style.display = 'none';
+    }
+  }
+  
+  // Show the more button in collapsed state
+  var moreBtn = itemEl.querySelector('.timeline__more-btn');
+  if (moreBtn) {
+    moreBtn.style.display = 'block';
+  }
+
+  itemEl.classList.remove('timeline__item--expanded');
+  document.body.classList.remove('timeline--modal-open');
+}
+
+// Collapse any expanded items on the page
+function collapseAllExpanded() {
+  var expanded = document.querySelectorAll('.timeline__item--expanded');
+  [].forEach.call(expanded, function(el) {
+    collapseItem(el);
   });
-}
-
-function openTimelineModal(itemEl) {
-  // Create modal if it doesn't exist
-  if (!timelineModal) {
-    createTimelineModal();
-  }
-  
-  // Get data from the clicked item
-  var title = itemEl.getAttribute('data-modal-title');
-  var content = itemEl.getAttribute('data-modal-content');
-  var image = itemEl.getAttribute('data-modal-image');
-  var html = itemEl.getAttribute('data-modal-html');
-  
-  // Populate modal
-  var modalTitle = timelineModal.querySelector('.timeline-modal__title');
-  var modalText = timelineModal.querySelector('.timeline-modal__text');
-  var modalImage = timelineModal.querySelector('.timeline-modal__image');
-  
-  modalTitle.textContent = title || '';
-  
-  if (image) {
-    modalImage.src = image;
-    modalImage.alt = title || '';
-    modalImage.style.display = 'block';
-  } else {
-    modalImage.style.display = 'none';
-  }
-  
-  if (html) {
-    modalText.innerHTML = html;
-  } else if (content) {
-    modalText.innerHTML = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
-  } else {
-    modalText.innerHTML = '';
-  }
-  
-  // Show modal
-  setTimeout(function() {
-    timelineModal.classList.add('timeline-modal-show');
-    timelineModalOverlay.classList.add('timeline-modal-show');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
-  }, 10);
-}
-
-function closeTimelineModal() {
-  if (timelineModal) {
-    timelineModal.classList.remove('timeline-modal-show');
-    timelineModalOverlay.classList.remove('timeline-modal-show');
-    document.body.style.overflow = ''; // Re-enable scrolling
-  }
 }
 
 function applyTimelineColors(container, config) {
@@ -719,8 +712,7 @@ function timeline(collection, options) {
   function setHeightandWidths(tl) {
     // Set widths of items and viewport
     function setWidths() {
-      // Use fixed width for horizontal timeline items
-      tl.itemWidth = 200; // Fixed width in pixels
+      tl.itemWidth = tl.wrap.offsetWidth / tl.settings.visibleItems;
       tl.items.forEach((item) => {
         item.style.width = `${tl.itemWidth}px`;
       });
@@ -773,11 +765,7 @@ function timeline(collection, options) {
 
   // Create and add arrow controls to horizontal timeline
   function addNavigation(tl) {
-    // Calculate actual visible items based on viewport width
-    const viewportWidth = tl.wrap.offsetWidth;
-    const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-    
-    if (tl.items.length > itemsVisible) {
+    if (tl.items.length > tl.settings.visibleItems) {
       const prevArrow = document.createElement('button');
       const nextArrow = document.createElement('button');
       const topPosition = tl.items[0].offsetHeight;
@@ -793,10 +781,9 @@ function timeline(collection, options) {
       prevArrow.innerHTML = createArrowSVG('left', arrowColor);
       nextArrow.innerHTML = createArrowSVG('right', arrowColor);
       
-      const maxIndex = Math.max(0, tl.items.length - itemsVisible);
       if (currentIndex === 0) {
         prevArrow.disabled = true;
-      } else if (currentIndex >= maxIndex) {
+      } else if (currentIndex === (tl.items.length - tl.settings.visibleItems)) {
         nextArrow.disabled = true;
       }
       tl.timelineEl.appendChild(prevArrow);
@@ -838,23 +825,13 @@ function timeline(collection, options) {
     const navArrows = tl.timelineEl.querySelectorAll('.timeline-nav-button');
     const arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
     const arrowNext = tl.timelineEl.querySelector('.timeline-nav-button--next');
-    
-    // Calculate max index based on actual visible width and fixed item width
-    const viewportWidth = tl.wrap.offsetWidth;
-    const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-    const maxIndex = Math.max(0, tl.items.length - itemsVisible);
-    
+    const maxIndex = tl.items.length - tl.settings.visibleItems;
     const moveItems = parseInt(tl.settings.moveItems, 10);
     [].forEach.call(navArrows, (arrow) => {
       arrow.addEventListener('click', function(e) {
         e.preventDefault();
-        e.stopPropagation();
-        
-        // Don't allow navigation if button is disabled
-        if (this.disabled) {
-          return;
-        }
-        
+        // collapse any expanded node before navigating
+        collapseAllExpanded();
         currentIndex = this.classList.contains('timeline-nav-button--next') ? (currentIndex += moveItems) : (currentIndex -= moveItems);
         if (currentIndex === 0 || currentIndex < 0) {
           currentIndex = 0;

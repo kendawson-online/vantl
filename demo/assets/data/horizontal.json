@@ -4,14 +4,14 @@
   "visibleItems": 5,
   "minWidth": 700,
   "nodeColor": "#04773B",
-  "lineColor": "#22333B",
+  "lineColor": "#04773B",
   "navColor": "#07C563",  
   "lastupdated": "2026-01-05T15:43:01.374Z",  
   "nodes": [
     {
       "id": 1,
       "title": "Mountain Vista",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. This is some additional text to test the truncation feature which should show a more button when text exceeds the maximum length.",
+      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. This is some additional text to test the truncation feature which should show a more button when text exceeds the maximum length.<br/><br/>",
       "image": "assets/img/sample1.jpg"
     },
     {

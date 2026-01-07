@@ -346,7 +346,7 @@ Data attribute
 
 `visibleItems`
 
-**If using the timeline in horizontal mode, define how many items are visible in the viewport**
+**For horizontal mode: Controls the scrolling range and when navigation arrows appear. Note: With fixed-width timeline items, the actual number of visible items is determined by the container width**
 
 JavaScript/jQuery
 

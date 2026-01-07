@@ -1,9 +1,9 @@
 {
   "timelineName": "Vertical Timeline - JSON Config",
   "layoutMode": "vertical",
-  "maxWidth": 500,
+  "maxWidth": 550,
   "nodeColor": "#04773B",
-  "lineColor": "#22333B",
+  "lineColor": "#04773B",
   "navColor": "#07C563",
   "lastupdated": "2026-01-05T15:43:01.374Z",
   "nodes": [
