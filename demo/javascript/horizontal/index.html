@@ -15,7 +15,7 @@
 
       <div id="jshoriz" class="timeline">
         <div class="timeline__wrap">
-            <div id="tlitems" class="timeline__items">
+            <div class="timeline__items">
 
                 <!-- Begin Timeline Items -->
                 <div class="timeline__item">
@@ -94,8 +94,7 @@
         timeline(document.querySelectorAll('.timeline'), {
             mode: 'horizontal',
             visibleItems: 4,
-            forceVerticalMode: 600,
-            moveItems: 1
+            minWidth: 600
         });
       });
     </script>

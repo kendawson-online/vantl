@@ -3,9 +3,27 @@
 // 
 // Originally created in 2018 by Mike Collins (https://github.com/squarechip/timeline)
 // Modified by Ken Dawson (https://github.com/kendawson-online) in 2026
-// Last updated: 01/06/26
+// Last updated: 01/07/26
 //
 // --------------------------------------------------------------------------
+
+// Auto-detect the timeline.js script location to build correct image paths
+var timelineBasePath = (function() {
+  var scripts = document.getElementsByTagName('script');
+  for (var i = 0; i < scripts.length; i++) {
+    var src = scripts[i].src;
+    if (src && src.indexOf('timeline.js') !== -1) {
+      // Extract directory path and replace /js with /images
+      var path = src.substring(0, src.lastIndexOf('/'));
+      return path.replace('/js', '/images');
+    }
+  }
+  // Fallback if script detection fails
+  return '../src/images';
+})();
+
+// Minimum time (ms) to keep the loading spinner visible
+var timelineLoaderMinMs = 1300;
 
 function createItemNode(item) {
   var itemEl = document.createElement('div');
@@ -33,6 +51,15 @@ function createItemNode(item) {
     img.src = item.image;
     img.className = 'timeline__image';
     img.alt = item.title || '';
+    
+    // Handle broken images gracefully
+    img.onerror = function() {
+      console.error('Timeline: The image "' + item.image + '" could not be loaded. Please check the path.');
+      this.src = timelineBasePath + '/missing-image.svg';
+      this.alt = 'Image not found';
+      this.title = 'Original image: ' + item.image;
+    };
+    
     content.appendChild(img);
   }
   
@@ -72,8 +99,150 @@ function createItemNode(item) {
     e.preventDefault();
     openTimelineModal(itemEl);
   });
+  // mark as bound so delegation doesn't double-bind
+  itemEl.setAttribute('data-modal-bound', '1');
   
   return itemEl;
+}
+
+// Error handling utility
+function showTimelineError(container, errorType, details) {
+  if (!container) return;
+  
+  var errorMessages = {
+    'json-load': {
+      title: 'Timeline Data Could Not Be Loaded',
+      message: 'The timeline data failed to load. This could be due to a network error or an incorrect file path.',
+      solution: 'Please check that the data-json-config path is correct and the file is accessible.'
+    },
+    'json-parse': {
+      title: 'Invalid Timeline Data',
+      message: 'The timeline data file exists but contains invalid JSON.',
+      solution: 'Please validate your JSON using a tool like jsonlint.com and ensure it follows the correct schema.'
+    },
+    'missing-element': {
+      title: 'Timeline Element Not Found',
+      message: 'The required timeline container element could not be found on the page.',
+      solution: 'Ensure your HTML includes a container with the class "timeline" and the correct selector.'
+    },
+    'invalid-config': {
+      title: 'Invalid Configuration',
+      message: 'One or more timeline configuration options are invalid.',
+      solution: 'Check your data attributes or JavaScript options and ensure they match the expected format.'
+    }
+  };
+  
+  var errorInfo = errorMessages[errorType] || {
+    title: 'Timeline Error',
+    message: 'An unexpected error occurred while initializing the timeline.',
+    solution: 'Please check the browser console for more details.'
+  };
+  
+  hideTimelineLoader(container);
+
+  container.innerHTML = '';
+
+  var errorDiv = document.createElement('div');
+  errorDiv.className = 'timeline__error';
+  
+  var errorIcon = document.createElement('img');
+  errorIcon.src = timelineBasePath + '/alert.svg';
+  errorIcon.alt = 'Error';
+  errorIcon.className = 'timeline__error-icon';
+  
+  var errorTitle = document.createElement('h2');
+  errorTitle.className = 'timeline__error-title';
+  errorTitle.textContent = errorInfo.title;
+  
+  var errorMessage = document.createElement('p');
+  errorMessage.className = 'timeline__error-message';
+  errorMessage.textContent = errorInfo.message;
+  
+  var errorSolution = document.createElement('p');
+  errorSolution.className = 'timeline__error-solution';
+  errorSolution.innerHTML = '<strong>Solution:</strong> ' + errorInfo.solution;
+  
+  if (details) {
+    var errorDetails = document.createElement('p');
+    errorDetails.className = 'timeline__error-details';
+    errorDetails.innerHTML = '<strong>Details:</strong> ' + details;
+    errorDiv.appendChild(errorDetails);
+  }
+  
+  errorDiv.appendChild(errorIcon);
+  errorDiv.appendChild(errorTitle);
+  errorDiv.appendChild(errorMessage);
+  errorDiv.appendChild(errorSolution);
+  
+  container.appendChild(errorDiv);
+  
+  console.error('Timeline Error [' + errorType + ']:', errorInfo.message, details || '');
+}
+
+var timelineLoaderState = {
+  count: 0,
+  startTime: 0,
+  removeTimer: null,
+  overlayEl: null
+};
+
+function showTimelineLoader() {
+  timelineLoaderState.count += 1;
+  if (timelineLoaderState.count !== 1) return;
+
+  timelineLoaderState.startTime = Date.now();
+
+  if (timelineLoaderState.removeTimer) {
+    clearTimeout(timelineLoaderState.removeTimer);
+    timelineLoaderState.removeTimer = null;
+  }
+
+  var overlay = document.createElement('div');
+  overlay.className = 'timeline__loader-overlay';
+
+  var loader = document.createElement('div');
+  loader.className = 'timeline__loader';
+
+  var spinner = document.createElement('img');
+  spinner.src = timelineBasePath + '/spinner.gif';
+  spinner.alt = 'Loading...';
+  spinner.title = 'Loading...';
+  spinner.className = 'timeline__loader-spinner';
+
+  loader.appendChild(spinner);
+  overlay.appendChild(loader);
+
+  document.body.appendChild(overlay);
+  timelineLoaderState.overlayEl = overlay;
+}
+
+function hideTimelineLoader() {
+  if (timelineLoaderState.count <= 0) return;
+  timelineLoaderState.count -= 1;
+  if (timelineLoaderState.count > 0) return;
+
+  var elapsed = Date.now() - timelineLoaderState.startTime;
+  var minMs = (typeof timelineLoaderMinMs === 'number' && timelineLoaderMinMs >= 0) ? timelineLoaderMinMs : 0;
+  var remaining = Math.max(0, minMs - elapsed);
+
+  var removeOverlay = function() {
+    if (timelineLoaderState.overlayEl) {
+      timelineLoaderState.overlayEl.remove();
+      timelineLoaderState.overlayEl = null;
+    }
+    timelineLoaderState.removeTimer = null;
+  };
+
+  if (timelineLoaderState.removeTimer) {
+    clearTimeout(timelineLoaderState.removeTimer);
+    timelineLoaderState.removeTimer = null;
+  }
+
+  if (remaining > 0) {
+    timelineLoaderState.removeTimer = setTimeout(removeOverlay, remaining);
+  } else {
+    removeOverlay();
+  }
 }
 
 // Modal functionality
@@ -244,10 +413,14 @@ function applyDataAttributes(container, config) {
     container.setAttribute('data-visible-items', config.visibleItems);
   }
   if (config.minWidth !== undefined) {
+    // New canonical attribute
+    container.setAttribute('data-minwidth', config.minWidth);
+    // Backward compatibility for older demos/configs
     container.setAttribute('data-force-vertical-mode', config.minWidth);
   }
   if (config.maxWidth !== undefined) {
-    container.setAttribute('data-force-vertical-mode', config.maxWidth);
+    // Reserved: no current behavior tied to maxWidth. Expose as data for future parity.
+    container.setAttribute('data-maxwidth', config.maxWidth);
   }
 }
 
@@ -297,9 +470,30 @@ function renderTimelineFromData(containerSelector, data, config) {
   return container;
 }
 
+// Convenience function to generate timeline nodes and initialize in one call
+// Useful for programmatic data generation (e.g. from database, API, or runtime calculations)
+function timelineFromData(containerSelector, data, options) {
+  // Render the nodes to the DOM
+  var container = renderTimelineFromData(containerSelector, data, options);
+  
+  if (!container) return;
+  
+  // Initialize the timeline behavior on the container
+  timeline([container], options);
+}
+
 function loadDataFromJson(url, containerSelector) {
   // Get the element to extract its ID for localStorage key
   var container = document.querySelector(containerSelector);
+  
+  if (!container) {
+    console.error('Timeline: Container not found:', containerSelector);
+    return;
+  }
+  
+  // Show loading spinner
+  showTimelineLoader();
+  
   var timelineId = container ? container.id : null;
   var cacheKey = timelineId ? 'vjs_' + timelineId : null;
   
@@ -356,61 +550,81 @@ function loadDataFromJson(url, containerSelector) {
     processTimelineData(json, containerSelector);
   }).catch(function (err) {
     console.error('Error loading timeline JSON:', err);
+    showTimelineError(container, 'json-load', err.message);
   });
 }
 
 function processTimelineData(json, containerSelector) {
-  var config = null;
-  var nodes = [];
+  var container = document.querySelector(containerSelector);
   
-  // Check if new format (object with nodes array) or old format (simple array)
-  if (json.nodes && Array.isArray(json.nodes)) {
-    // New format
-    nodes = json.nodes;
-    config = {
-      timelineName: json.timelineName,
-      layoutMode: json.layoutMode,
-      visibleItems: json.visibleItems,
-      minWidth: json.minWidth,
-      maxWidth: json.maxWidth,
-      nodeColor: json.nodeColor,
-      lineColor: json.lineColor,
-      navColor: json.navColor,
-      lastupdated: json.lastupdated
-    };
-  } else if (Array.isArray(json)) {
-    // Old format (simple array) - deprecated but we'll handle it
-    nodes = json;
-  } else {
-    console.error('Invalid JSON format. Expected object with "nodes" array or simple array.');
+  if (!container) {
+    console.error('Timeline: Container not found:', containerSelector);
     return;
   }
   
-  var container = renderTimelineFromData(containerSelector, nodes, config);
+  var config = null;
+  var nodes = [];
   
-  // initialize the library (globally exposed function `timeline`) with a slight delay
-  // to ensure DOM is fully rendered
-  setTimeout(function() {
-    if (typeof window.timeline === 'function') {
-      try {
-        window.timeline(document.querySelectorAll(containerSelector));
-        
-        // Handle deep linking after timeline is initialized
-        handleDeepLinking(containerSelector);
-      } catch (e) {
-        console.error('Error initializing timeline library:', e);
-      }
-    } else if (typeof timeline === 'function') {
-      try {
-        timeline(document.querySelectorAll(containerSelector));
-        handleDeepLinking(containerSelector);
-      } catch (e) {
-        console.error(e);
-      }
+  try {
+    // Check if new format (object with nodes array) or old format (simple array)
+    if (json.nodes && Array.isArray(json.nodes)) {
+      // New format
+      nodes = json.nodes;
+      config = {
+        timelineName: json.timelineName,
+        layoutMode: json.layoutMode,
+        visibleItems: json.visibleItems,
+        minWidth: json.minWidth,
+        maxWidth: json.maxWidth,
+        nodeColor: json.nodeColor,
+        lineColor: json.lineColor,
+        navColor: json.navColor,
+        lastupdated: json.lastupdated
+      };
+    } else if (Array.isArray(json)) {
+      // Old format (simple array) - deprecated but we'll handle it
+      nodes = json;
     } else {
-      console.warn('timeline library not found; ensure js/timeline.js is loaded');
+      throw new Error('Invalid JSON format. Expected object with "nodes" array or simple array.');
     }
-  }, 100);
+    
+    if (nodes.length === 0) {
+      throw new Error('No timeline items found in data.');
+    }
+    
+    renderTimelineFromData(containerSelector, nodes, config);
+    
+    // Initialize the timeline immediately - setUpTimelines() will handle the 2-second loader delay
+    try {
+      if (typeof window.timeline === 'function') {
+        window.timeline(document.querySelectorAll(containerSelector));
+      } else if (typeof timeline === 'function') {
+        timeline(document.querySelectorAll(containerSelector));
+      }
+      
+      // Handle deep linking after timeline is initialized
+      handleDeepLinking(containerSelector);
+
+      // JSON loader show/hide balance: we showed loader at fetch start
+      hideTimelineLoader();
+    } catch (e) {
+      console.error('Error initializing timeline:', e);
+      var container = document.querySelector(containerSelector);
+      if (container) {
+        showTimelineError(container, 'invalid-config', e.message);
+      }
+
+      // Ensure loader doesn't stick on screen
+      hideTimelineLoader();
+    }
+    
+  } catch (e) {
+    console.error('Error processing timeline data:', e);
+    showTimelineError(container, 'json-parse', e.message);
+
+    // Ensure loader doesn't stick on screen
+    hideTimelineLoader();
+  }
 }
 
 // Utility function to clear timeline cache
@@ -480,12 +694,33 @@ function handleDeepLinking(containerSelector) {
   }
 }
 
+// Global registry to store timeline instances for programmatic navigation
+var timelineRegistry = {};
+
 function navigateToNodeIndex(container, index) {
-  // This function will be called to navigate to a specific index
-  // It needs to work with the existing timeline navigation system
-  // For now, we'll just highlight the item
-  // The actual navigation will be handled by the main timeline() function
-  console.log('Navigate to index:', index);
+  if (!container) return;
+  var timelineId = container.id || container.getAttribute('data-timeline-id');
+  if (!timelineId) {
+    console.warn('Cannot navigate: timeline container has no ID');
+    return;
+  }
+  
+  var tlData = timelineRegistry[timelineId];
+  if (!tlData) {
+    console.warn('Timeline not found in registry:', timelineId);
+    return;
+  }
+  
+  // Only navigate if horizontal mode
+  if (!container.classList.contains('timeline--horizontal')) {
+    return; // vertical mode doesn't need programmatic scrolling
+  }
+  
+  // Set the current index and trigger position update
+  if (tlData.setCurrentIndex && tlData.updatePosition) {
+    tlData.setCurrentIndex(index);
+    tlData.updatePosition();
+  }
 }
 
 // original timeline function from squarechip
@@ -495,9 +730,15 @@ function timeline(collection, options) {
   let winWidth = window.innerWidth;
   let resizeTimer;
   let currentIndex = 0;
+
+  // Show loader for programmatic / inline timelines.
+  // For JSON-loaded timelines, loadDataFromJson() shows the loader earlier;
+  // the global loader uses a ref-count so this remains safe.
+  showTimelineLoader();
+  let shouldHideLoader = true;
   // Set default settings
   const defaultSettings = {
-    forceVerticalMode: {
+    minWidth: {
       type: 'integer',
       defaultValue: 600
     },
@@ -604,7 +845,7 @@ function timeline(collection, options) {
     let scroller;
     let items;
     const settings = {};
-
+    
     // Test for correct HTML structure
     try {
       wrap = timelineEl.querySelector('.timeline__wrap');
@@ -620,6 +861,7 @@ function timeline(collection, options) {
       }
     } catch (e) {
       console.warn(e.message);
+      showTimelineError(timelineEl, 'missing-element', e.message);
       return false;
     }
 
@@ -627,10 +869,27 @@ function timeline(collection, options) {
     Object.keys(defaultSettings).forEach((key) => {
       settings[key] = defaultSettings[key].defaultValue;
 
-      if (data[key]) {
-        settings[key] = data[key];
-      } else if (options && options[key]) {
-        settings[key] = options[key];
+      // Special handling for minWidth to support legacy and attribute variants
+      if (key === 'minWidth') {
+        let candidate = undefined;
+        // Data attributes
+        if (data.minWidth !== undefined) candidate = data.minWidth;          // data-min-width
+        if (data.minwidth !== undefined) candidate = data.minwidth;          // data-minwidth (preferred naming per project)
+        if (data.forceVerticalMode !== undefined) candidate = data.forceVerticalMode;      // legacy data-force-vertical-mode
+        if (data.forceverticalmode !== undefined) candidate = data.forceverticalmode;      // hyphen-less dataset mapping safety
+        // JS/jQuery options
+        if (candidate === undefined && options) {
+          if (options.minWidth !== undefined) candidate = options.minWidth;
+          else if (options.forceVerticalMode !== undefined) candidate = options.forceVerticalMode; // legacy
+        }
+        if (candidate !== undefined) settings.minWidth = candidate;
+      } else {
+        // Generic handling for all other keys
+        if (data[key]) {
+          settings[key] = data[key];
+        } else if (options && options[key] !== undefined) {
+          settings[key] = options[key];
+        }
       }
 
       if (defaultSettings[key].type === 'integer') {
@@ -644,6 +903,25 @@ function timeline(collection, options) {
         }
       }
     });
+
+    // Apply color settings from data-attributes or JS options
+    (function applyColorParity(){
+      var data = timelineEl.dataset;
+      var getData = function(k){
+        return data[k] !== undefined ? data[k] : (data[k && k.toLowerCase()] !== undefined ? data[k.toLowerCase()] : undefined);
+      };
+      var nodeColor = getData('nodeColor');
+      var lineColor = getData('lineColor');
+      var navColor = getData('navColor');
+      if (options) {
+        if (options.nodeColor !== undefined) nodeColor = options.nodeColor;
+        if (options.lineColor !== undefined) lineColor = options.lineColor;
+        if (options.navColor !== undefined) navColor = options.navColor;
+      }
+      if (nodeColor || lineColor || navColor) {
+        applyTimelineColors(timelineEl, { nodeColor: nodeColor, lineColor: lineColor, navColor: navColor });
+      }
+    })();
 
     // Further specific testing of input values
     const defaultTrigger = defaultSettings.verticalTrigger.defaultValue.match(/(\d*\.?\d*)(.*)/);
@@ -701,6 +979,14 @@ function timeline(collection, options) {
       // otherwise collapse
       collapseAllExpanded();
     });
+
+    // Enhance inline items to support modals when using inline markup
+    enhanceInlineItems(timelineEl, items);
+
+    // Assign a unique ID if missing (needed for navigation registry)
+    if (!timelineEl.id) {
+      timelineEl.setAttribute('data-timeline-id', 'timeline-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
+    }
 
     timelines.push({
       timelineEl,
@@ -765,7 +1051,7 @@ function timeline(collection, options) {
       tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest}px`;
     }
 
-    if (window.innerWidth > tl.settings.forceVerticalMode) {
+    if (window.innerWidth > tl.settings.minWidth) {
       setWidths();
       setHeights();
     }
@@ -886,6 +1172,32 @@ function timeline(collection, options) {
     addNavigation(tl);
     addHorizontalDivider(tl);
     slideTimeline(tl);
+    
+    // Register navigation helpers for this timeline
+    var timelineId = tl.timelineEl.id || tl.timelineEl.getAttribute('data-timeline-id');
+    if (timelineId) {
+      timelineRegistry[timelineId] = {
+        setCurrentIndex: function(index) {
+          var viewportWidth = tl.wrap.offsetWidth;
+          var itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
+          var maxIndex = Math.max(0, tl.items.length - itemsVisible);
+          currentIndex = Math.max(0, Math.min(index, maxIndex));
+        },
+        updatePosition: function() {
+          timelinePosition(tl);
+          // Update nav button states
+          var arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
+          var arrowNext = tl.timelineEl.querySelector('.timeline-nav-button--next');
+          if (arrowPrev && arrowNext) {
+            var viewportWidth = tl.wrap.offsetWidth;
+            var itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
+            var maxIndex = Math.max(0, tl.items.length - itemsVisible);
+            arrowPrev.disabled = currentIndex === 0;
+            arrowNext.disabled = currentIndex >= maxIndex;
+          }
+        }
+      };
+    }
   }
 
   // Set up vertical timeline
@@ -899,7 +1211,7 @@ function timeline(collection, options) {
         lastVisibleIndex = i;
       }
       const divider = tl.settings.verticalStartPosition === 'left' ? 1 : 0;
-      if (i % 2 === divider && window.innerWidth > tl.settings.forceVerticalMode) {
+      if (i % 2 === divider && window.innerWidth > tl.settings.minWidth) {
         item.classList.add('timeline__item--right');
       } else {
         item.classList.add('timeline__item--left');
@@ -940,19 +1252,29 @@ function timeline(collection, options) {
         wrapElements(tl.items);
       }
       resetTimelines(tl);
-      if (window.innerWidth <= tl.settings.forceVerticalMode) {
+      if (window.innerWidth <= tl.settings.minWidth) {
         tl.timelineEl.classList.add('timeline--mobile');
       }
-      if (tl.settings.mode === 'horizontal' && window.innerWidth > tl.settings.forceVerticalMode) {
+      if (tl.settings.mode === 'horizontal' && window.innerWidth > tl.settings.minWidth) {
         setUpHorinzontalTimeline(tl);
       } else {
         setUpVerticalTimeline(tl);
       }
       tl.timelineEl.classList.add('timeline--loaded');
-      setTimeout(() => {
-        tl.timelineEl.style.opacity = 1;
-      }, 500);
     });
+
+    // Fade in timelines after initial setup
+    setTimeout(() => {
+      timelines.forEach((tl) => {
+        tl.timelineEl.style.opacity = 1;
+      });
+    }, 500);
+
+    // Hide loader once per timeline() call (not on resize)
+    if (shouldHideLoader) {
+      hideTimelineLoader();
+      shouldHideLoader = false;
+    }
   }
 
   // Initialise the timelines on the page
@@ -995,4 +1317,47 @@ if (window.jQuery) {
 // Expose clearTimelineCache globally for developer convenience
 if (typeof window !== 'undefined') {
   window.clearTimelineCache = clearTimelineCache;
+  window.timelineFromData = timelineFromData;
+}
+
+// Build modal data for inline items if not provided via data-* attributes
+function ensureInlineModalData(itemEl) {
+  if (!itemEl) return;
+  var content = itemEl.querySelector('.timeline__content') || itemEl;
+  if (!itemEl.hasAttribute('data-modal-title')) {
+    var heading = content.querySelector('h1,h2,h3,h4,h5,h6');
+    if (heading && heading.textContent) {
+      itemEl.setAttribute('data-modal-title', heading.textContent.trim());
+    }
+  }
+  if (!itemEl.hasAttribute('data-modal-content')) {
+    var firstP = content.querySelector('p');
+    if (firstP && firstP.textContent) {
+      itemEl.setAttribute('data-modal-content', firstP.textContent.trim());
+    }
+  }
+  if (!itemEl.hasAttribute('data-modal-image')) {
+    var img = content.querySelector('img');
+    if (img && img.getAttribute('src')) {
+      itemEl.setAttribute('data-modal-image', img.getAttribute('src'));
+    }
+  }
+}
+
+// Enhance existing inline items so they support modal/deep-link parity
+function enhanceInlineItems(timelineEl, items) {
+  if (!items || !items.length) return;
+  items.forEach(function(item){
+    if (item.getAttribute('data-modal-bound') === '1') return;
+    // Build missing modal data from markup
+    ensureInlineModalData(item);
+    var hasModal = item.hasAttribute('data-modal-title') || item.hasAttribute('data-modal-content') || item.hasAttribute('data-modal-image') || item.hasAttribute('data-modal-html');
+    if (hasModal) {
+      item.addEventListener('click', function(e){
+        e.preventDefault();
+        openTimelineModal(item);
+      });
+      item.setAttribute('data-modal-bound', '1');
+    }
+  });
 }

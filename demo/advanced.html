@@ -3,19 +3,359 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla JS Timeline - Advanced Usage</title>
+    <title>Vanilla JS Timeline - Advanced Demo</title>
+    <!-- load timeline.css styles -->
+    <link rel="stylesheet" href="../src/css/timeline.css">
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
+    <style>
+      .demo-section {
+        margin: 60px 0;
+      }
+
+      .demo-section h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0 0 20px;
+        color: #333;
+      }
+
+      .demo-section p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #666;
+        margin: 0 0 30px;
+      }
+
+      .code-block {
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+        overflow-x: auto;
+        font-size: 0.9rem;
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+      }
+    </style>
   </head>
   <body>
 
     <div class="wrapper">
 
-      <h1>Advanced Usage</h1>
-      
-      <!-- add example here -->
+      <!-- Demo 1: Programmatic Data Generation -->
+      <div class="demo-section">
+        <h2>Demo 1: Programmatic Data Generation</h2>
+        <p>
+          Generate timeline data from JavaScript at runtime. This example creates a timeline 
+          with data constructed entirely from code, without loading external JSON files.
+        </p>
+
+        <div id="progTimeline" class="timeline"></div>
+
+        <div class="code-block">
+          // Create timeline data dynamically<br>
+          var timelineData = [<br>
+          &nbsp;&nbsp;{ id: 1, title: "Start", content: "Project kickoff..." },<br>
+          &nbsp;&nbsp;{ id: 2, title: "Development", content: "Building features..." },<br>
+          &nbsp;&nbsp;// ... more items<br>
+          ];<br>
+          <br>
+          // Render with one function call<br>
+          timelineFromData('#progTimeline', timelineData, {<br>
+          &nbsp;&nbsp;mode: 'vertical',<br>
+          &nbsp;&nbsp;visibleItems: 3<br>
+          });
+        </div>
+      </div>
+
+      <!-- Demo 2: Horizontal Timeline from API Simulation -->
+      <div class="demo-section">
+        <h2>Demo 2: API Data (Simulated) - Horizontal Timeline</h2>
+        <p>
+          Simulate fetching timeline data from a remote API and render as a horizontal timeline.
+          This demonstrates the flexibility of programmatic rendering.
+        </p>
+
+        <div id="apiTimeline" class="timeline"></div>
+
+        <div class="code-block">
+          // Simulate API call<br>
+          fetch('/api/timeline')<br>
+          &nbsp;&nbsp;.then(res => res.json())<br>
+          &nbsp;&nbsp;.then(data => {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;timelineFromData('#apiTimeline', data, {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode: 'horizontal',<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visibleItems: 5<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+          &nbsp;&nbsp;});
+        </div>
+      </div>
+
+      <!-- Demo 3: Database Simulation with Colors -->
+      <div class="demo-section">
+        <h2>Demo 3: Database Query with Dynamic Colors</h2>
+        <p>
+          Fetch data from a "database" and apply custom colors based on categories or statuses.
+          Shows how to mix programmatic generation with styling options.
+        </p>
+
+        <div id="dbTimeline" class="timeline"></div>
+
+        <div class="code-block">
+          // Query database simulation<br>
+          var dbResults = queryDatabase('SELECT * FROM milestones');<br>
+          <br>
+          // Transform to timeline format with colors<br>
+          var timelineItems = dbResults.map(row => ({<br>
+          &nbsp;&nbsp;id: row.id,<br>
+          &nbsp;&nbsp;title: row.milestone_name,<br>
+          &nbsp;&nbsp;content: row.description,<br>
+          &nbsp;&nbsp;image: row.image_url<br>
+          }));<br>
+          <br>
+          timelineFromData('#dbTimeline', timelineItems, {<br>
+          &nbsp;&nbsp;mode: 'vertical',<br>
+          &nbsp;&nbsp;nodeColor: '#4CAF50',<br>
+          &nbsp;&nbsp;lineColor: '#81C784'<br>
+          });
+        </div>
+      </div>
+
+      <!-- Demo 4: jQuery Integration -->
+      <div class="demo-section">
+        <h2>Demo 4: jQuery Integration (if jQuery is loaded)</h2>
+        <p>
+          Works seamlessly with jQuery. You can use the jQuery plugin syntax for initialization.
+        </p>
+
+        <div id="jqTimeline" class="timeline"></div>
+
+        <div class="code-block">
+          var data = [ ... ];<br>
+          <br>
+          // Method 1: Direct function (vanilla JS)<br>
+          timelineFromData('#jqTimeline', data, { mode: 'horizontal' });<br>
+          <br>
+          // Method 2: jQuery plugin syntax (if jQuery loaded)<br>
+          $('#jqTimeline').timeline({ mode: 'horizontal' });<br>
+          <br>
+          // Note: jQuery version requires HTML nodes already in DOM
+        </div>
+      </div>
 
     </div>
+
+    <!-- load timeline.js functions -->
+    <script src="../src/js/timeline.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+
+        // ============================================
+        // Demo 1: Simple Vertical Timeline
+        // ============================================
+        var basicData = [
+          {
+            id: 1,
+            title: 'Project Initiation',
+            content: 'The project kicks off with team planning and requirements gathering. This phase involves stakeholder meetings and scope definition.',
+            image: 'assets/img/sample1.jpg'
+          },
+          {
+            id: 2,
+            title: 'Design Phase',
+            content: 'UI/UX designers create mockups and prototypes. Feedback is collected and incorporated into the design specifications.',
+            image: 'assets/img/sample2.jpg'
+          },
+          {
+            id: 3,
+            title: 'Development Sprint 1',
+            content: 'First sprint focuses on core functionality. Backend API endpoints are created and basic frontend components are built.',
+            image: 'assets/img/sample3.jpg'
+          },
+          {
+            id: 4,
+            title: 'Development Sprint 2',
+            content: 'Additional features are implemented. Integration testing begins to ensure components work together correctly.',
+            image: 'assets/img/sample4.jpg'
+          },
+          {
+            id: 5,
+            title: 'Quality Assurance',
+            content: 'Comprehensive testing including unit, integration, and user acceptance testing. Bugs are identified and fixed.',
+            image: 'assets/img/sample5.jpg'
+          }
+        ];
+
+        timelineFromData('#progTimeline', basicData, {
+          mode: 'vertical',
+          visibleItems: 3
+        });
+
+
+        // ============================================
+        // Demo 2: Simulate API Response
+        // ============================================
+        // Simulate an API that returns timeline data
+        function simulateApiCall() {
+          return Promise.resolve({
+            timelineName: 'Technology Evolution',
+            layoutMode: 'horizontal',
+            visibleItems: 4,
+            minWidth: 700,
+            nodeColor: '#2196F3',
+            lineColor: '#64B5F6',
+            nodes: [
+              {
+                id: 1,
+                title: '1990s',
+                content: 'Early web technologies emerge. HTML and HTTP become foundational standards.',
+                image: 'assets/img/sample1.jpg'
+              },
+              {
+                id: 2,
+                title: '2000s',
+                content: 'Broadband adoption accelerates. JavaScript gains prominence for client-side interactivity.',
+                image: 'assets/img/sample2.jpg'
+              },
+              {
+                id: 3,
+                title: '2010s',
+                content: 'Mobile-first development becomes standard. Single-page applications revolutionize UX.',
+                image: 'assets/img/sample3.jpg'
+              },
+              {
+                id: 4,
+                title: '2020s',
+                content: 'JAMstack and serverless architectures gain traction. Performance and privacy concerns drive innovation.',
+                image: 'assets/img/sample4.jpg'
+              },
+              {
+                id: 5,
+                title: 'Future',
+                content: 'AI-powered development tools and edge computing reshape how we build applications.',
+                image: 'assets/img/sample5.jpg'
+              }
+            ]
+          });
+        }
+
+        simulateApiCall().then(function(apiData) {
+          var nodes = apiData.nodes;
+          var config = {
+            mode: 'horizontal',
+            visibleItems: apiData.visibleItems,
+            minWidth: apiData.minWidth,
+            nodeColor: apiData.nodeColor,
+            lineColor: apiData.lineColor,
+            timelineName: apiData.timelineName
+          };
+          timelineFromData('#apiTimeline', nodes, config);
+        });
+
+
+        // ============================================
+        // Demo 3: Database Simulation with Colors
+        // ============================================
+        // Simulate a database query result
+        function queryDatabase(sql) {
+          return [
+            {
+              id: 1,
+              milestone_name: 'Requirements Complete',
+              description: 'All business requirements documented and approved by stakeholders.',
+              image_url: 'assets/img/sample6.jpg',
+              status: 'completed'
+            },
+            {
+              id: 2,
+              milestone_name: 'Design Approved',
+              description: 'Design mockups reviewed and approved by the UX team.',
+              image_url: 'assets/img/sample7.jpg',
+              status: 'completed'
+            },
+            {
+              id: 3,
+              milestone_name: 'Alpha Release',
+              description: 'First internal release for team testing and feedback.',
+              image_url: 'assets/img/sample8.jpg',
+              status: 'in-progress'
+            },
+            {
+              id: 4,
+              milestone_name: 'Beta Testing',
+              description: 'Limited external release for selected user groups.',
+              image_url: 'assets/img/sample9.jpg',
+              status: 'pending'
+            },
+            {
+              id: 5,
+              milestone_name: 'Production Launch',
+              description: 'Official public release to all users.',
+              image_url: 'assets/img/sample10.jpg',
+              status: 'pending'
+            }
+          ];
+        }
+
+        var dbData = queryDatabase('SELECT * FROM milestones');
+        var dbItems = dbData.map(function(row) {
+          return {
+            id: row.id,
+            title: row.milestone_name,
+            content: row.description,
+            image: row.image_url
+          };
+        });
+
+        timelineFromData('#dbTimeline', dbItems, {
+          mode: 'vertical',
+          visibleItems: 3,
+          nodeColor: '#FF9800',
+          lineColor: '#FFB74D'
+        });
+
+
+        // ============================================
+        // Demo 4: jQuery Integration Info
+        // ============================================
+        // Just render with vanilla approach since most demos don't have jQuery
+        var jqData = [
+          {
+            id: 1,
+            title: 'Frontend',
+            content: 'React, Vue, or Vanilla JS for the user interface.',
+            image: 'assets/img/sample1.jpg'
+          },
+          {
+            id: 2,
+            title: 'API Layer',
+            content: 'RESTful or GraphQL endpoints serving data to clients.',
+            image: 'assets/img/sample2.jpg'
+          },
+          {
+            id: 3,
+            title: 'Backend',
+            content: 'Node.js, Python, or Java handling business logic and database operations.',
+            image: 'assets/img/sample3.jpg'
+          },
+          {
+            id: 4,
+            title: 'Database',
+            content: 'PostgreSQL, MongoDB, or other data stores persisting application state.',
+            image: 'assets/img/sample4.jpg'
+          }
+        ];
+
+        timelineFromData('#jqTimeline', jqData, {
+          mode: 'horizontal',
+          visibleItems: 3,
+          minWidth: 600
+        });
+
+      });
+    </script>
 
   </body>
 </html>

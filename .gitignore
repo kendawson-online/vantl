@@ -5,3 +5,7 @@ demo/test.html
 
 # OS files
 .DS_Store
+
+# Docs
+API-Documentation.md
+Jan-7-Code-Review-Claude.md

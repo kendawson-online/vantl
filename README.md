@@ -179,9 +179,9 @@ Data attribute
 
 <br />
 
-`forceVerticalMode`
+`minWidth`
 
-**When using the timeline in horizontal mode, define at which viewport width it should revert to vertical mode**
+**When using the timeline in horizontal mode, define the minimum viewport width (px) to stay horizontal; below this it becomes vertical/mobile**
 
 JavaScript/jQuery
 ````javascript
@@ -191,10 +191,13 @@ options: integer
 
 Data attribute
 ````html
-<div class="timeline" data-force-vertical-mode="600">
+<div class="timeline" data-minwidth="600">
     ...
 </div>
 ````
+
+Notes:
+- Backwards compatibility: legacy `forceVerticalMode` (JS) and `data-force-vertical-mode` (HTML) are still accepted.
 
 <br />
 
@@ -363,6 +366,62 @@ Data attribute
 </div>
 ```
 <br />
+
+------
+
+<br />
+
+`nodeColor`, `lineColor`, `navColor`
+
+**Set theme colors for nodes, center line, and navigation buttons (horizontal)**
+
+JavaScript/jQuery
+
+```javascript
+// any subset can be provided
+jQuery('.timeline').timeline({
+    nodeColor: '#2d6cdf',
+    lineColor: '#2d6cdf',
+    navColor: '#f2f2f2'
+});
+```
+
+Data attributes (container)
+
+```html
+<div class="timeline" 
+         data-node-color="#2d6cdf" 
+         data-line-color="#2d6cdf" 
+         data-nav-color="#f2f2f2">
+    ...
+</div>
+```
+
+JSON (top-level)
+
+```json
+{
+    "nodeColor": "#2d6cdf",
+    "lineColor": "#2d6cdf",
+    "navColor": "#f2f2f2"
+}
+```
+
+Notes:
+- If only one of `nodeColor` or `lineColor` is set, it is used for both.
+- `navColor` automatically sets a contrasting border and arrow color.
+
+------
+
+<br />
+
+Deep Linking and Node IDs
+
+**Link to a specific node by ID using `?timeline=<containerId>&id=<nodeId>`**
+
+- JSON nodes: set `id` on each node; the renderer adds `data-node-id` to items.
+- Inline markup: add `data-node-id` to each `.timeline__item` you want addressable.
+- On click modals: inline items can optionally declare `data-modal-title`, `data-modal-content`, `data-modal-image`, or `data-modal-html`. If absent, the library derives reasonable defaults from the markup (first heading, first paragraph, first image).
 
 
 ## Server Upload Workflow
