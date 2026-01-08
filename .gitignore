@@ -1,6 +1,8 @@
 # Ignore Composer vendor directories
 server-tools/vendor/
 vendor/
+node_modules/
+dist/
 demo/test.html
 
 # OS files

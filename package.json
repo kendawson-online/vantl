@@ -1,0 +1,22 @@
+{
+  "name": "vanillajs-timeline",
+  "version": "2.0.0",
+  "description": "A vanilla JavaScript timeline library (modernized fork of squarechip/timeline)",
+  "main": "dist/timeline.min.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.55.1"
+  },
+  "keywords": [
+    "timeline",
+    "vanilla",
+    "javascript",
+    "ui"
+  ],
+  "author": "Ken Dawson",
+  "license": "MIT"
+}
