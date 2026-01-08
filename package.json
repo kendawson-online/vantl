@@ -1,5 +1,5 @@
 {
-  "name": "vantl",
+  "name": "@kendawson-online/vantl",
   "version": "2.0.0",
   "description": "A vanilla JavaScript timeline library (modernized fork of squarechip/timeline)",
   "main": "dist/timeline.min.js",
@@ -26,5 +26,8 @@
     "url": "https://github.com/kendawson-online/vantl/issues"
   },
   "homepage": "https://github.com/kendawson-online/vantl#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "files": ["dist"],
+  "prepare": "npm run build",
+  "publishConfig": { "access": "public" }
 }
