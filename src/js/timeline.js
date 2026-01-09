@@ -1,9 +1,9 @@
 // --------------------------------------------------------------------------
 // timeline.js - a vanilla JS app to display timelines
 // 
-// Originally created in 2018 by Mike Collins (https://github.com/squarechip/timeline)
-// Modified by Ken Dawson (https://github.com/kendawson-online) in 2026
-// Last updated: 01/07/26
+// Created in 2018 by Mike Collins (https://github.com/squarechip/timeline)
+// Modified in 2026 by Ken Dawson (https://github.com/kendawson-online)
+// Last updated: 01/08/26
 //
 // --------------------------------------------------------------------------
 

@@ -4,9 +4,6 @@ import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 
-// Placeholder until expanded-node feature is defined
-function collapseAllExpanded() {}
-
 function ensureInlineModalData(itemEl) {
   if (!itemEl) return;
   const content = itemEl.querySelector('.timeline__content') || itemEl;
@@ -250,14 +247,6 @@ export function timeline(collection, options) {
       console.warn(`${warningLabel} The 'startIndex' setting must be between 0 and ${items.length - settings.visibleItems} for this timeline. The value of 0 has been used instead.`);
       settings.startIndex = 0;
     }
-
-    timelineEl.addEventListener('click', function(e) {
-      const expanded = document.querySelector('.timeline__item--expanded');
-      if (!expanded) return;
-      const expandedContent = expanded.querySelector('.timeline__content');
-      if (expandedContent && expandedContent.contains(e.target)) return;
-      collapseAllExpanded();
-    });
 
     enhanceInlineItems(timelineEl, items);
 

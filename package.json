@@ -1,7 +1,7 @@
 {
   "name": "@kendawson-online/vantl",
-  "version": "2.0.0",
-  "description": "A vanilla JavaScript timeline library (modernized fork of squarechip/timeline)",
+  "version": "2.0.1",
+  "description": "A vanilla JavaScript library that creates responsive timelines for both horizontal and vertical layouts",
   "main": "dist/timeline.min.js",
   "scripts": {
     "build": "rollup -c",
@@ -27,7 +27,11 @@
   },
   "homepage": "https://github.com/kendawson-online/vantl#readme",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "src/css",
+    "src/images"
+  ],
   "prepare": "npm run build",
   "publishConfig": { "access": "public" }
 }

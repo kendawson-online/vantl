@@ -1,468 +1,256 @@
-# Vanilla JS Timeline
+# Vantl - Vanilla (JS) Timeline
 
-A vanilla JavaScript app to create responsive horizontal and vertical timelines. 
+A lightweight, responsive timeline library created with vanilla Javascript for creating beautiful horizontal and vertical timelines with zero dependencies. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [squarechip](https://github.com/squarechip) in 2018.
 
-Supports jQuery, external JSON configuration, color theming, HTML support, node images, and deep-linking via URL. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [Mike Collins](https://github.com/squarechip) in 2018.
-
-[Link to Screenshot]
-
-<br/>
 
 ## Features
 
-#### 🔘&nbsp; Create / load data via three methods (see Examples)
-- Directly via API using Javascript (e.g. jQuery)
-- Inline in HTML page using data-attributes
-- Externally via JSON configuration file
-
-#### 🔘&nbsp; Library agnostic. If jQuery is present it will register itself as a plugin.
-
-#### 🔘&nbsp; Color customization for nodes, timeline, and navigation buttons
-
-#### 🔘&nbsp; Image support (per-node) with fluid sizing
-
-#### 🔘&nbsp; Deep link to specific nodes via URL parameters
-
-#### 🔘&nbsp; Allows multiple independent timelines on a single page
-
-#### 🔘&nbsp; Auto-initialization when using JSON config
-
-#### 🔘&nbsp; Caches JSON data to local storage for faster loading
-
-#### 🔘&nbsp; Responsive layout switches based on screen size
-
-#### 🔘&nbsp; Small file size
-
-<br/>
-
-### Examples:
-
- - Using Javascript (jQuery):
-   &nbsp;&nbsp;[Horizontal](#) &nbsp;|&nbsp; [Vertical](#)
- - Using Inline HTML: 
-   &nbsp;&nbsp;[Horizontal Layout](#) &nbsp;|&nbsp; [Vertical Layout](#)
- - Using External JSON data: 
-   &nbsp;&nbsp;[Horizontal Layout](#) &nbsp;|&nbsp; [Vertical Layout](#)
- - Deep Linking to Nodes:
-   &nbsp;&nbsp;[Horizontal Layout](#) &nbsp;|&nbsp; [Vertical Layout](#)
- - Using Multiple Timelines On A Page:
-   &nbsp;&nbsp;[Horizontal Layout](#) &nbsp;|&nbsp; [Vertical Layout](#)
-
-<br/>
+- ✨ **Zero dependencies** - Pure vanilla JavaScript (jQuery optional)
+- 📱 **Fully responsive** - Auto-switches between horizontal/vertical layouts
+- 🎨 **Customizable colors** - Theme nodes, lines, and navigation
+- 🖼️ **Rich content** - Support for images, HTML, and modal popups
+- 🔗 **Deep linking** - Link directly to specific timeline nodes via URL
+- 📦 **Multiple layouts** - Vertical scroll or horizontal carousel modes
+- 💾 **Smart caching** - LocalStorage caching for JSON data
+- 🚀 **Auto-init** - Just add a data attribute to load from JSON
+- 📏 **Small footprint** - Minified and tree-shakeable
 
 ## Quick Start
 
-### 1. Include required files in your page
- - Download code and load files locally:
- ```html
- <html>
-    <head>
-        <link href="src/css/timeline.css" rel="stylesheet" />
-    </head>
-    <body>
-        <!-- [ timeline code goes here ] -->
-        <script src="src/js/timeline.js"></script>
-    </body>
+### Via CDN
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- timeline stylesheet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/src/css/timeline.css">
+</head>
+<body>
+   
+  <!-- your timeline code here --> 
+  <div id="timeline" class="timeline" data-json-config="/path/to/your/data.json"></div>
+  
+  <!-- timeline Javascript -->
+  <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script>
+</body>
 </html>
- ```
- - Load files via CDN links:
- ````html
-  <html>
-    <head>
-        <link href="https://cdn.jsdelivr.net/gh/kendawson-online/vanillajs-timeline/src/css/timeline.css" rel="stylesheet">
-    </head>
-    <body>
-        <!-- [ timeline code goes here ] -->
-        <script src="https://cdn.jsdelivr.net/gh/kendawson-online/vanillajs-timeline/src/js/timeline.js"></script>
-    </body>
-</html>
- ````
+```
 
-### 2. Choose a creation method
- - Javascript API (e.g. jQuery)
- - Inline HTML data-attributes
- - External JSON configuration file
+### Via npm
 
-### 3. Add timeline data
- - If you are using the vanilla JS/Jquery or data-attributes method, you need to add your timeline node data via regular HTML. If you are using the JSON method you can skip this step.
-
-````html
-<div class="timeline">
-    <div class="timeline__wrap">
-        <div class="timeline__items">
-            <div class="timeline__item">
-                <div class="timeline__content">
-                    Content / markup here
-                </div>
-            </div>
-            <div class="timeline__item">
-                <div class="timeline__content">
-                    Content / markup here
-                </div>
-            </div>
-            <div class="timeline__item">
-                <div class="timeline__content">
-                    Content / markup here
-                </div>
-            </div>
-            <div class="timeline__item">
-                <div class="timeline__content">
-                    Content / markup here
-                </div>
-            </div>
-            <div class="timeline__item">
-                <div class="timeline__content">
-                    Content / markup here
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-````
-
- - Add timeline nodes via [JSON config](demo/assets/data/sample1.json) file
-
-    [Add More Explaination Text Here]
-
- - [Convert CSV or Spreadsheet](#) file to JSON [Link to server tool]
-
-    [Add More Explaination Text Here]
-
-### 4. Initialize the app 
- - Using vanilla Javascript 
-   ````javascript
-   timeline(document.querySelectorAll('.timeline'));
-   ````
- - Using jQuery
-   ````javascript
-    jQuery('.timeline').timeline();
-   ````
-
-<br/><br/>
-
-**NOTE: if you're using an external JSON file, you can skip step four. You don't have to manually initialize the app. Loading the JSON file automatically initializes the app for you.**
-
-<br/>
-
-### Javascript API and data-attributes:
-
- 1. Using data-attributes will take priority over settings via the API.
-
- 2. Using an external JSON file will take priority over data-attributes and/or API settings.
-
-<br/><br/>
-
-# API Options:
-
-<br/>
-
-`mode`
-
-**Choose whether the timeline should be vertical or horizontal**
-
-JavaScript/jQuery
-````js
-default: 'vertical'
-options: 'vertical', 'horizontal'
-````
-
-Data attribute
-````html
-<div class="timeline" data-mode="horizontal">
-    ...
-</div>
-````
-
-<br />
-
-------
-
-<br />
-
-`minWidth`
-
-**When using the timeline in horizontal mode, define the minimum viewport width (px) to stay horizontal; below this it becomes vertical/mobile**
-
-JavaScript/jQuery
-````javascript
-default: 600
-options: integer
-````
-
-Data attribute
-````html
-<div class="timeline" data-minwidth="600">
-    ...
-</div>
-````
-
-Notes:
-- Backwards compatibility: legacy `forceVerticalMode` (JS) and `data-force-vertical-mode` (HTML) are still accepted.
-
-<br />
-
-------
-
-<br />
-
-`horizontalStartPosition`
-
-**When using the timeline in horizontal mode, define the vertical alignment of the first item**
-
-JavaScript/jQuery
-````javascript
-default: 'top'
-options: 'bottom', 'top'
-````
-
-Data attribute
-````html
-<div class="timeline" data-horizontal-start-position="top">
-    ...
-</div>
-````
-
-<br />
-
-------
-
-<br />
-
-`moveItems`
-
-**When using the timeline in horizontal mode, define how many items to move when clicking a navigation button**
-
-JavaScript/jQuery
-````javascript
-default: 1
-options: integer
-````
-
-Data attribute
-````html
-<div class="timeline" data-move-items="1">
-    ...
-</div>
-````
-
-<br />
-
-------
-
-<br />
-
-
-`rtlMode`
-
-**When using the timeline in horizontal mode, this defines whether the timeline should start from the right. This overrides the startIndex setting.**
-
-JavaScript/jQuery
-````javascript
-default: false
-options: true / false
-````
-
-Data attribute
-````html
-<div class="timeline" data-rtl-mode="true">
-    ...
-</div>
-````
-<br />
-
-------
-
-<br />
-
-`startIndex`
-
-**When using the timeline in horizontal mode, define which item the timeline should start at**
-
-JavaScript/jQuery
-````javascript
-default: 0
-options: integer
-````
-
-Data attribute
-````html
-<div class="timeline" data-start-index="0">
-    ...
-</div>
-````
-
-<br />
-
-------
-
-<br />
-
-`verticalStartPosition`
-
-**When using the timeline in vertical mode, define the alignment of the first item**
-
-JavaScript/jQuery
+```bash
+npm install @kendawson-online/vantl
+```
 
 ```javascript
-default: 'left'
-options: 'left', 'right'
-```
+import { timeline } from '@kendawson-online/vantl';
+import '@kendawson-online/vantl/src/css/timeline.css';
 
-Data attribute
-
-```html
-<div class="timeline" data-vertical-start-position="right">
-    ...
-</div>
-```
-
-<br />
-
-------
-
-<br />
-
-`verticalTrigger`
-
-**When using the timeline in vertical mode, define the distance from the bottom of the screen, in percent or pixels, that the items slide into view**
-
-JavaScript/jQuery
-
-```javascript
-default: '15%'
-options: percentage or pixel value e.g. '20%' or '150px'
-```
-
-Data attribute
-
-```html
-<div class="timeline" data-vertical-trigger="150px">
-    ...
-</div>
-```
-
-<br />
-
-------
-
-<br />
-
-`visibleItems`
-
-**For horizontal mode: Controls the scrolling range and when navigation arrows appear. Note: With fixed-width timeline items, the actual number of visible items is determined by the container width**
-
-JavaScript/jQuery
-
-```javascript
-default: 3
-options: integer
-```
-
-Data attribute
-
-```html
-<div class="timeline" data-visible-items="3">
-    ...
-</div>
-```
-<br />
-
-------
-
-<br />
-
-`nodeColor`, `lineColor`, `navColor`
-
-**Set theme colors for nodes, center line, and navigation buttons (horizontal)**
-
-JavaScript/jQuery
-
-```javascript
-// any subset can be provided
-jQuery('.timeline').timeline({
-    nodeColor: '#2d6cdf',
-    lineColor: '#2d6cdf',
-    navColor: '#f2f2f2'
+timeline(document.querySelectorAll('.timeline'), {
+  mode: 'vertical',
+  nodeColor: '#2d6cdf'
 });
 ```
 
-Data attributes (container)
+## Usage Examples
+
+### 1. Auto-Init with JSON (Easiest)
+
+The timeline auto-initializes when you add a `data-json-config` attribute:
 
 ```html
-<div class="timeline" 
-         data-node-color="#2d6cdf" 
-         data-line-color="#2d6cdf" 
-         data-nav-color="#f2f2f2">
-    ...
-</div>
+<div class="timeline" data-json-config="/path/to/timeline.json"></div>
 ```
 
-JSON (top-level)
-
+**JSON Format:**
 ```json
 {
-    "nodeColor": "#2d6cdf",
-    "lineColor": "#2d6cdf",
-    "navColor": "#f2f2f2"
+  "timelineName": "My Timeline",
+  "layoutMode": "vertical",
+  "lastupdated": "2026-01-08T20:15:34.873Z",
+  "nodes": [
+    {
+      "id": 1,
+      "title": "Event Title",
+      "content": "Event description...",
+      "image": "/path/to/image.jpg"
+    }
+  ]
 }
 ```
 
-Notes:
-- If only one of `nodeColor` or `lineColor` is set, it is used for both.
-- `navColor` automatically sets a contrasting border and arrow color.
+### 2. Inline HTML with Data Attributes
 
-------
+```html
+<div class="timeline" data-mode="horizontal">
+  <div class="timeline__wrap">
+    <div class="timeline__items">
+        <div class="timeline__item">
+            <div class="timeline__content">
+                <h5>2001</h5>
+                <p>Lorem ipsum dolor sit amet, qui <a href="#">minim</a> labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+            </div>
+        </div>
+        <div class="timeline__item">
+            <div class="timeline__content">
+                <h5>2002</h5>
+                <p>Lorem ipsum <a href="#">dolor sit amet</a>, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+            </div>
+        </div>
+        <div class="timeline__item">
+            <div class="timeline__content">
+                <h5>2003</h5>
+                <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
 
-<br />
-
-Deep Linking and Node IDs
-
-**Link to a specific node by ID using `?timeline=<containerId>&id=<nodeId>`**
-
-- JSON nodes: set `id` on each node; the renderer adds `data-node-id` to items.
-- Inline markup: add `data-node-id` to each `.timeline__item` you want addressable.
-- On click modals: inline items can optionally declare `data-modal-title`, `data-modal-content`, `data-modal-image`, or `data-modal-html`. If absent, the library derives reasonable defaults from the markup (first heading, first paragraph, first image).
-
-
-## Server Upload Workflow
-
-This repository includes a small PHP utility under the `server-tools/` folder that converts CSV / Excel / Google Sheets into the timeline JSON format used by the demo. The basic flow is:
-
-1. Open `server-tools/upload.html` in a browser (or host the `server-tools/` folder on a PHP-capable host).
-2. Upload a CSV or `.xls/.xlsx` file, or provide a public Google Sheets URL. The server runs `convert.php` to parse the sheet and produce JSON.
-3. If conversion succeeds the JSON is saved to `server-tools/tmp/` with a unique filename and you are redirected to `server-tools/done.php` which shows a preview and a download link.
-4. Temporary files are cleaned up automatically by `server-tools/cleanup_tmp.php` (24-hour TTL). Run that as a cron job on the server.
-
-Quick local test (from project root):
-
-```bash
-php -S localhost:8000 -t .
-# then visit http://localhost:8000/server/upload.html
+<script>
+  timeline(document.querySelectorAll('.timeline'));
+</script>
 ```
 
-Notes:
-- The converter will set a `lastupdated` timestamp in the JSON if none is provided — this integrates with the client's caching behavior.
-- Excel parsing requires `phpoffice/phpspreadsheet` (installed via Composer). `convert.php` auto-loads `vendor/autoload.php` if available in `server/` or project root.
+### 3. JavaScript API
 
-## Security Notes (important)
+```javascript
+// Vanilla JS
+timeline(document.querySelectorAll('.timeline'), {
+  mode: 'horizontal',
+  visibleItems: 3,
+});
 
-This upload utility is a convenience tool and not hardened for untrusted public hosting. If you plan to run it on a public server, consider the following safeguards:
+// jQuery (if available)
+$('.timeline').timeline({
+  mode: 'vertical',
+  verticalTrigger: '20%'
+});
+```
 
-- Validate uploads: restrict accepted MIME types / extensions (`.csv`, `.xls`, `.xlsx`) and enforce a reasonable maximum file size.
-- Run file parsing in a controlled environment; avoid executing any uploaded content.
-- Store temporary files outside the web root or restrict direct listing/access; `server/done.php` only exposes the saved JSON filename.
-- Sanitize all filenames and never use user-supplied filenames for server paths without cleaning.
-- Limit rate and require authentication if the endpoint will be public to avoid abuse.
-- Use HTTPS to protect uploads in transit.
-- Keep Composer dependencies up-to-date and audit for security issues.
-- Consider additional input validation on fields extracted from the spreadsheet (e.g., URLs, image paths) before including them in output JSON.
+## API Options
 
+All options can be set via JavaScript API, data attributes, or JSON config.
 
-## License & Credits
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `mode` | string | `'vertical'` | Layout mode: `'vertical'` or `'horizontal'` |
+| `minWidth` | number | `600` | Min viewport width (px) to maintain horizontal mode |
+| `visibleItems` | number | `3` | Number of items in horizontal viewport |
+| `moveItems` | number | `1` | Items to scroll per navigation click (horizontal) |
+| `startIndex` | number | `0` | Initial item index (horizontal mode) |
+| `horizontalStartPosition` | string | `'top'` | First item alignment: `'top'` or `'bottom'` |
+| `verticalStartPosition` | string | `'left'` | First item alignment: `'left'` or `'right'` |
+| `verticalTrigger` | string | `'15%'` | Scroll trigger distance: percentage or px (e.g., `'20%'` or `'150px'`) |
+| `rtlMode` | boolean | `false` | Right-to-left mode (horizontal) |
+| `nodeColor` | string | — | Node circle color (hex/rgb/hsl) |
+| `lineColor` | string | — | Center line color (hex/rgb/hsl) |
+| `navColor` | string | — | Navigation button color (hex/rgb/hsl) |
 
-This app is released under the [MIT License](LICENSE)
+**Setting Options:**
 
-The original `timeline` project was created by Mike Collins and was also released under the MIT License. His project can be found on GitHub here: [https://github.com/squarechip/timeline](https://github.com/squarechip/timeline)
+```javascript
+// JavaScript
+timeline(el, { mode: 'horizontal', nodeColor: '#2d6cdf' });
+```
 
+```html
+<!-- Data attributes -->
+<div class="timeline" data-mode="horizontal" data-node-color="#2d6cdf">
+```
 
-Last updated: Jan. 5, 2026
+```json
+// JSON
+{ "layoutMode": "horizontal", "nodeColor": "#2d6cdf" }
+```
+
+## Deep Linking
+
+Link to a specific timeline node using URL parameters:
+
+```
+https://example.com/page.html?timeline=myTimelineId&id=3
+```
+
+- Add `id` attribute to timeline container
+- Add `data-node-id` to each item you want to link to
+- Works automatically with JSON-loaded timelines
+
+## Advanced Features
+
+### Custom Image Path
+
+Override the auto-detected image path:
+
+```html
+<script>
+  window.TimelineConfig = {
+    basePath: '/custom/path/to/images'
+  };
+</script>
+<script src="dist/timeline.min.js"></script>
+```
+
+### Modal Content
+
+Each timeline item can display a modal popup on click:
+
+```html
+<div class="timeline__item" 
+     data-modal-title="Full Title"
+     data-modal-content="Extended description..."
+     data-modal-image="/img/large.jpg"
+     data-modal-html="<p>Custom HTML content</p>">
+  ...
+</div>
+```
+
+JSON items automatically support modals with the `title`, `content`, `image`, and `html` fields.
+
+### Programmatic Control
+
+```javascript
+// Load from JSON programmatically
+loadDataFromJson('/data/timeline.json', '#myTimeline');
+
+// Clear cache
+clearTimelineCache(); // Clear all
+clearTimelineCache('timelineId'); // Clear specific
+
+// Navigate to node (horizontal mode)
+navigateTimelineToNodeIndex(containerElement, 5);
+
+// Open modal
+openTimelineModal(itemElement);
+
+// Close modal
+closeTimelineModal();
+```
+
+## Browser Support
+
+- Chrome/Edge (2018+)
+- Firefox (2018+)  
+- Safari (2018+)
+- Requires: ES6, IntersectionObserver, CSS Custom Properties
+
+## Contributing
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for build instructions and architecture overview.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Credits
+
+Originally inspired by [timeline](https://github.com/squarechip/timeline) by [Mike Collins](https://github.com/squarechip) (2018).
+
+Refactored and maintained by [Ken Dawson](https://github.com/kendawson-online) (2026).
+
+---
+
+**Package:** [@kendawson-online/vantl](https://www.npmjs.com/package/@kendawson-online/vantl)  
+**Repository:** [github.com/kendawson-online/vantl](https://github.com/kendawson-online/vantl)  
+**CDN:** [cdn.jsdelivr.net/npm/@kendawson-online/vantl](https://cdn.jsdelivr.net/npm/@kendawson-online/vantl)

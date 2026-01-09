@@ -5,7 +5,7 @@ module.exports = {
   output: {
     file: 'dist/timeline.min.js',
     format: 'iife',
-    name: 'VanillaTimeline',
+    name: 'Timeline',
     sourcemap: true
   },
   plugins: [terser()]

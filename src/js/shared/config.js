@@ -3,9 +3,9 @@
 export const timelineBasePath = (function() {
   // Check for user override
   if (typeof window !== 'undefined' && 
-      window.VanillaTimelineConfig && 
-      window.VanillaTimelineConfig.basePath) {
-    return window.VanillaTimelineConfig.basePath;
+      window.TimelineConfig && 
+      window.TimelineConfig.basePath) {
+    return window.TimelineConfig.basePath;
   }
   
   const scripts = document.getElementsByTagName('script');
