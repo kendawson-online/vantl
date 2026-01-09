@@ -2,6 +2,12 @@
 
 A lightweight, responsive timeline library created with vanilla Javascript for creating beautiful horizontal and vertical timelines with zero dependencies. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [squarechip](https://github.com/squarechip) in 2018.
 
+<table align="center">
+  <tr>
+    <td><img src="demo/assets/img/horizontal-screenshot.png" width="650"></td>
+  </tr>
+</table>
+
 
 ## Features
 
@@ -24,7 +30,7 @@ A lightweight, responsive timeline library created with vanilla Javascript for c
 <html>
 <head>
   <!-- timeline stylesheet -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/src/css/timeline.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.css">
 </head>
 <body>
    

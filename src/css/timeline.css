@@ -669,8 +669,9 @@
 }
 
 .timeline__loader-spinner {
-    width: 498px;
-    height: 328px;
+    width: 120px;
+    max-width: 100%;
+    height: auto;
     display: block;
     object-fit: contain;
 }
@@ -693,7 +694,8 @@
 
 .timeline__error-icon {
     width: 200px;
-    height: 200px;
+    max-width: 100%;
+    height: auto;
     margin-bottom: 24px;
     opacity: 0.8;
 }

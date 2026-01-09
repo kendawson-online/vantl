@@ -43,6 +43,10 @@ export function showTimelineError(container, errorType, details) {
   errorIcon.src = timelineBasePath + '/alert.svg';
   errorIcon.alt = 'Error';
   errorIcon.className = 'timeline__error-icon';
+  // Ensure a reasonable default size even if CSS isn't loaded
+  // This makes the error icon usable when a consumer forgets to include CSS.
+  errorIcon.width = 200;
+  errorIcon.style.height = 'auto';
 
   const errorTitle = document.createElement('h2');
   errorTitle.className = 'timeline__error-title';

@@ -11,6 +11,7 @@ import { createTimelineModal, openTimelineModal, closeTimelineModal } from './fe
 import { handleDeepLinking, navigateToNodeIndex } from './features/deep-linking.js';
 import { renderTimelineFromData, timelineFromData, loadDataFromJson, processTimelineData, clearTimelineCache } from './features/data-loader.js';
 import { timeline } from './core/timeline-engine.js';
+import '../css/timeline.css';
 
 function autoInitJsonTimelines() {
   const timelinesWithJson = document.querySelectorAll('[data-json-config]');

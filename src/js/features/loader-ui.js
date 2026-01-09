@@ -23,6 +23,9 @@ export function showTimelineLoader() {
   spinner.alt = 'Loading...';
   spinner.title = 'Loading...';
   spinner.className = 'timeline__loader-spinner';
+  // Default to a compact spinner if page CSS is missing
+  spinner.width = 120;
+  spinner.style.height = 'auto';
 
   loader.appendChild(spinner);
   overlay.appendChild(loader);
