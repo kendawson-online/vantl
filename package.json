@@ -1,6 +1,6 @@
 {
   "name": "@kendawson-online/vantl",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "A vanilla JavaScript library that creates responsive timelines for both horizontal and vertical layouts",
   "main": "dist/timeline.min.js",
   "scripts": {
