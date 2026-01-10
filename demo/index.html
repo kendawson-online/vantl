@@ -10,10 +10,19 @@
   <body>
 
     <div class="wrapper">
-
-        <h1 style="margin-bottom: 65px;">Vanilla Timeline Demos</h1>
-
-        <div class="cardlayout">
+        
+        <!-- page heading -->
+        <header class="fbox">
+          <div>
+            <img src="assets/img/vanilla-flower.jpg" height="65" title="Vanilla Timline" alt="Vanilla Flower"/>
+          </div>
+          <div>
+            <h1 class="demoheading">Vanilla Timeline Demos</h1>
+          </div>
+        </header> 
+        
+        <!-- demo cards -->
+        <main class="cardlayout">
 
           <div class="card">
             <div class="container">
@@ -94,9 +103,20 @@
                 <button class="btn danger" onclick="loadUrl('advanced.html')">Advanced Usage</button>
               </p>
             </div>
-          </div>             
+          </div> 
+          
+          <div class="card">
+            <div class="container">
+              <h3>JSON Timestamps</h3>
+              <img src="assets/img/time-clock.svg" height="110"/>
+              <p>Learn how to format JSON timestamps for your timelines using the correct ISO 8601 date string format.</p>
+              <p>
+                <button class="btn danger" onclick="loadUrl('time.html')">JSON Timestamps</button>
+              </p>
+            </div>
+          </div> 
 
-        </div>
+        </main>
 
     </div>
 

@@ -1,6 +1,15 @@
+/* Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
+
 body { 
     font-family: Arial, Helvetica, sans-serif; 
     padding: 20px;
+}
+
+.delius-regular {
+  font-family: "Delius", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .wrapper { 
@@ -161,4 +170,30 @@ body {
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
   line-height: 1.5;
+}
+
+.fbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 65px;
+}
+
+.demoheading {
+  font-family: "Delius";
+  font-size: 42px;
+}
+
+/* dark background color */
+.darkmode {
+  background-color: rgb(50, 53, 53);
+}
+
+.lightlink {
+  color: white;
+  font-weight: bold;
+  color: gold;
 }

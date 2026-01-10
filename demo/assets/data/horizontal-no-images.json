@@ -1,9 +1,9 @@
 {
-  "timelineName": "Horizontal Layout Timeline",
+  "timelineName": "Horizontal Timeline (Text Only)",
   "layoutMode": "horizontal",
   "visibleItems": 4,
   "minWidth": 550,
-  "lastupdated": "2026-01-09T14:18:40.407Z",  
+  "lastupdated": "2026-01-10T14:35:57.492Z",  
   "nodes": [
     {
       "id": 1,
@@ -54,6 +54,16 @@
       "id": 10,
       "title": "05/05/2005",
       "content": "<h4>Subheading</h4><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>"
-    }    
+    },
+    {
+      "id": 11,
+      "title": "05/31/2005",
+      "content": "<h4>Subheading</h4><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>"
+    },
+    {
+      "id": 12,
+      "title": "06/09/2005",
+      "content": "<h4>Subheading</h4><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p><p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>"
+    }  
   ]
 }

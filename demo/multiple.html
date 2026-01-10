@@ -4,37 +4,37 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Multiple Timelines Demo</title>
-    <!-- load timeline styles -->
-    <link rel="stylesheet" href="../dist/timeline.min.css">
+    <!-- load timeline.css styles from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.css">
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
   </head>
-  <body style="background-color: rgb(50, 53, 53);">
+  <body class="darkmode">
 
     <div class="wrapper">
 
       <h1 class="center multitext">Using Multiple Timelines On the Same Page</h1>
 
-      <p class="center multitext">View the source code of this page to see how the HTML is set up for multiple timelines</p>
+      <p class="center multitext"><a href="https://github.com/kendawson-online/vantl/blob/main/demo/multiple.html" class="lightlink" target="_blank">View the source code</a> of this page to see how the HTML is set up for multiple timelines</p>
 
       <br/><br/>
       
       <div class="timeline-section">
         <!-- timeline 1: horizontal layout -->
-        <div id="timeline1" class="timeline" data-json-config="assets/data/horiz-no-images.json"></div>
+        <div id="timeline1" class="timeline" data-json-config="assets/data/horizontal-no-images.json"></div>
       </div>
 
       <br/><br/>
 
       <div class="timeline-section">
         <!-- timeline 2: vertical layout -->
-        <div id="timeline2" class="timeline" data-json-config="assets/data/vert-no-images.json"></div>
+        <div id="timeline2" class="timeline" data-json-config="assets/data/vertical-no-images.json"></div>
       </div>
 
     </div>
 
-    <!-- load timeline functions -->
-    <script src="../dist/timeline.min.js"></script>
+    <!-- load timeline.js functions from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script>
 
   </body>
 </html>
