@@ -190,7 +190,7 @@ It's a lightweight text format stored in a file with a `.json` extension. It's e
   "maxWidth": "",
   "nodeColor": "",
   "lineColor": "",
-  "navColor": "",  
+  "navColor": ""  
 }
 ````
 
