@@ -1,6 +1,6 @@
 # Vantl - Vanilla Timeline
 
-Vantl is a lightweight, responsive timeline library created with vanilla Javascript for creating beautiful horizontal and vertical timelines with zero dependencies. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [squarechip](https://github.com/squarechip) in 2018.
+Vantl is a lightweight, responsive timeline library created with vanilla Javascript for creating beautiful horizontal and vertical timelines with zero dependencies. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [squarechip](https://github.com/squarechip) in 2018. You can load your timeline data via a variety of methods and, you can include multiple timelines on a single page.
 
 <table align="center">
   <tr>
