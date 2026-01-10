@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ISO 8601 date string</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+        }
+        a:link {
+            text-decoration: none;
+        }
+        h3 {
+            margin: 40px 0;
+        }
+        ol {
+            text-align: left;
+            width: 600px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        input {
+            background-color: azure;
+            margin-bottom: 25px;
+        }
+        li {
+            margin: 15px 0;
+        }
+        hr {
+            width: 700px;
+        }
+        .wrapper {
+            text-align: center;
+            padding-top: 80px;
+        }
+        .datestring {
+            text-align: center;
+            font-size: 18px;
+            padding: 15px 25px;
+            font-family: monospace;
+            width: 600px;
+        }
+        .mono {
+            font-family: monospace;
+            font-weight: bold;
+            color: #202020;
+            white-space: nowrap;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <h1>ISO 8601 date string</h1>
+      <input id="datestring" class="datestring" type="text"/>
+      <hr>
+      <h3>How to generate this date string using Developer Console:</h3>
+      <ol>
+         <li><a href="https://www.perplexity.ai/search/how-do-i-open-the-developer-co-q2Z.JHcqR3ipI6WykQfr5w#0" title="Learn how to do this from Perplexity.ai (opens a new tab or window)" target="_blank">Open the developer console in your browser</a></li>
+         <li>Go to the "Console" tab</li>
+         <li>Type: <span class="mono">new Date().toISOString();</span></li>
+         <li>Press <kbd>Enter</kbd> key</li>
+         <li>It will output a ISO 8601 date string like this: <span id="consdate" class="mono">2026-01-10T04:19:41.355Z</span></li>
+      </ol>
+    </div>
+
+    <script>
+        const datestring = document.getElementById('datestring');
+        const consdate = document.getElementById('consdate');
+        if (!datestring || !consdate) { console.error('Could not find page element'); }
+        let d = new Date();
+        let str = d.toISOString();
+        datestring.value = str;
+        consdate.textContent = `'${str}'`;
+    </script>
+
+  </body>
+</html>

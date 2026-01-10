@@ -82,11 +82,11 @@ function applyDataAttributes(container, config) {
     container.setAttribute('data-visible-items', config.visibleItems);
   }
   if (config.minWidth !== undefined) {
-    container.setAttribute('data-minwidth', config.minWidth);
+    container.setAttribute('data-min-width', config.minWidth);
     container.setAttribute('data-force-vertical-mode', config.minWidth);
   }
   if (config.maxWidth !== undefined) {
-    container.setAttribute('data-maxwidth', config.maxWidth);
+    container.setAttribute('data-max-width', config.maxWidth);
   }
 }
 

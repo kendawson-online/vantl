@@ -63,6 +63,7 @@ export function timeline(collection, options) {
 
   const defaultSettings = {
     minWidth: { type: 'integer', defaultValue: 600 },
+    maxWidth: { type: 'integer', defaultValue: 600 },
     horizontalStartPosition: { type: 'string', acceptedValues: ['bottom', 'top'], defaultValue: 'top' },
     mode: { type: 'string', acceptedValues: ['horizontal', 'vertical'], defaultValue: 'vertical' },
     moveItems: { type: 'integer', defaultValue: 1 },
@@ -165,6 +166,14 @@ export function timeline(collection, options) {
           else if (options.forceVerticalMode !== undefined) candidate = options.forceVerticalMode;
         }
         if (candidate !== undefined) settings.minWidth = candidate;
+      } else if (key === 'maxWidth') {
+        let candidate = undefined;
+        if (data.maxWidth !== undefined) candidate = data.maxWidth;
+        if (data.maxwidth !== undefined) candidate = data.maxwidth;
+        if (candidate === undefined && options) {
+          if (options.maxWidth !== undefined) candidate = options.maxWidth;
+        }
+        if (candidate !== undefined) settings.maxWidth = candidate;
       } else {
         if (data[key]) {
           settings[key] = data[key];
@@ -543,7 +552,16 @@ export function timeline(collection, options) {
       if (window.innerWidth <= tl.settings.minWidth) {
         tl.timelineEl.classList.add('timeline--mobile');
       }
+      
+      // Determine which mode to use based on settings and viewport width
+      let useHorizontalMode = false;
       if (tl.settings.mode === 'horizontal' && window.innerWidth > tl.settings.minWidth) {
+        useHorizontalMode = true;
+      } else if (tl.settings.mode === 'vertical' && window.innerWidth > tl.settings.maxWidth) {
+        useHorizontalMode = true;
+      }
+      
+      if (useHorizontalMode) {
         setUpHorinzontalTimeline(tl);
       } else {
         setUpVerticalTimeline(tl);

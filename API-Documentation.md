@@ -99,7 +99,7 @@ timeline(el, { minWidth: 800 });
 ```
 
 ```html
-<div class="timeline" data-minwidth="800">
+<div class="timeline" data-min-width="800">
 ```
 
 ```json
@@ -109,6 +109,28 @@ timeline(el, { minWidth: 800 });
 **Legacy Compatibility:**
 - `forceVerticalMode` (JS boolean) still supported
 - `data-force-vertical-mode` (HTML) still supported
+
+---
+
+#### `maxWidth`
+
+**Type:** `number` (pixels)  
+**Default:** `600`  
+**Description:** Maximum viewport width to maintain vertical mode. Above this, timeline switches to horizontal. Only affects timelines with `mode: 'vertical'`.
+
+```javascript
+timeline(el, { maxWidth: 1200 });
+```
+
+```html
+<div class="timeline" data-max-width="1200">
+```
+
+```json
+{ "maxWidth": 1200 }
+```
+
+**Note:** This setting is the inverse of `minWidth`. While `minWidth` controls when horizontal timelines switch to vertical, `maxWidth` controls when vertical timelines switch to horizontal.
 
 ---
 
@@ -319,6 +341,7 @@ timeline(el, { navColor: '#f2f2f2' });
   "navColor": "#f2f2f2",
   "visibleItems": 3,
   "minWidth": 600,
+  "maxWidth": 600,
   "lastupdated": "2026-01-08",
   "data": [
     // Array of timeline items...
@@ -376,7 +399,8 @@ clearTimelineCache('timelineId'); // Clear specific
 |-----------|---------|---------|
 | `data-json-config` | JSON file path | `data-json-config="/data.json"` |
 | `data-mode` | `mode` | `data-mode="horizontal"` |
-| `data-minwidth` | `minWidth` | `data-minwidth="800"` |
+| `data-min-width` | `minWidth` | `data-min-width="800"` |
+| `data-max-width` | `maxWidth` | `data-max-width="1200"` |
 | `data-visible-items` | `visibleItems` | `data-visible-items="4"` |
 | `data-move-items` | `moveItems` | `data-move-items="2"` |
 | `data-start-index` | `startIndex` | `data-start-index="3"` |
@@ -733,6 +757,6 @@ setTimelineLoaderMinMs(2000); // Show loader for min 2 seconds
 ## See Also
 
 - **User Guide:** [README.md](README.md)
-- **Developer Guide:** [DEVELOPMENT.md](DEVELOPMENT.md)
+- **Developer Guide:** [Development.md](Development.md)
 - **GitHub:** [github.com/kendawson-online/vantl](https://github.com/kendawson-online/vantl)
 - **npm:** [@kendawson-online/vantl](https://www.npmjs.com/package/@kendawson-online/vantl)

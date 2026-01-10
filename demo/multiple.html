@@ -1,44 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla JS Timeline - Multiple Timelines Demo</title>
+    <title>Multiple Timelines Demo</title>
+    <!-- load timeline styles -->
     <link rel="stylesheet" href="../dist/timeline.min.css">
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
-    <style>
-      h1 { text-align: center; margin-bottom: 40px; }
-      .timeline-section {
-        background: #fff;
-        padding: 30px;
-        margin-bottom: 60px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
-      .timeline-section h2 {
-        margin-top: 0;
-        margin-bottom: 30px;
-        color: #333;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
-      }
-    </style>
   </head>
-  <body>
+  <body style="background-color: rgb(50, 53, 53);">
 
     <div class="wrapper">
-      <h1>Multiple Independent Timelines</h1>
+
+      <h1 class="center multitext">Using Multiple Timelines On the Same Page</h1>
+
+      <p class="center multitext">View the source code of this page to see how the HTML is set up for multiple timelines</p>
+
+      <br/><br/>
       
       <div class="timeline-section">
-        <div id="timeline1" class="timeline" data-mode="horizontal" data-json-config="assets/data/simple-data-array.json"></div>
+        <!-- timeline 1: horizontal layout -->
+        <div id="timeline1" class="timeline" data-json-config="assets/data/horiz-no-images.json"></div>
       </div>
+
+      <br/><br/>
 
       <div class="timeline-section">
-        <div id="timeline2" class="timeline" data-json-config="assets/data/simple-data-array.json"></div>
+        <!-- timeline 2: vertical layout -->
+        <div id="timeline2" class="timeline" data-json-config="assets/data/vert-no-images.json"></div>
       </div>
+
     </div>
 
+    <!-- load timeline functions -->
     <script src="../dist/timeline.min.js"></script>
 
   </body>

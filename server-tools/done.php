@@ -11,7 +11,7 @@ if (!$file || !file_exists($path)) {
 
 $json = file_get_contents($path);
 $data = json_decode($json, true);
-?><!doctype html>
+?><!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Conversion Done</title>
 <style>body{font-family:Arial,Helvetica,sans-serif;margin:20px}pre{background:#f6f8fa;padding:12px;border:1px solid #ddd;overflow:auto}</style>
 </head><body>
