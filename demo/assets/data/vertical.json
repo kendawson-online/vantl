@@ -1,5 +1,5 @@
 {
-  "timelineName": "Vertical Timeline - JSON Config",
+  "timelineName": "Vertical Timeline from JSON File",
   "layoutMode": "vertical",
   "maxWidth": 1200,
   "nodeColor": "#0097ff",

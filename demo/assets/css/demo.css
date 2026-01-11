@@ -1,32 +1,106 @@
+/* Stylesheet for Vanilla Timeline Demos */
+
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
 
 body { 
+    background-color: white;
+    padding: 20px;
+    color: black;
     font-family: Arial, Helvetica, sans-serif; 
     padding: 20px;
 }
 
+/* Google Font: Delius */
 .delius-regular {
   font-family: "Delius", cursive;
   font-weight: 400;
   font-style: normal;
 }
 
-.wrapper { 
-    max-width: 1800px; 
-    margin: 80px auto; 
+/* Demo page styles */
+
+.fbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 65px;
 }
 
-/* demo outline buttons */
+.demologo img {
+  margin: 0;
+  padding: 0;
+}
+
+.demoheading h1 {
+  font-family: "Delius";
+  font-size: 42px;
+}
+
+.wrapper { 
+  max-width: 1800px; 
+  margin: 80px auto; 
+}
+
+.mainhead {
+  font-size: 42px;
+}
+
+.textcontainer {
+  margin: 90px auto;
+  padding: 20px;
+  width: 65vw;
+  max-width: 1500px;
+  min-width: 400px;
+}
+
+.step {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+.steptext {
+  font-size: 30px;
+}
+
+.scriptwrapper {
+  margin-top: 25px;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+footer {
+  margin-top: 300px;
+  text-align: center;
+  font-size: 12px;
+  font-family: monospace;
+  color: #3a3a3a;
+  opacity: 0.6;
+}
+
+footer a:link {
+  text-decoration: none;
+}
+
+/* Outline buttons */
 
 .btn {
-    border: 2px solid black;
-    border-radius: 8px;
-    background-color: white;
-    color: black;
-    padding: 14px 28px;
-    font-size: 16px;
-    cursor: pointer;
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 /* Green */
@@ -71,12 +145,12 @@ body {
 
 /* Gray */
 .secondary {
-    border-color: #6C757D;
-    color: #6C757D;
+  border-color: #6C757D;
+  color: #6C757D;
 }
 .secondary:hover {
-    background: #e9ecef;
-    color: black;
+  background: #e9ecef;
+  color: black;
 }
 
 /* Cards */
@@ -90,7 +164,7 @@ body {
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
 }
 
 .container {
@@ -125,7 +199,7 @@ body {
   text-align: center;
 }
 
-/* used on Multiple page */
+/* Multiple page */
 
 .timeline-section {
   background: #fff;
@@ -140,7 +214,18 @@ body {
   color: white;
 }
 
-/* Used on Advanced page */
+/* dark background color */
+.darkmode {
+  background-color: rgb(50, 53, 53);
+}
+
+.lightlink {
+  color: white;
+  font-weight: bold;
+  color: gold;
+}
+
+/*  Advanced page */
 
 .demo-section {
   margin: 60px 0;
@@ -172,28 +257,51 @@ body {
   line-height: 1.5;
 }
 
-.fbox {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin-bottom: 65px;
+/* Tool Tips */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
 }
 
-.demoheading {
-  font-family: "Delius";
-  font-size: 42px;
+/* Tooltip text */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
 }
 
-/* dark background color */
-.darkmode {
-  background-color: rgb(50, 53, 53);
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 350px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 7px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
 }
 
-.lightlink {
-  color: white;
-  font-weight: bold;
-  color: gold;
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
