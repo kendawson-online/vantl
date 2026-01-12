@@ -19,25 +19,26 @@ function loadUrl(url) {
 // show instructions after a delay (gives timeline data a chance to load)
 let instructionsTimerId = null;
 function loadInstructions() {
-    const delay = 3000;  // 3 second delay
+    const delay = 5000;  // 5 second delay
     const inst = document.getElementById('instructions');
     if (!inst) { console.error('The instructions element does not exist on the page'); return false; }
     // Schedule showing instructions only if no timeline error is present
     instructionsTimerId = setTimeout(() => {
         // If the timeline is in error state, skip showing instructions
         if (document.querySelector('.timeline.timeline--error')) { return; }
-        inst.style.display = 'block';
+        inst.classList.remove('hidethis');
+        inst.classList.add('fade-in');
     }, delay);
 }
 
-// Cancel instructions when a timeline error occurs
+// Don't display instructions when a timeline error occurs (e.g. missing JSON data)
 window.addEventListener('timeline:error', () => {
     if (instructionsTimerId) { clearTimeout(instructionsTimerId); instructionsTimerId = null; }
     const inst = document.getElementById('instructions');
-    if (inst) { inst.style.display = 'none'; }
+    if (inst) { inst.classList.remove('fade-in'); inst.classList.add('hidethis'); }
 });
 
-// test screen size (to see Horizontal timelines, screen must be at least 600px wide)
+// test screen size (to see Horizontal timelines screen must be at least 600px wide)
 function testScreenSize(width = null) {
     if (!width) { width = 600; }
     const maxQuery = `(max-width: ${width - 1}px)`;

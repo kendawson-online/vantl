@@ -44,9 +44,11 @@
         .datestring {
             text-align: center;
             font-size: 18px;
-            padding: 15px 25px;
+            padding: 12px 15px;
             font-family: monospace;
-            width: 600px;
+            width: 80%;
+            min-width: 400px;
+            max-width: 600px;
         }
         .mono {
             font-family: monospace;
@@ -71,14 +73,16 @@
          <li>Go to the "Console" tab</li>
          <li>Type: <span class="mono">new Date().toISOString();</span></li>
          <li>Press <kbd>Enter</kbd> key</li>
-         <li>It will output a ISO 8601 date string like this: <span id="consdate1" class="mono">2026-01-10T04:20:00.000Z</span></li>
+         <li>It will output a ISO 8601 date string like this: <span id="consdate1" class="mono">2026-01-01T00:00:00.000Z</span></li>
          <li>Copy/paste the date string into your JSON file (without the single quote marks)</li>
       </ol>
       <hr/>
       <br/><br/>
       <p style="text-align: center;">In your JSON file, the date string should look like this:</p>
-      <p style="text-align: center;"><span id="consdate2" class="mono" style="color: red;">"lastupdated": "2026-01-10T04:20:00.000Z",</span></p>
+      <p style="text-align: center;"><span id="consdate2" class="mono" style="color: red;">"lastupdated": "2026-01-01T00:00:00.000Z",</span></p>
     </div>
+
+    <br/><br/>
 
     <script>
         const datestring = document.getElementById('datestring');

@@ -20,13 +20,59 @@
     --timeline-h-text-font-size: 11px;
 }
 
-/* Timeline heading */
-.timeline__heading {
-    font-size: 2rem;
+/* Semantic node field styles */
+.timeline__date {
+    font-size: 0.95rem;
     font-weight: 700;
-    margin: 0 0 60px;
-    text-align: center;
     color: #333;
+    margin-bottom: 8px;
+}
+
+.timeline__heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #333;
+}
+
+.timeline__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+/* Summary truncation with line-clamp (3 lines) */
+.timeline__summary {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #555;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Modal content hidden by default */
+.timeline__modal-content {
+    display: none;
+}
+
+.timeline__content-full {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.timeline__content-full p {
+    margin-bottom: 12px;
+}
+
+.timeline__content-full p:last-child {
+    margin-bottom: 0;
 }
 
 .timeline *,
@@ -67,36 +113,130 @@
     z-index: 2;
 }
 
-/* Vertical timeline (not mobile) - side-by-side layout */
-.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__content {
-    max-height: 200px;
+/* Mobile layout: single column, left-aligned, stacked */
+.timeline--mobile .timeline__item {
+    padding-left: 40px;
+    padding-right: 0;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.timeline--mobile .timeline__content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    max-height: none;
 }
 
-.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__image {
+.timeline--mobile .timeline__image {
+    max-height: 80px;
+    width: auto;
     flex-shrink: 0;
-}
-
-.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__content > div {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__content h3 {
-    text-align: center;
-    margin: 0 0 6px;
-    flex-shrink: 0;
-}
-
-.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__content p {
     margin-bottom: 0;
-    overflow: hidden;
+    border-radius: 4px;
+}
+
+.timeline--mobile .timeline__content > div {
     flex: 1;
-    min-height: 0;
+    min-width: 0;
+}
+
+.timeline--mobile .timeline__date {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.timeline--mobile .timeline__heading {
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+}
+
+.timeline--mobile .timeline__summary {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+}
+
+/* Vertical layout: side-by-side alternating */
+@media (min-width: 768px) {
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item {
+        width: 50%;
+        max-width: 500px;
+        padding: 10px 40px 10px 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--left {
+        margin-left: 0;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 40px;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--right {
+        margin-left: auto;
+        margin-right: 0;
+        padding-left: 40px;
+        padding-right: 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+        max-height: none;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__image {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__summary {
+        font-size: 0.95rem;
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* Horizontal layout: carousel with fixed card width */
+@media (min-width: 1200px) {
+    .timeline--horizontal .timeline__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .timeline--horizontal .timeline__date {
+        order: 2;
+        font-weight: bold;
+        font-size: 0.95rem;
+    }
+
+    .timeline--horizontal .timeline__heading {
+        order: 3;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .timeline--horizontal .timeline__image {
+        order: 1;
+        max-width: 100px;
+        max-height: 100px;
+        width: auto;
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    .timeline--horizontal .timeline__summary {
+        order: 4;
+        font-size: 0.85rem;
+        -webkit-line-clamp: 2;
+    }
 }
 
 .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item .timeline__image {
@@ -181,23 +321,7 @@
     position: relative;
 }
 
-/* Image styling - fluid to fit content box */
-.timeline__image {
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    display: block;
-}
-
-/* Horizontal timeline images - square thumbnails */
-.timeline--horizontal .timeline__image {
-    width: var(--timeline-h-image-size);
-    height: var(--timeline-h-image-size);
-    object-fit: cover;
-    margin: 0 auto 8px;
-}
+/* Image styling handled in responsive sections above */
 
 .timeline__content::before,
 .timeline__content::after {
@@ -455,79 +579,7 @@
     right: 10px;
 }
 
-.timeline--mobile {
-    padding: 0;
-}
-
-.timeline--mobile::before {
-    left: 10px !important;
-    margin: 0 !important;
-}
-
-.timeline--mobile .timeline__item {
-    left: 0;
-    padding-left: 40px;
-    padding-right: 0;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.timeline--mobile .timeline__item .timeline__content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 6px;
-    padding: 12px;
-    max-height: 100px;
-}
-
-.timeline--mobile .timeline__item .timeline__image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    flex-shrink: 0;
-    margin: 0;
-    border-radius: 6px;
-}
-
-.timeline--mobile .timeline__item .timeline__content > div {
-    flex: 1;
-    min-width: 0;
-}
-
-.timeline--mobile .timeline__item .timeline__content h3 {
-    font-size: 16px;
-    margin: 0 0 6px;
-}
-
-.timeline--mobile .timeline__item .timeline__content p {
-    font-size: 13px;
-    line-height: 1.4;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.timeline--mobile .timeline__item::after {
-    left: 2px;
-    margin: 0;
-}
-
-.timeline--mobile .timeline__item .timeline__content::before {
-    left: -12px;
-    border-bottom: 12px solid transparent;
-    border-right: 12px solid #CCC;
-    border-left: none;
-    border-top: 12px solid transparent;
-}
-
-.timeline--mobile .timeline__item .timeline__content::after {
-    left: -10px;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #FFF;
-    border-left: none;
-    border-top: 10px solid transparent;
-}
+/* Mobile layout styles handled in responsive sections above */
 
 @keyframes fadeIn {
     0% {

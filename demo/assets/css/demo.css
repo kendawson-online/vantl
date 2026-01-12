@@ -7,7 +7,7 @@ body {
     background-color: white;
     color: black;
     font-family: Arial, Helvetica, sans-serif; 
-    padding: 0;
+    padding: 10px;
     margin: 0;
 }
 
@@ -51,17 +51,37 @@ body {
   margin-bottom: 50px;
 }
 
-.mainhead {
-  font-size: 42px;
+.hidethis {
+  display: none;
+  opacity: 0;
+}
+
+#instructions {
+  margin-top: 30px;
+}
+
+/* Fade-in animation */
+.fade-in {
+  display: block; /* override .hidethis */
+  animation: fadeIn 360ms ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .textcontainer {
-  display: none;
-  margin: 90px auto;
+  margin: 0 auto;
   padding: 20px;
   width: 65vw;
   max-width: 1500px;
   min-width: 400px;
+}
+
+.mainhead {
+  font-size: 42px;
+  margin-bottom: 20px;
 }
 
 .step {
@@ -319,7 +339,7 @@ footer a:link {
   color: white;
   background-color: #f44336; 
   padding: 8px 15px;
-  width: 100%;
+  width: 98%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -331,7 +351,7 @@ footer a:link {
   flex-grow: 1;
 }
 
-/* The close button */
+/* Alert message close button */
 .closebtn {
   margin-left: 15px;
   color: white;
@@ -345,4 +365,43 @@ footer a:link {
 .closebtn:hover {
   color: black;
   transform: scale(1.2);
+}
+
+/* Accordion menus */
+
+.accordion {
+  background-color: #dff5fc;
+  color: #444;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+.accordion:after {
+  content: '\25BC'; /* down-triangle */
+  font-size: 18px;
+  color: #444;
+  float: right;
+  margin-left: 5px;
+}
+
+.accordion.accordion--active, .accordion:hover {
+  background-color: #a8ebff;
+}
+
+.accordion.accordion--active:after {
+  content: '\25B2'; /* up-triangle */
+}
+
+.accordion + .panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
 }

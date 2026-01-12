@@ -4,77 +4,130 @@ import { showTimelineError } from './error-ui.js';
 import { applyTimelineColors } from './colors.js';
 import { handleDeepLinking } from './deep-linking.js';
 import { timeline } from '../core/timeline-engine.js';
+import { LOREM_PARAGRAPH, LOREM_FULL } from '../shared/lipsum.js';
 
+/**
+ * Normalize item data to standard 5-field schema
+ * Fields: date, heading, summary, content (HTML), image
+ */
+function normalizeItemData(rawData) {
+  const normalized = {
+    id: rawData.id || null,
+    date: rawData.date || 'DD/MM/YYYY',
+    heading: rawData.heading || 'Node Title',
+    summary: rawData.summary || LOREM_PARAGRAPH,
+    content: rawData.content || LOREM_FULL,
+    image: rawData.image || null
+  };
+  
+  return normalized;
+}
+
+/**
+ * Sanitize HTML content - remove potentially problematic tags
+ * Allow: p, strong, em, u, a, ul, ol, li, br, blockquote
+ * Strip: script, iframe, form, input, h1, h2
+ */
+function sanitizeContent(html) {
+  if (!html) return '';
+  
+  let clean = html;
+  
+  // Remove script tags and content
+  clean = clean.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  
+  // Remove form tags and content
+  clean = clean.replace(/<form[^>]*>[\s\S]*?<\/form>/gi, '');
+  
+  // Remove input tags
+  clean = clean.replace(/<input[^>]*>/gi, '');
+  
+  // Remove h1 tags (replace with h3)
+  clean = clean.replace(/<h1/gi, '<h3');
+  clean = clean.replace(/<\/h1>/gi, '</h3>');
+  
+  // Remove h2 tags (replace with h3)
+  clean = clean.replace(/<h2/gi, '<h3');
+  clean = clean.replace(/<\/h2>/gi, '</h3>');
+  
+  return clean.trim();
+}
+
+/**
+ * Create DOM node from normalized item data
+ */
 function createItemNode(item) {
+  const normalized = normalizeItemData(item);
+  
   const itemEl = document.createElement('div');
   itemEl.className = 'timeline__item';
-
-  if (item.id) {
-    itemEl.setAttribute('data-node-id', item.id);
+  
+  if (normalized.id) {
+    itemEl.setAttribute('data-node-id', normalized.id);
   }
 
-  itemEl.setAttribute('data-modal-title', item.title || '');
-  itemEl.setAttribute('data-modal-content', item.content || '');
-  itemEl.setAttribute('data-modal-image', item.image || '');
-  if (item.html) {
-    itemEl.setAttribute('data-modal-html', item.html);
-  }
-
+  // Timeline content (visible in node)
   const content = document.createElement('div');
   content.className = 'timeline__content';
 
-  if (item.image) {
+  // Date
+  const dateEl = document.createElement('div');
+  dateEl.className = 'timeline__date';
+  dateEl.textContent = normalized.date;
+  content.appendChild(dateEl);
+
+  // Image (optional)
+  if (normalized.image) {
     const img = document.createElement('img');
-    img.src = item.image;
+    img.src = normalized.image;
     img.className = 'timeline__image';
-    img.alt = item.title || '';
+    img.alt = normalized.heading || 'Timeline image';
     img.loading = 'lazy';
     img.onerror = function() {
-      console.error('Timeline: The image "' + item.image + '" could not be loaded. Please check the path.');
+      console.error('Timeline: Image failed to load:', normalized.image);
       this.src = timelineBasePath + '/missing-image.svg';
       this.alt = 'Image not found';
-      this.title = 'Original image: ' + item.image;
     };
     content.appendChild(img);
   }
 
-  const textWrapper = document.createElement('div');
-  if (item.title) {
-    const title = document.createElement('h3');
-    title.textContent = item.title;
-    textWrapper.appendChild(title);
-  }
+  // Heading
+  const headingEl = document.createElement('h3');
+  headingEl.className = 'timeline__heading';
+  headingEl.textContent = normalized.heading;
+  content.appendChild(headingEl);
 
-  if (item.content) {
-    const para = document.createElement('p');
-    let displayText = item.content;
-    if (displayText.length > 105) {
-      displayText = displayText.substring(0, 105) + '...';
-    }
-    para.innerHTML = displayText;
-    textWrapper.appendChild(para);
-  }
+  // Summary (truncated by CSS)
+  const summaryEl = document.createElement('div');
+  summaryEl.className = 'timeline__summary';
+  summaryEl.textContent = normalized.summary;
+  content.appendChild(summaryEl);
 
-  if (item.html) {
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = item.html;
-    textWrapper.appendChild(wrapper);
-  }
-
-  content.appendChild(textWrapper);
   itemEl.appendChild(content);
 
+  // Modal content (hidden by default, shown in popup)
+  const modalContent = document.createElement('div');
+  modalContent.className = 'timeline__modal-content';
+  const contentFull = document.createElement('div');
+  contentFull.className = 'timeline__content-full';
+  contentFull.innerHTML = sanitizeContent(normalized.content);
+  modalContent.appendChild(contentFull);
+  itemEl.appendChild(modalContent);
+
+  // Click handler to open modal
   itemEl.addEventListener('click', function(e) {
     e.preventDefault();
     if (typeof window.openTimelineModal === 'function') {
       window.openTimelineModal(itemEl);
     }
   });
-  itemEl.setAttribute('data-modal-bound', '1');
 
   return itemEl;
 }
 
+/**
+ * Apply configuration as data attributes
+ */
 function applyDataAttributes(container, config) {
   if (config.layoutMode) {
     container.setAttribute('data-mode', config.layoutMode);
@@ -84,20 +137,26 @@ function applyDataAttributes(container, config) {
   }
   if (config.minWidth !== undefined) {
     container.setAttribute('data-min-width', config.minWidth);
-    container.setAttribute('data-force-vertical-mode', config.minWidth);
   }
   if (config.maxWidth !== undefined) {
     container.setAttribute('data-max-width', config.maxWidth);
   }
 }
 
+/**
+ * Render timeline from data array
+ */
 export function renderTimelineFromData(containerSelector, data, config) {
   const container = document.querySelector(containerSelector);
-  if (!container) return;
+  if (!container) {
+    console.error('Timeline: Container not found:', containerSelector);
+    return null;
+  }
 
-  // remove any previous error state
+  // Remove any previous error state
   container.classList.remove('timeline--error');
 
+  // Get or create timeline structure
   let itemsWrap = container.querySelector('.timeline__items');
   if (!itemsWrap) {
     const wrap = document.createElement('div');
@@ -110,10 +169,12 @@ export function renderTimelineFromData(containerSelector, data, config) {
     itemsWrap.innerHTML = '';
   }
 
+  // Apply configuration
   if (config) {
     applyDataAttributes(container, config);
     applyTimelineColors(container, config);
 
+    // Add timeline heading if provided
     if (config.timelineName && config.timelineName.trim() !== '') {
       const existingHeading = container.previousElementSibling;
       if (existingHeading && existingHeading.classList.contains('timeline__heading')) {
@@ -128,155 +189,139 @@ export function renderTimelineFromData(containerSelector, data, config) {
     }
   }
 
-  data.forEach(function (it) {
-    itemsWrap.appendChild(createItemNode(it));
+  // Create timeline items from data
+  if (!Array.isArray(data) || data.length === 0) {
+    showTimelineError(container, 'no-data', 'No timeline items provided');
+    return null;
+  }
+
+  data.forEach(function(item) {
+    itemsWrap.appendChild(createItemNode(item));
   });
 
   return container;
 }
 
+/**
+ * Initialize timeline from data (with skipLoader option)
+ */
 export function timelineFromData(containerSelector, data, options) {
   const container = renderTimelineFromData(containerSelector, data, options);
   if (!container) return;
-  // Skip loader for programmatic timelines (data already in memory)
+  
+  // Skip loader for programmatic timelines (data already loaded)
   const mergedOptions = Object.assign({}, options, { skipLoader: true });
   timeline([container], mergedOptions);
 }
 
+/**
+ * Load timeline data from JSON file and initialize
+ */
 export function loadDataFromJson(url, containerSelector) {
   const container = document.querySelector(containerSelector);
   if (!container) {
     console.error('Timeline: Container not found:', containerSelector);
+    showTimelineError(null, 'missing-element', 'Timeline container not found: ' + containerSelector);
     return;
   }
 
   showTimelineLoader();
 
-  const timelineId = container ? container.id : null;
-  const cacheKey = timelineId ? 'vjs_' + timelineId : null;
+  // Check cache first
+  const cacheKey = 'timeline_cache_' + url;
+  let cachedData = null;
+  let cachedTime = null;
 
-  if (cacheKey && typeof(Storage) !== 'undefined') {
+  if (typeof(Storage) !== 'undefined') {
     try {
       const cached = localStorage.getItem(cacheKey);
       if (cached) {
-        const cachedData = JSON.parse(cached);
-        fetch(url).then(function(res) {
-          if (!res.ok) throw new Error('Failed to load ' + url + ' (' + res.status + ')');
-          return res.json();
-        }).then(function(json) {
-          if (json.lastupdated && cachedData.lastupdated && json.lastupdated === cachedData.lastupdated) {
-            console.log('Using cached timeline data for', timelineId);
-            processTimelineData(cachedData, containerSelector);
-          } else {
-            console.log('Updating cached timeline data for', timelineId);
-            localStorage.setItem(cacheKey, JSON.stringify(json));
-            processTimelineData(json, containerSelector);
-          }
-        }).catch(function(err) {
-          console.warn('Failed to fetch fresh data, using cache:', err);
-          processTimelineData(cachedData, containerSelector);
-        });
-        return;
+        const parsedCache = JSON.parse(cached);
+        cachedData = parsedCache.data;
+        cachedTime = parsedCache.timestamp;
       }
     } catch (e) {
-      console.warn('Error reading from localStorage:', e);
+      console.warn('Timeline: Failed to parse cached data');
     }
   }
 
-  fetch(url).then(function (res) {
-    if (!res.ok) throw new Error('Failed to load ' + url + ' (' + res.status + ')');
-    return res.json();
-  }).then(function (json) {
-    if (cacheKey && typeof(Storage) !== 'undefined') {
-      try {
-        localStorage.setItem(cacheKey, JSON.stringify(json));
-        console.log('Cached timeline data for', timelineId);
-      } catch (e) {
-        console.warn('Failed to cache timeline data:', e);
+  // Fetch JSON
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error('Failed to load: ' + response.statusText);
+      return response.json();
+    })
+    .then(jsonData => {
+      // Check if we need to update cache
+      const needsUpdate = !cachedData || 
+        !jsonData.lastupdated || 
+        new Date(jsonData.lastupdated) > new Date(cachedTime);
+
+      if (needsUpdate && jsonData.nodes && typeof(Storage) !== 'undefined') {
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify({
+            data: jsonData.nodes,
+            timestamp: jsonData.lastupdated || new Date().toISOString()
+          }));
+        } catch (e) {
+          console.warn('Timeline: Unable to cache data', e);
+        }
       }
-    }
-    processTimelineData(json, containerSelector);
-  }).catch(function (err) {
-    console.error('Error loading timeline JSON:', err);
-    showTimelineError(container, 'json-load', err.message);
-  });
+
+      const dataToUse = jsonData.nodes || jsonData;
+      const config = Object.assign({}, jsonData);
+      delete config.nodes;
+
+      renderTimelineFromData(containerSelector, dataToUse, config);
+      timeline([container], { skipLoader: true });
+      handleDeepLinking();
+    })
+    .catch(error => {
+      console.error('Timeline: Error loading JSON:', error);
+      
+      // Try to use cached data as fallback
+      if (cachedData && cachedData.length > 0) {
+        console.log('Timeline: Using cached data as fallback');
+        renderTimelineFromData(containerSelector, cachedData, {});
+        timeline([container], { skipLoader: true });
+      } else {
+        showTimelineError(container, 'load-failed', 'Failed to load timeline data: ' + error.message);
+      }
+      
+      hideTimelineLoader();
+    });
 }
 
-export function processTimelineData(json, containerSelector) {
-  const container = document.querySelector(containerSelector);
-  if (!container) {
-    console.error('Timeline: Container not found:', containerSelector);
-    return;
-  }
-
-  let config = null;
-  let nodes = [];
-
-  try {
-    if (json.nodes && Array.isArray(json.nodes)) {
-      nodes = json.nodes;
-      config = {
-        timelineName: json.timelineName,
-        layoutMode: json.layoutMode,
-        visibleItems: json.visibleItems,
-        minWidth: json.minWidth,
-        maxWidth: json.maxWidth,
-        nodeColor: json.nodeColor,
-        lineColor: json.lineColor,
-        navColor: json.navColor,
-        lastupdated: json.lastupdated
-      };
-    } else if (Array.isArray(json)) {
-      nodes = json;
-    } else {
-      throw new Error('Invalid JSON format. Expected object with "nodes" array or simple array.');
-    }
-
-    if (nodes.length === 0) {
-      throw new Error('No timeline items found in data.');
-    }
-
-    renderTimelineFromData(containerSelector, nodes, config);
-
-    try {
-      timeline(document.querySelectorAll(containerSelector));
-      handleDeepLinking(containerSelector);
-      hideTimelineLoader();
-    } catch (e) {
-      console.error('Error initializing timeline:', e);
-      const container = document.querySelector(containerSelector);
-      if (container) {
-        showTimelineError(container, 'invalid-config', e.message);
-      }
-      hideTimelineLoader();
-    }
-
-  } catch (e) {
-    console.error('Error processing timeline data:', e);
-    showTimelineError(container, 'json-parse', e.message);
-    hideTimelineLoader();
-  }
-}
-
-export function clearTimelineCache(timelineId) {
+/**
+ * Clear timeline cache
+ */
+export function clearTimelineCache(url) {
   if (typeof(Storage) === 'undefined') {
-    console.warn('localStorage not supported');
+    console.warn('Timeline: localStorage not supported');
     return;
   }
 
-  if (timelineId) {
-    const key = 'vjs_' + timelineId;
-    localStorage.removeItem(key);
-    console.log('Cleared cache for timeline:', timelineId);
+  if (url) {
+    const cacheKey = 'timeline_cache_' + url;
+    localStorage.removeItem(cacheKey);
+    console.log('Timeline: Cleared cache for', url);
   } else {
+    // Clear all timeline caches
     const keys = Object.keys(localStorage);
     let cleared = 0;
-    keys.forEach(function(key) {
-      if (key.startsWith('vjs_')) {
+    keys.forEach(key => {
+      if (key.startsWith('timeline_cache_')) {
         localStorage.removeItem(key);
         cleared++;
       }
     });
-    console.log('Cleared', cleared, 'timeline cache(s)');
+    console.log('Timeline: Cleared', cleared, 'cache(s)');
   }
+}
+
+/**
+ * Process timeline data (alias for renderTimelineFromData for backwards compat)
+ */
+export function processTimelineData(containerSelector, data, config) {
+  return renderTimelineFromData(containerSelector, data, config);
 }
