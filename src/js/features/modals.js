@@ -12,10 +12,11 @@ export function createTimelineModal() {
   modalState.modal.innerHTML = `
     <button class="timeline-modal__close" aria-label="Close modal"></button>
     <div class="timeline-modal__content">
-      <img class="timeline-modal__image" src="" alt="" style="display: none;">
+      <img class="timeline-modal__image" src="" alt="" loading="lazy" style="display: none;">
       <h2 class="timeline-modal__title"></h2>
       <div class="timeline-modal__text"></div>
-      <hr class="timeline-modal__divider">
+    </div>
+    <div class="timeline-modal__footer">
       <button class="timeline-modal__close-bottom">Close</button>
     </div>
   `;

@@ -10,6 +10,8 @@ export function applyTimelineColors(container, config) {
 
   if (nodeColor) {
     container.style.setProperty('--timeline-node-color', nodeColor);
+    // Use configured nodeColor for the active/current item outline
+    container.style.setProperty('--timeline-active-outline-color', nodeColor);
   }
   if (lineColor) {
     container.style.setProperty('--timeline-line-color', lineColor);

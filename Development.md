@@ -188,6 +188,14 @@ The codebase is organized into three layers:
 - Auto-renders items and initializes timeline
 - See `features/data-loader.js`
 
+**Loader Management:**
+- Loading spinner shown during async operations (JSON fetch)
+- Skipped for programmatic timelines (data already in memory)
+- `timelineFromData()` passes `skipLoader: true` to prevent unnecessary spinner
+- Only `loadDataFromJson()` shows the loader (async data loading)
+- Ref count system: each `show()` increments, each `hide()` decrements
+- Overlay removed when count reaches 0 (after minimum display time of 1.3s)
+
 **Responsive Mode Switching:**
 - `minWidth` - For horizontal timelines, switches to vertical when viewport width drops below this value (default: 600px)
 - `maxWidth` - For vertical timelines, switches to horizontal when viewport width exceeds this value (default: 600px)
@@ -336,6 +344,46 @@ npm run build 2>&1 | grep -i warn
 4. Rebuild: `npm run build`
 5. Verify fix in demo
 6. Commit and push
+
+## Responsive Horizontal Timeline Scaling
+
+The horizontal timeline automatically scales to fit any viewport height using CSS custom properties and JavaScript calculations.
+
+### How It Works
+
+1. **CSS Variables** define default dimensions (200px nodes, 100px images, 18px/11px fonts)
+2. **`calculateHorizontalScale()`** function runs on init and resize to:
+   - Measure available viewport height
+   - Calculate scale factor to fit content without scrollbars/clipping
+   - Update CSS variables with scaled values (respecting min/max constraints)
+3. **Constraints** prevent extreme scaling:
+   - Node width: 150px - 200px
+   - Node min-height: 135px - 180px  
+   - Image size: 80px - 100px
+   - Title font: 14px - 18px
+   - Text font: 11px - 13px (11px minimum)
+
+### Customizing Constraints
+
+Edit `calculateHorizontalScale()` in `src/js/core/timeline-engine.js`:
+
+```javascript
+const constraints = {
+  nodeWidth: { min: 150, max: 200, default: 200 },
+  nodeMinHeight: { min: 135, max: 180, default: 180 },
+  // ... adjust min/max/default values
+};
+```
+
+### CSS Variables Used
+
+- `--timeline-h-node-width`
+- `--timeline-h-node-min-height`
+- `--timeline-h-image-size`
+- `--timeline-h-title-font-size`
+- `--timeline-h-text-font-size`
+
+These can be overridden per-timeline via inline styles if needed.
 
 ## Resources
 

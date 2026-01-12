@@ -5,10 +5,10 @@
 
 body { 
     background-color: white;
-    padding: 20px;
     color: black;
     font-family: Arial, Helvetica, sans-serif; 
-    padding: 20px;
+    padding: 0;
+    margin: 0;
 }
 
 /* Google Font: Delius */
@@ -42,7 +42,13 @@ body {
 
 .wrapper { 
   max-width: 1800px; 
-  margin: 80px auto; 
+  margin: 0 auto; 
+}
+
+.topnotice {
+  width: 97%;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
 .mainhead {
@@ -50,6 +56,7 @@ body {
 }
 
 .textcontainer {
+  display: none;
   margin: 90px auto;
   padding: 20px;
   width: 65vw;
@@ -304,4 +311,38 @@ footer a:link {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+
+/* Alert messages */
+.alert {
+  font-size: 12px;
+  color: white;
+  background-color: #f44336; 
+  padding: 8px 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  visibility: hidden;
+}
+
+.alerttxt {
+  flex-grow: 1;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+  transform: scale(1.2);
 }

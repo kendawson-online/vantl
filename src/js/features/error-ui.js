@@ -33,7 +33,9 @@ export function showTimelineError(container, errorType, details) {
     solution: 'Please check the browser console for more details.'
   };
 
-  hideTimelineLoader(container);
+  hideTimelineLoader();
+  // mark container as error state so timeline visuals (lines, nav buttons) can be hidden via CSS
+  container.classList.add('timeline--error');
   container.innerHTML = '';
 
   const errorDiv = document.createElement('div');
@@ -75,4 +77,19 @@ export function showTimelineError(container, errorType, details) {
   container.appendChild(errorDiv);
 
   console.error('Timeline Error [' + errorType + ']:', errorInfo.message, details || '');
+
+  // Emit a global event so host pages can react (e.g., cancel instructions UI)
+  try {
+    const evt = new CustomEvent('timeline:error', {
+      detail: {
+        type: errorType,
+        message: errorInfo.message,
+        details: details || null,
+        containerId: container.id || null
+      }
+    });
+    window.dispatchEvent(evt);
+  } catch (e) {
+    // ignore event errors in very old browsers
+  }
 }

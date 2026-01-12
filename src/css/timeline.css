@@ -9,6 +9,15 @@
     --timeline-node-bg: #FFF;
     --timeline-nav-color: #FFF;
     --timeline-nav-border: #DDD;
+    /* Outline color for the active/current item (defaults to black when no nodeColor is configured) */
+    --timeline-active-outline-color: #000;
+    
+    /* CSS Custom Properties for responsive horizontal layout dimensions */
+    --timeline-h-node-width: 200px;
+    --timeline-h-node-min-height: 180px;
+    --timeline-h-image-size: 100px;
+    --timeline-h-title-font-size: 18px;
+    --timeline-h-text-font-size: 11px;
 }
 
 /* Timeline heading */
@@ -45,7 +54,9 @@
 }
 
 .timeline--horizontal .timeline__wrap {
-    overflow: visible;
+    /* Clip items horizontally (past nav buttons) but allow vertical overflow */
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 .timeline__item {
@@ -120,10 +131,15 @@
     animation-name: fadeIn;
 }
 
-/* Active state for deep linking */
+/* Active state for current/deep-linked node */
 .timeline__item--active .timeline__content {
-    transform: scale(1.05);
+    border: 2px solid var(--timeline-active-outline-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Fill the dot for active node */
+.timeline__item--active::after {
+    background-color: var(--timeline-node-color);
 }
 
 .timeline__item--left {
@@ -177,8 +193,8 @@
 
 /* Horizontal timeline images - square thumbnails */
 .timeline--horizontal .timeline__image {
-    width: 100px;
-    height: 100px;
+    width: var(--timeline-h-image-size);
+    height: var(--timeline-h-image-size);
     object-fit: cover;
     margin: 0 auto 8px;
 }
@@ -230,6 +246,12 @@
 .timeline--horizontal {
     font-size: 0;
     padding: 0 60px;
+    /* Allow vertical overflow so bottom items aren't clipped */
+    overflow-y: visible;
+}
+
+.timeline--horizontal .timeline__wrap {
+    /* Clip items horizontally (past nav buttons) but allow vertical overflow (prevent bottom clipping) */
     overflow-x: hidden;
     overflow-y: visible;
     white-space: nowrap;
@@ -259,22 +281,22 @@
     transition: none;
     vertical-align: top;
     white-space: normal;
-    width: 200px;
+    width: var(--timeline-h-node-width);
 }
 
 .timeline--horizontal .timeline__item .timeline__content {
     padding: 12px;
-    min-height: 180px;
+    min-height: var(--timeline-h-node-min-height);
 }
 
 .timeline--horizontal .timeline__item .timeline__content h3 {
-    font-size: 18px;
+    font-size: var(--timeline-h-title-font-size);
     font-weight: 700;
     margin: 0 0 8px;
 }
 
 .timeline--horizontal .timeline__item .timeline__content p {
-    font-size: 11px;
+    font-size: var(--timeline-h-text-font-size);
     line-height: 1.4;
     margin-bottom: 0;
 }
@@ -349,6 +371,27 @@
     top: auto;
 }
 
+/* Active pointer/arrow outline should match the active outline color */
+.timeline--horizontal .timeline__item.timeline__item--active .timeline__content::before {
+    border-top-color: var(--timeline-active-outline-color);
+}
+
+.timeline--horizontal .timeline__item--bottom.timeline__item--active .timeline__content::before {
+    border-bottom-color: var(--timeline-active-outline-color);
+}
+
+.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--active.timeline__item--left .timeline__content::before {
+    border-left-color: var(--timeline-active-outline-color);
+}
+
+.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--active.timeline__item--right .timeline__content::before {
+    border-right-color: var(--timeline-active-outline-color);
+}
+
+.timeline--mobile .timeline__item--active .timeline__content::before {
+    border-right-color: var(--timeline-active-outline-color);
+}
+
 .timeline-nav-button {
     background-color: var(--timeline-nav-color);
     border: 3px solid var(--timeline-nav-border);
@@ -378,6 +421,19 @@
     pointer-events: none;
     cursor: not-allowed;
     user-select: none;
+}
+
+/* Visual disabled state for at-start and at-end classes (no actual disabled attribute) */
+.timeline-nav-button.timeline-nav-button--at-start,
+.timeline-nav-button.timeline-nav-button--at-end {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.timeline-nav-button.timeline-nav-button--at-start:hover,
+.timeline-nav-button.timeline-nav-button--at-end:hover {
+    transform: translateY(-50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .timeline-nav-button::before {
@@ -521,12 +577,14 @@
     max-width: 900px;
     max-height: 90vh;
     background-color: #FFF;
-    border-radius: 12px;
+    border-radius: 0;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     z-index: 9999;
     opacity: 0;
     visibility: hidden;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
@@ -537,36 +595,21 @@
 }
 
 .timeline-modal__content {
-    padding: 40px 40px 80px 40px;
+    padding: 40px;
     max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
-/* Fix scrollbar overflow on rounded corners */
-.timeline-modal__content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.timeline-modal__content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 0 12px 12px 0;
-}
-
-.timeline-modal__content::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.timeline-modal__content::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
+/* Use user-agent/default scrollbar styling so OS/browser controls decide width */
 
 .timeline-modal__image {
     width: auto;
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 0;
     margin: 0 auto 20px;
     display: block;
 }
@@ -595,13 +638,12 @@
 }
 
 .timeline-modal__close-bottom {
-    display: block;
-    margin: 30px auto 0;
+    display: inline-block;
     padding: 12px 40px;
     background-color: #333;
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: 0;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -609,6 +651,14 @@
 
 .timeline-modal__close-bottom:hover {
     background-color: #555;
+}
+
+.timeline-modal__footer {
+    border-top: 1px solid #ddd;
+    padding: 16px 24px;
+    background: #fff;
+    text-align: center;
+    flex: 0 0 auto;
 }
 
 .timeline-modal__close {
@@ -619,7 +669,7 @@
     height: 40px;
     background-color: rgba(0, 0, 0, 0.6);
     border: none;
-    border-radius: 50%;
+    border-radius: 4px;
     color: #FFF;
     font-size: 24px;
     line-height: 1;
@@ -637,6 +687,43 @@
 
 .timeline-modal__close::before {
     content: '×';
+}
+
+/* Fullscreen modals on small screens (medium and below) */
+@media (max-width: 768px) {
+    .timeline-modal {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        top: 0;
+        left: 0;
+        transform: scale(0.95);
+        border-radius: 0;
+    }
+    
+    .timeline-modal.timeline-modal-show {
+        transform: scale(1);
+    }
+    
+    .timeline-modal__content {
+        max-height: 100%;
+        padding: 60px 20px 20px; /* More top padding for close button */
+    }
+    
+    .timeline-modal__close {
+        top: 10px;
+        right: 10px;
+        width: 48px;
+        height: 48px;
+        font-size: 28px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .timeline-modal__close:hover {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
 }
 
 /* Make timeline items clickable */
@@ -698,6 +785,17 @@
     height: auto;
     margin-bottom: 24px;
     opacity: 0.8;
+}
+
+/* Hide timeline decorations when showing error UI inside the timeline container */
+.timeline.timeline--error::before,
+.timeline.timeline--error .timeline-divider,
+.timeline.timeline--error .timeline-nav-button {
+    display: none !important;
+}
+.timeline.timeline--error .timeline__items,
+.timeline.timeline--error .timeline__wrap {
+    display: none !important;
 }
 
 .timeline__error-title {

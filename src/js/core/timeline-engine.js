@@ -4,6 +4,54 @@ import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 
+/**
+ * Calculate and apply responsive scaling for horizontal timeline based on viewport height
+ * @param {HTMLElement} timelineEl - The timeline container element
+ */
+function calculateHorizontalScale(timelineEl) {
+  if (!timelineEl || !timelineEl.classList.contains('timeline--horizontal')) {
+    return;
+  }
+
+  // Define constraints
+  const constraints = {
+    nodeWidth: { min: 150, max: 200, default: 200 },
+    nodeMinHeight: { min: 135, max: 180, default: 180 },
+    imageSize: { min: 80, max: 100, default: 100 },
+    titleFontSize: { min: 14, max: 18, default: 18 },
+    textFontSize: { min: 11, max: 13, default: 11 }
+  };
+
+  // Get available viewport height (minus padding/margins)
+  const viewportHeight = window.innerHeight;
+  const timelinePadding = 180; // Account for heading, margins, bottom item padding (40px), and buffer
+  const availableHeight = viewportHeight - timelinePadding;
+
+  // Calculate required height for default (max) dimensions
+  // Two rows of nodes + divider line + spacing + bottom padding
+  const maxNodeHeight = constraints.nodeMinHeight.max;
+  const requiredHeight = (maxNodeHeight * 2) + 90; // 90px for divider, spacing, and bottom item padding
+
+  // Calculate scale factor
+  let scaleFactor = 1.0;
+  if (availableHeight < requiredHeight) {
+    scaleFactor = Math.max(0.75, availableHeight / requiredHeight); // Don't scale below 75%
+  }
+
+  // Apply scaling with constraints
+  function scaleValue(config) {
+    const scaled = Math.round(config.default * scaleFactor);
+    return Math.max(config.min, Math.min(config.max, scaled));
+  }
+
+  // Set CSS custom properties
+  timelineEl.style.setProperty('--timeline-h-node-width', scaleValue(constraints.nodeWidth) + 'px');
+  timelineEl.style.setProperty('--timeline-h-node-min-height', scaleValue(constraints.nodeMinHeight) + 'px');
+  timelineEl.style.setProperty('--timeline-h-image-size', scaleValue(constraints.imageSize) + 'px');
+  timelineEl.style.setProperty('--timeline-h-title-font-size', scaleValue(constraints.titleFontSize) + 'px');
+  timelineEl.style.setProperty('--timeline-h-text-font-size', scaleValue(constraints.textFontSize) + 'px');
+}
+
 function ensureInlineModalData(itemEl) {
   if (!itemEl) return;
   const content = itemEl.querySelector('.timeline__content') || itemEl;
@@ -58,8 +106,11 @@ export function timeline(collection, options) {
   let currentIndex = 0;
   const eventListeners = new Map(); // Track listeners for cleanup
 
-  showTimelineLoader();
-  let shouldHideLoader = true;
+  const skipLoader = options && options.skipLoader === true;
+  if (!skipLoader) {
+    showTimelineLoader();
+  }
+  let shouldHideLoader = !skipLoader;
 
   const defaultSettings = {
     minWidth: { type: 'integer', defaultValue: 600 },
@@ -279,7 +330,10 @@ export function timeline(collection, options) {
 
   function setHeightandWidths(tl) {
     function setWidths() {
-      tl.itemWidth = 200;
+      // Get the current scaled node width from CSS variable
+      const computedStyle = getComputedStyle(tl.timelineEl);
+      const nodeWidth = parseInt(computedStyle.getPropertyValue('--timeline-h-node-width')) || 200;
+      tl.itemWidth = nodeWidth;
       tl.items.forEach((item) => {
         item.style.width = `${tl.itemWidth}px`;
       });
@@ -320,7 +374,8 @@ export function timeline(collection, options) {
           }
         }
       });
-      tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest}px`;
+      // Add 40px to account for bottom padding on items to prevent clipping
+      tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest + 40}px`;
     }
 
     if (window.innerWidth > tl.settings.minWidth) {
@@ -340,7 +395,9 @@ export function timeline(collection, options) {
       prevArrow.className = 'timeline-nav-button timeline-nav-button--prev';
       nextArrow.className = 'timeline-nav-button timeline-nav-button--next';
       prevArrow.textContent = 'Previous';
+      prevArrow.title = 'Go to previous items';
       nextArrow.textContent = 'Next';
+      nextArrow.title = 'Go to next items';
       prevArrow.style.top = `${topPosition}px`;
       nextArrow.style.top = `${topPosition}px`;
 
@@ -350,9 +407,12 @@ export function timeline(collection, options) {
 
       const maxIndex = Math.max(0, tl.items.length - itemsVisible);
       if (currentIndex === 0) {
-        prevArrow.disabled = true;
-      } else if (currentIndex >= maxIndex) {
-        nextArrow.disabled = true;
+        prevArrow.classList.add('timeline-nav-button--at-start');
+        prevArrow.title = 'Already at beginning of timeline';
+      }
+      if (currentIndex >= maxIndex) {
+        nextArrow.classList.add('timeline-nav-button--at-end');
+        nextArrow.title = 'Already at end of timeline';
       }
       tl.timelineEl.appendChild(prevArrow);
       tl.timelineEl.appendChild(nextArrow);
@@ -377,6 +437,15 @@ export function timeline(collection, options) {
     addTransforms(tl.scroller, str);
   }
 
+  function updateActiveItem(tl, index) {
+    // Remove active class from all items
+    tl.items.forEach(item => item.classList.remove('timeline__item--active'));
+    // Add active class to current item
+    if (tl.items[index]) {
+      tl.items[index].classList.add('timeline__item--active');
+    }
+  }
+
   function slideTimeline(tl) {
     const navArrows = tl.timelineEl.querySelectorAll('.timeline-nav-button');
     const arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
@@ -391,25 +460,37 @@ export function timeline(collection, options) {
     const handleArrowClick = function(e) {
       e.preventDefault();
       e.stopPropagation();
+      e.stopImmediatePropagation();
 
-      if (this.disabled) {
+      // If at bounds, show tooltip message and return (no-op)
+      if (this.classList.contains('timeline-nav-button--at-start') || this.classList.contains('timeline-nav-button--at-end')) {
         return;
       }
 
       currentIndex = this.classList.contains('timeline-nav-button--next') ? (currentIndex += moveItems) : (currentIndex -= moveItems);
       if (currentIndex === 0 || currentIndex < 0) {
         currentIndex = 0;
-        arrowPrev.disabled = true;
-        arrowNext.disabled = false;
+        arrowPrev.classList.add('timeline-nav-button--at-start');
+        arrowPrev.title = 'Already at beginning of timeline';
+        arrowNext.classList.remove('timeline-nav-button--at-end');
+        arrowNext.title = 'Go to next items';
       } else if (currentIndex === maxIndex || currentIndex > maxIndex) {
         currentIndex = maxIndex;
-        arrowPrev.disabled = false;
-        arrowNext.disabled = true;
+        arrowPrev.classList.remove('timeline-nav-button--at-start');
+        arrowPrev.title = 'Go to previous items';
+        arrowNext.classList.add('timeline-nav-button--at-end');
+        arrowNext.title = 'Already at end of timeline';
       } else {
-        arrowPrev.disabled = false;
-        arrowNext.disabled = false;
+        arrowPrev.classList.remove('timeline-nav-button--at-start');
+        arrowPrev.title = 'Go to previous items';
+        arrowNext.classList.remove('timeline-nav-button--at-end');
+        arrowNext.title = 'Go to next items';
       }
       timelinePosition(tl);
+      tl.activeIndex = currentIndex;
+      updateActiveItem(tl, tl.activeIndex);
+      // Remove focus from button to avoid keyboard navigation side effects
+      this.blur();
     };
     
     Array.from(navArrows).forEach((arrow) => {
@@ -424,9 +505,15 @@ export function timeline(collection, options) {
     } else {
       currentIndex = tl.settings.startIndex;
     }
+    // Track the "active" item separately from the scroll position.
+    // Usually these are the same, but they can diverge near the end (e.g. last item).
+    tl.activeIndex = currentIndex;
     tl.timelineEl.classList.add('timeline--horizontal');
+    // Calculate responsive scaling before layout calculations
+    calculateHorizontalScale(tl.timelineEl);
     setHeightandWidths(tl);
     timelinePosition(tl);
+    updateActiveItem(tl, tl.activeIndex);
     addNavigation(tl);
     addHorizontalDivider(tl);
     slideTimeline(tl);
@@ -438,21 +525,52 @@ export function timeline(collection, options) {
           const viewportWidth = tl.wrap.offsetWidth;
           const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
           const maxIndex = Math.max(0, tl.items.length - itemsVisible);
+          // Scroll position clamps to maxIndex, but the active highlight can be the actual requested item.
+          tl.activeIndex = Math.max(0, Math.min(index, tl.items.length - 1));
           currentIndex = Math.max(0, Math.min(index, maxIndex));
         },
         updatePosition: function() {
           timelinePosition(tl);
+          updateActiveItem(tl, tl.activeIndex);
           const arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
           const arrowNext = tl.timelineEl.querySelector('.timeline-nav-button--next');
           if (arrowPrev && arrowNext) {
             const viewportWidth = tl.wrap.offsetWidth;
             const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
             const maxIndex = Math.max(0, tl.items.length - itemsVisible);
-            arrowPrev.disabled = currentIndex === 0;
-            arrowNext.disabled = currentIndex >= maxIndex;
+            // Use classes instead of disabled attribute to avoid focus issues
+            if (currentIndex === 0) {
+              arrowPrev.classList.add('timeline-nav-button--at-start');
+              arrowPrev.title = 'Already at beginning of timeline';
+            } else {
+              arrowPrev.classList.remove('timeline-nav-button--at-start');
+              arrowPrev.title = 'Go to previous items';
+            }
+            if (currentIndex >= maxIndex) {
+              arrowNext.classList.add('timeline-nav-button--at-end');
+              arrowNext.title = 'Already at end of timeline';
+            } else {
+              arrowNext.classList.remove('timeline-nav-button--at-end');
+              arrowNext.title = 'Go to next items';
+            }
           }
         }
       };
+
+      // Clicking an item (dot or card) should also make it the current/active node.
+      // This runs alongside modal opening.
+      const tlData = timelineRegistry[timelineId];
+      tl.items.forEach((item, idx) => {
+        const activateHandler = () => {
+          if (!tl.timelineEl.classList.contains('timeline--horizontal')) return;
+          if (tlData && tlData.setCurrentIndex && tlData.updatePosition) {
+            tlData.setCurrentIndex(idx);
+            tlData.updatePosition();
+          }
+        };
+        item.addEventListener('click', activateHandler);
+        tl.listeners.push({ element: item, type: 'click', handler: activateHandler });
+      });
     }
   }
 
@@ -581,16 +699,25 @@ export function timeline(collection, options) {
     }
   }
 
-  setUpTimelines();
+  try {
+    setUpTimelines();
 
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      const newWinWidth = window.innerWidth;
-      if (newWinWidth !== winWidth) {
-        setUpTimelines();
-        winWidth = newWinWidth;
-      }
-    }, 250);
-  });
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const newWinWidth = window.innerWidth;
+        if (newWinWidth !== winWidth) {
+          setUpTimelines();
+          winWidth = newWinWidth;
+        }
+      }, 250);
+    });
+  } catch (e) {
+    console.error('Timeline initialization failed:', e);
+  } finally {
+    if (shouldHideLoader) {
+      hideTimelineLoader();
+      shouldHideLoader = false;
+    }
+  }
 }

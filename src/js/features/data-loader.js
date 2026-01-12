@@ -28,6 +28,7 @@ function createItemNode(item) {
     img.src = item.image;
     img.className = 'timeline__image';
     img.alt = item.title || '';
+    img.loading = 'lazy';
     img.onerror = function() {
       console.error('Timeline: The image "' + item.image + '" could not be loaded. Please check the path.');
       this.src = timelineBasePath + '/missing-image.svg';
@@ -94,6 +95,9 @@ export function renderTimelineFromData(containerSelector, data, config) {
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
+  // remove any previous error state
+  container.classList.remove('timeline--error');
+
   let itemsWrap = container.querySelector('.timeline__items');
   if (!itemsWrap) {
     const wrap = document.createElement('div');
@@ -134,7 +138,9 @@ export function renderTimelineFromData(containerSelector, data, config) {
 export function timelineFromData(containerSelector, data, options) {
   const container = renderTimelineFromData(containerSelector, data, options);
   if (!container) return;
-  timeline([container], options);
+  // Skip loader for programmatic timelines (data already in memory)
+  const mergedOptions = Object.assign({}, options, { skipLoader: true });
+  timeline([container], mergedOptions);
 }
 
 export function loadDataFromJson(url, containerSelector) {

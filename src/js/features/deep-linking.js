@@ -23,6 +23,8 @@ export function handleDeepLinking(containerSelector) {
   const targetNode = targetContainer.querySelector('[data-node-id="' + nodeId + '"]');
   if (targetNode) {
     setTimeout(function() {
+      // Ensure only one active item is highlighted in this timeline
+      targetContainer.querySelectorAll('.timeline__item--active').forEach((n) => n.classList.remove('timeline__item--active'));
       targetNode.classList.add('timeline__item--active');
       const itemIndex = Array.from(targetNode.parentNode.children).indexOf(targetNode);
       navigateToNodeIndex(targetContainer, itemIndex);

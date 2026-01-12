@@ -39,10 +39,6 @@ export function hideTimelineLoader() {
   loaderState.count -= 1;
   if (loaderState.count > 0) return;
 
-  const elapsed = Date.now() - loaderState.startTime;
-  const minMs = getTimelineLoaderMinMs();
-  const remaining = Math.max(0, minMs - elapsed);
-
   const removeOverlay = function() {
     if (loaderState.overlayEl) {
       loaderState.overlayEl.remove();
@@ -55,6 +51,11 @@ export function hideTimelineLoader() {
     clearTimeout(loaderState.removeTimer);
     loaderState.removeTimer = null;
   }
+
+  // Respect minimum display time where possible
+  const elapsed = Date.now() - loaderState.startTime;
+  const minMs = getTimelineLoaderMinMs();
+  const remaining = Math.max(0, minMs - elapsed);
 
   if (remaining > 0) {
     loaderState.removeTimer = setTimeout(removeOverlay, remaining);
