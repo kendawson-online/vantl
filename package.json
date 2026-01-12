@@ -1,8 +1,17 @@
 {
   "name": "@kendawson-online/vantl",
+  "author": "Ken Dawson",
   "version": "2.0.6",
-  "description": "A vanilla JavaScript library that creates responsive timelines for both horizontal and vertical layouts",
+  "description": "A vanilla JavaScript library with zero dependencies that generates responsive timelines for both horizontal and vertical layouts",
   "main": "dist/timeline.min.js",
+  "homepage": "https://github.com/kendawson-online/vantl",
+  "license": "MIT",
+  "keywords": [
+    "timeline",
+    "vanilla",
+    "javascript",
+    "ui"
+  ],
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w"
@@ -14,13 +23,6 @@
     "rollup": "^4.55.1",
     "rollup-plugin-postcss": "^4.0.2"
   },
-  "keywords": [
-    "timeline",
-    "vanilla",
-    "javascript",
-    "ui"
-  ],
-  "author": "Ken Dawson",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kendawson-online/vantl.git"
@@ -28,8 +30,7 @@
   "bugs": {
     "url": "https://github.com/kendawson-online/vantl/issues"
   },
-  "homepage": "https://github.com/kendawson-online/vantl#readme",
-  "license": "MIT",
+
   "files": [
     "dist",
     "src/css",
