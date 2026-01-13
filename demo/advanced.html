@@ -33,8 +33,7 @@
           <br>
           // Render with one function call<br>
           timelineFromData('#progTimeline', timelineData, {<br>
-          &nbsp;&nbsp;mode: 'vertical',<br>
-          &nbsp;&nbsp;visibleItems: 3<br>
+          &nbsp;&nbsp;mode: 'vertical'<br>
           });
         </div>
       </div>
@@ -55,8 +54,7 @@
           &nbsp;&nbsp;.then(res => res.json())<br>
           &nbsp;&nbsp;.then(data => {<br>
           &nbsp;&nbsp;&nbsp;&nbsp;timelineFromData('#apiTimeline', data, {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode: 'horizontal',<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visibleItems: 5<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode: 'horizontal'<br>
           &nbsp;&nbsp;&nbsp;&nbsp;});<br>
           &nbsp;&nbsp;});
         </div>
@@ -158,8 +156,7 @@
         ];
 
         timelineFromData('#progTimeline', basicData, {
-          mode: 'vertical',
-          visibleItems: 3
+          mode: 'vertical'
         });
 
 
@@ -171,7 +168,6 @@
           return Promise.resolve({
             timelineName: 'Technology Evolution',
             layoutMode: 'horizontal',
-            visibleItems: 4,
             minWidth: 700,
             nodeColor: '#2196F3',
             lineColor: '#64B5F6',
@@ -214,7 +210,6 @@
           var nodes = apiData.nodes;
           var config = {
             mode: 'horizontal',
-            visibleItems: apiData.visibleItems,
             minWidth: apiData.minWidth,
             nodeColor: apiData.nodeColor,
             lineColor: apiData.lineColor,
@@ -280,7 +275,6 @@
 
         timelineFromData('#dbTimeline', dbItems, {
           mode: 'vertical',
-          visibleItems: 3,
           nodeColor: '#FF9800',
           lineColor: '#FFB74D'
         });
@@ -319,7 +313,6 @@
 
         timelineFromData('#jqTimeline', jqData, {
           mode: 'horizontal',
-          visibleItems: 3,
           minWidth: 600
         });
 

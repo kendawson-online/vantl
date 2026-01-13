@@ -185,7 +185,6 @@ It's a lightweight text format stored in a file with a `.json` extension. It's e
 {
   "timelineName": "Timeline Title",
   "layoutMode": "horizontal",
-  "visibleItems": 5,
   "minWidth": 700,
   "maxWidth": "",
   "nodeColor": "",
@@ -222,9 +221,9 @@ Here are some examples of JSON files you can use as templates to build your own 
 
 🗓️ **A NOTE ABOUT DATES IN JSON** 🗓️ 
 
-If there are dates stored in these JSON files (e.g. the `lastupdated` field), they're stored in a special format named ISO 8601. The vanilla timeline app expects dates to be in this format. 
+Dates stored in JSON data files (e.g. the `lastupdated` field) are stored in a special format called ISO 8601. The vanilla timeline app expects dates to be in this specific format. 
 
-There is a [demo page](demo/time.html) included which displays this date format for you. This page also teaches you how to generate the ISO 8601 timestamp in the developer console of your web browser. Open the [demo/time.html](demo/time.html) file in your browser to see a current ISO 8601 timestamp. You can copy/paste this date string directly into your JSON timelines.
+There is a [demo page](demo/time.html) which displays dates in this format for you. The page also teaches you how to generate ISO 8601 timestamps in the developer console of your own web browser. Open the [demo/time.html](demo/time.html) file in a browser to see a current ISO 8601 timestamp. You can copy/paste this date string directly to your JSON timelines.
 
 ----
 
@@ -300,8 +299,7 @@ timeline(document.querySelectorAll('.timeline'), {
 ```javascript
 // vanilla Javascript
 timeline(document.querySelectorAll('.timeline'), {
-  mode: 'horizontal',
-  visibleItems: 3,
+  mode: 'horizontal'
 });
 
 
@@ -321,7 +319,6 @@ All options can be set via JavaScript API, data attributes, or with JSON config.
 | `mode` | string | `'vertical'` | Layout mode: `'vertical'` or `'horizontal'` |
 | `minWidth` | number | `600` | Min viewport width (px) to maintain horizontal mode |
 | `maxWidth` | number | `600` | Max viewport width (px) to maintain vertical mode |
-| `visibleItems` | number | `3` | Number of items in horizontal viewport |
 | `moveItems` | number | `1` | Items to scroll per navigation click (horizontal) |
 | `startIndex` | number | `0` | Initial item index (horizontal mode) |
 | `horizontalStartPosition` | string | `'top'` | First item alignment: `'top'` or `'bottom'` |

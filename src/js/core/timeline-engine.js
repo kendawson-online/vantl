@@ -97,6 +97,38 @@ function createArrowSVG(direction, color) {
   return '<svg xmlns="http://www.w3.org/2000/svg" width="7.8" height="14" style="display:block;margin:auto;"><path fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 1l5.8 6L1 13"/></svg>';
 }
 
+function clampInt(value, min, max) {
+  const n = parseInt(value, 10);
+  if (Number.isNaN(n)) return min;
+  return Math.max(min, Math.min(max, n));
+}
+
+function shouldUpdateDeepLinkForTimeline(timelineEl) {
+  if (typeof window === 'undefined' || !window.location) return false;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('id')) return false;
+  const timelineParam = params.get('timeline');
+  // If a specific timeline is deep-linked, only update URL for that one.
+  if (timelineParam && timelineEl && timelineEl.id) {
+    return timelineParam === timelineEl.id;
+  }
+  // If no timeline param provided, treat as generic deep link.
+  return true;
+}
+
+function updateDeepLinkUrl(timelineEl, nodeId) {
+  if (!timelineEl || !nodeId || typeof window === 'undefined' || !window.history) return;
+  if (!shouldUpdateDeepLinkForTimeline(timelineEl)) return;
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  if (timelineEl.id) {
+    params.set('timeline', timelineEl.id);
+  }
+  params.set('id', String(nodeId));
+  url.search = params.toString();
+  window.history.replaceState({}, '', url.toString());
+}
+
 export function timeline(collection, options) {
   const timelines = [];
   const warningLabel = 'Timeline:';
@@ -115,7 +147,7 @@ export function timeline(collection, options) {
     startIndex: { type: 'integer', defaultValue: 0 },
     verticalStartPosition: { type: 'string', acceptedValues: ['left', 'right'], defaultValue: 'left' },
     verticalTrigger: { type: 'string', defaultValue: '15%' },
-    visibleItems: { type: 'integer', defaultValue: 3 }
+    /* visibleItems is deprecated and ignored; visible count is computed at runtime */
   };
 
   function testValues(value, settingName) {
@@ -198,6 +230,8 @@ export function timeline(collection, options) {
 
     Object.keys(defaultSettings).forEach((key) => {
       settings[key] = defaultSettings[key].defaultValue;
+
+      
 
       if (key === 'minWidth') {
         let candidate = undefined;
@@ -285,20 +319,19 @@ export function timeline(collection, options) {
       value: triggerValue
     };
 
-    if (settings.moveItems > settings.visibleItems) {
-      console.warn(`${warningLabel} The value of "moveItems" (${settings.moveItems}) is larger than the number of "visibleItems" (${settings.visibleItems}). The value of "visibleItems" has been used instead.`);
-      settings.moveItems = settings.visibleItems;
+    // Sanity-check moveItems: cap to total items if it's larger than available
+    if (settings.moveItems > items.length) {
+      console.warn(`${warningLabel} The value of "moveItems" (${settings.moveItems}) is larger than the total number of items (${items.length}). It has been reduced to ${items.length}.`);
+      settings.moveItems = items.length;
     }
 
-    if (settings.startIndex > (items.length - settings.visibleItems) && items.length > settings.visibleItems) {
-      console.warn(`${warningLabel} The 'startIndex' setting must be between 0 and ${items.length - settings.visibleItems} for this timeline. The value of ${items.length - settings.visibleItems} has been used instead.`);
-      settings.startIndex = items.length - settings.visibleItems;
-    } else if (items.length <= settings.visibleItems) {
-      console.warn(`${warningLabel} The number of items in the timeline must exceed the number of visible items to use the 'startIndex' option.`);
+    // Sanity-check startIndex: ensure it's within 0..items.length-1
+    if (settings.startIndex < 0) {
+      console.warn(`${warningLabel} The 'startIndex' setting must be >= 0. The value of 0 has been used instead.`);
       settings.startIndex = 0;
-    } else if (settings.startIndex < 0) {
-      console.warn(`${warningLabel} The 'startIndex' setting must be between 0 and ${items.length - settings.visibleItems} for this timeline. The value of 0 has been used instead.`);
-      settings.startIndex = 0;
+    } else if (settings.startIndex > Math.max(0, items.length - 1)) {
+      console.warn(`${warningLabel} The 'startIndex' setting is larger than the last index for this timeline. It has been reduced to ${Math.max(0, items.length - 1)}.`);
+      settings.startIndex = Math.max(0, items.length - 1);
     }
 
     enhanceInlineItems(timelineEl, items);
@@ -367,8 +400,17 @@ export function timeline(collection, options) {
           }
         }
       });
-      // Add 40px to account for bottom padding on items to prevent clipping
-      tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest + 40}px`;
+      // Store heights for use in divider and arrow positioning  
+      tl.evenIndexTallest = evenIndexTallest;
+      tl.oddIndexTallest = oddIndexTallest;
+      // Set scroller height (no extra padding - use original calculation)
+      tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest}px`;
+      // Compute how many items fit in the viewport for this timeline
+      try {
+        tl.computedVisibleCount = Math.floor(tl.wrap.offsetWidth / tl.itemWidth) || 1;
+      } catch (e) {
+        tl.computedVisibleCount = 1;
+      }
     }
 
     if (window.innerWidth > tl.settings.minWidth) {
@@ -384,6 +426,7 @@ export function timeline(collection, options) {
     if (tl.items.length > itemsVisible) {
       const prevArrow = document.createElement('button');
       const nextArrow = document.createElement('button');
+      // Use the same calculation as the original: first item's offsetHeight
       const topPosition = tl.items[0].offsetHeight;
       prevArrow.className = 'timeline-nav-button timeline-nav-button--prev';
       nextArrow.className = 'timeline-nav-button timeline-nav-button--next';
@@ -398,12 +441,12 @@ export function timeline(collection, options) {
       prevArrow.innerHTML = createArrowSVG('left', arrowColor);
       nextArrow.innerHTML = createArrowSVG('right', arrowColor);
 
-      const maxIndex = Math.max(0, tl.items.length - itemsVisible);
-      if (currentIndex === 0) {
+      const maxActiveIndex = Math.max(0, tl.items.length - 1);
+      if (tl.activeIndex <= 0) {
         prevArrow.classList.add('timeline-nav-button--at-start');
         prevArrow.title = 'Already at beginning of timeline';
       }
-      if (currentIndex >= maxIndex) {
+      if (tl.activeIndex >= maxActiveIndex) {
         nextArrow.classList.add('timeline-nav-button--at-end');
         nextArrow.title = 'Already at end of timeline';
       }
@@ -417,6 +460,7 @@ export function timeline(collection, options) {
     if (divider) {
       tl.timelineEl.removeChild(divider);
     }
+    // Use the same calculation as the original: first item's offsetHeight
     const topPosition = tl.items[0].offsetHeight;
     const horizontalDivider = document.createElement('span');
     horizontalDivider.className = 'timeline-divider';
@@ -424,8 +468,9 @@ export function timeline(collection, options) {
     tl.timelineEl.appendChild(horizontalDivider);
   }
 
-  function timelinePosition(tl) {
-    const position = tl.items[currentIndex].offsetLeft;
+  function timelinePosition(tl, index) {
+    const safeIndex = clampInt(index, 0, Math.max(0, tl.items.length - 1));
+    const position = tl.items[safeIndex].offsetLeft;
     const str = `translate3d(-${position}px, 0, 0)`;
     addTransforms(tl.scroller, str);
   }
@@ -446,7 +491,7 @@ export function timeline(collection, options) {
 
     const viewportWidth = tl.wrap.offsetWidth;
     const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-    const maxIndex = Math.max(0, tl.items.length - itemsVisible);
+    const maxScrollIndex = Math.max(0, tl.items.length - itemsVisible);
 
     const moveItems = parseInt(tl.settings.moveItems, 10);
     
@@ -460,28 +505,36 @@ export function timeline(collection, options) {
         return;
       }
 
-      currentIndex = this.classList.contains('timeline-nav-button--next') ? (currentIndex += moveItems) : (currentIndex -= moveItems);
-      if (currentIndex === 0 || currentIndex < 0) {
-        currentIndex = 0;
+      const direction = this.classList.contains('timeline-nav-button--next') ? 1 : -1;
+      const maxActiveIndex = Math.max(0, tl.items.length - 1);
+      const nextActive = clampInt(tl.activeIndex + (direction * moveItems), 0, maxActiveIndex);
+
+      // Scroll position clamps to the last scrollable index, but active highlight can continue.
+      currentIndex = clampInt(nextActive, 0, maxScrollIndex);
+      tl.activeIndex = nextActive;
+
+      // Update arrows based on ACTIVE index (linear user expectation)
+      if (tl.activeIndex <= 0) {
         arrowPrev.classList.add('timeline-nav-button--at-start');
         arrowPrev.title = 'Already at beginning of timeline';
-        arrowNext.classList.remove('timeline-nav-button--at-end');
-        arrowNext.title = 'Go to next items';
-      } else if (currentIndex === maxIndex || currentIndex > maxIndex) {
-        currentIndex = maxIndex;
-        arrowPrev.classList.remove('timeline-nav-button--at-start');
-        arrowPrev.title = 'Go to previous items';
-        arrowNext.classList.add('timeline-nav-button--at-end');
-        arrowNext.title = 'Already at end of timeline';
       } else {
         arrowPrev.classList.remove('timeline-nav-button--at-start');
         arrowPrev.title = 'Go to previous items';
+      }
+      if (tl.activeIndex >= maxActiveIndex) {
+        arrowNext.classList.add('timeline-nav-button--at-end');
+        arrowNext.title = 'Already at end of timeline';
+      } else {
         arrowNext.classList.remove('timeline-nav-button--at-end');
         arrowNext.title = 'Go to next items';
       }
-      timelinePosition(tl);
-      tl.activeIndex = currentIndex;
+
+      timelinePosition(tl, currentIndex);
       updateActiveItem(tl, tl.activeIndex);
+
+      const activeItem = tl.items[tl.activeIndex];
+      const nodeId = activeItem && activeItem.getAttribute('data-node-id');
+      if (nodeId) updateDeepLinkUrl(tl.timelineEl, nodeId);
       // Remove focus from button to avoid keyboard navigation side effects
       this.blur();
     };
@@ -493,19 +546,26 @@ export function timeline(collection, options) {
   }
 
   function setUpHorinzontalTimeline(tl) {
-    if (tl.settings.rtlMode) {
-      currentIndex = tl.items.length > tl.settings.visibleItems ? tl.items.length - tl.settings.visibleItems : 0;
-    } else {
-      currentIndex = tl.settings.startIndex;
-    }
-    // Track the "active" item separately from the scroll position.
-    // Usually these are the same, but they can diverge near the end (e.g. last item).
-    tl.activeIndex = currentIndex;
     tl.timelineEl.classList.add('timeline--horizontal');
     // Calculate responsive scaling before layout calculations
     calculateHorizontalScale(tl.timelineEl);
     setHeightandWidths(tl);
-    timelinePosition(tl);
+
+    // Compute how many items fit in the viewport for this timeline
+    const itemsVisible = Math.floor(tl.wrap.offsetWidth / tl.itemWidth) || 1;
+    tl.computedVisibleCount = itemsVisible;
+
+    if (tl.settings.rtlMode) {
+      currentIndex = tl.items.length > itemsVisible ? tl.items.length - itemsVisible : 0;
+    } else {
+      currentIndex = tl.settings.startIndex;
+    }
+
+    // Track the "active" item separately from the scroll position.
+    // Usually these are the same, but they can diverge near the end (e.g. last item).
+    tl.activeIndex = currentIndex;
+
+    timelinePosition(tl, currentIndex);
     updateActiveItem(tl, tl.activeIndex);
     addNavigation(tl);
     addHorizontalDivider(tl);
@@ -517,29 +577,27 @@ export function timeline(collection, options) {
         setCurrentIndex: function(index) {
           const viewportWidth = tl.wrap.offsetWidth;
           const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-          const maxIndex = Math.max(0, tl.items.length - itemsVisible);
+          const maxScrollIndex = Math.max(0, tl.items.length - itemsVisible);
           // Scroll position clamps to maxIndex, but the active highlight can be the actual requested item.
           tl.activeIndex = Math.max(0, Math.min(index, tl.items.length - 1));
-          currentIndex = Math.max(0, Math.min(index, maxIndex));
+          currentIndex = Math.max(0, Math.min(index, maxScrollIndex));
         },
         updatePosition: function() {
-          timelinePosition(tl);
+          timelinePosition(tl, currentIndex);
           updateActiveItem(tl, tl.activeIndex);
           const arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
           const arrowNext = tl.timelineEl.querySelector('.timeline-nav-button--next');
           if (arrowPrev && arrowNext) {
-            const viewportWidth = tl.wrap.offsetWidth;
-            const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-            const maxIndex = Math.max(0, tl.items.length - itemsVisible);
+            const maxActiveIndex = Math.max(0, tl.items.length - 1);
             // Use classes instead of disabled attribute to avoid focus issues
-            if (currentIndex === 0) {
+            if (tl.activeIndex <= 0) {
               arrowPrev.classList.add('timeline-nav-button--at-start');
               arrowPrev.title = 'Already at beginning of timeline';
             } else {
               arrowPrev.classList.remove('timeline-nav-button--at-start');
               arrowPrev.title = 'Go to previous items';
             }
-            if (currentIndex >= maxIndex) {
+            if (tl.activeIndex >= maxActiveIndex) {
               arrowNext.classList.add('timeline-nav-button--at-end');
               arrowNext.title = 'Already at end of timeline';
             } else {
@@ -547,6 +605,10 @@ export function timeline(collection, options) {
               arrowNext.title = 'Go to next items';
             }
           }
+
+          const activeItem = tl.items[tl.activeIndex];
+          const nodeId = activeItem && activeItem.getAttribute('data-node-id');
+          if (nodeId) updateDeepLinkUrl(tl.timelineEl, nodeId);
         }
       };
 

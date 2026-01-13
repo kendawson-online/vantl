@@ -1,7 +1,7 @@
 {
   "timelineName": "Horizontal Timeline from JSON File",
   "layoutMode": "horizontal",
-  "visibleItems": 5,
+  "moveItems": 4,
   "minWidth": 699,
   "nodeColor": "#0097ff",
   "lineColor": "#0097ff",

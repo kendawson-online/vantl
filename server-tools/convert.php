@@ -4,7 +4,7 @@
 // Usage:
 //  - POST file upload: field name `file` (CSV or XLS/XLSX)
 //  - GET/POST with `url` pointing to a CSV or Google Sheets URL
-//  - Optional POST/GET metadata fields: timelineName, layoutMode, visibleItems, minWidth, maxWidth, nodeColor, lineColor, navColor, lastupdated
+//  - Optional POST/GET metadata fields: timelineName, layoutMode, minWidth, maxWidth, nodeColor, lineColor, navColor, lastupdated
 // Output: JSON matching the app's expected format including `lastupdated` timestamp
 
 header('Content-Type: application/json; charset=utf-8');
@@ -169,7 +169,7 @@ if (in_array($ext, ['csv','txt']) || strpos($content, ',') !== false) {
 $nodes = rowsToNodes($rows);
 
 // Build metadata from params
-$metaKeys = ['timelineName','layoutMode','visibleItems','minWidth','maxWidth','nodeColor','lineColor','navColor','lastupdated'];
+$metaKeys = ['timelineName','layoutMode','minWidth','maxWidth','nodeColor','lineColor','navColor','lastupdated'];
 $meta = [];
 foreach ($metaKeys as $k) {
     $v = getParam($k);

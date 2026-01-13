@@ -39,7 +39,6 @@ Add `data-json-config` attribute to automatically load and initialize:
 ```javascript
 timeline(document.querySelectorAll('.timeline'), {
   mode: 'horizontal',
-  visibleItems: 4,
   nodeColor: '#2d6cdf'
 });
 ```
@@ -131,26 +130,6 @@ timeline(el, { maxWidth: 1200 });
 ```
 
 **Note:** This setting is the inverse of `minWidth`. While `minWidth` controls when horizontal timelines switch to vertical, `maxWidth` controls when vertical timelines switch to horizontal.
-
----
-
-#### `visibleItems`
-
-**Type:** `number`  
-**Default:** `3`  
-**Description:** Number of items visible in horizontal mode viewport. Note: actual visible count depends on container width and fixed 200px item width. This value primarily controls navigation behavior.
-
-```javascript
-timeline(el, { visibleItems: 4 });
-```
-
-```html
-<div class="timeline" data-visible-items="4">
-```
-
-```json
-{ "visibleItems": 4 }
-```
 
 ---
 
@@ -339,7 +318,6 @@ timeline(el, { navColor: '#f2f2f2' });
   "nodeColor": "#2d6cdf",
   "lineColor": "#2d6cdf",
   "navColor": "#f2f2f2",
-  "visibleItems": 3,
   "minWidth": 600,
   "maxWidth": 600,
   "lastupdated": "2026-01-08",
@@ -401,7 +379,6 @@ clearTimelineCache('timelineId'); // Clear specific
 | `data-mode` | `mode` | `data-mode="horizontal"` |
 | `data-min-width` | `minWidth` | `data-min-width="800"` |
 | `data-max-width` | `maxWidth` | `data-max-width="1200"` |
-| `data-visible-items` | `visibleItems` | `data-visible-items="4"` |
 | `data-move-items` | `moveItems` | `data-move-items="2"` |
 | `data-start-index` | `startIndex` | `data-start-index="3"` |
 | `data-horizontal-start-position` | `horizontalStartPosition` | `data-horizontal-start-position="bottom"` |
@@ -451,7 +428,6 @@ timeline(collection, options)
 const timelines = document.querySelectorAll('.timeline');
 timeline(timelines, {
   mode: 'horizontal',
-  visibleItems: 4,
   nodeColor: '#2d6cdf'
 });
 ```
@@ -745,7 +721,6 @@ setTimelineLoaderMinMs(2000); // Show loader for min 2 seconds
 **Breaking Changes:**
 - `forceVerticalMode` → `minWidth` (inverted logic)
 - jQuery no longer required (opt-in plugin)
-- `visibleItems` semantics changed (see option docs)
 
 **Compatibility:**
 - Old data attributes still work

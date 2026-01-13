@@ -20,6 +20,15 @@
     --timeline-h-text-font-size: 11px;
 }
 
+/* Hide timeline by default to prevent flash of unstyled/incorrectly-styled content.
+   The timeline engine will add the .timeline--loaded class after layout is complete,
+   and the fade-in will make the transition smooth. */
+.timeline:not(.timeline--loaded) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 /* Semantic node field styles */
 .timeline__date {
     font-size: 0.95rem;
@@ -33,6 +42,27 @@
     font-weight: 700;
     margin: 0 0 8px 0;
     color: #333;
+}
+
+/* Page-level timeline title (from JSON timelineName) */
+/* Hidden by default to prevent jump; revealed with timeline fade-in */
+.timeline__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 18px 0;
+    color: #333;
+    text-align: center;
+    position: relative;
+    z-index: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 500ms ease-in-out, visibility 500ms ease-in-out;
+}
+
+/* Show title when visible class is added by JS */
+.timeline__title--visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .timeline__image {
@@ -382,7 +412,7 @@
 
 /* Active state for current/deep-linked node */
 .timeline__item--active .timeline__content {
-    border: 2px solid var(--timeline-active-outline-color);
+    border-color: var(--timeline-active-outline-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -428,6 +458,7 @@
     display: block;
     padding: 20px;
     position: relative;
+    z-index: 2;
 }
 
 /* Image styling handled in responsive sections above */
@@ -479,15 +510,14 @@
 .timeline--horizontal {
     font-size: 0;
     padding: 0 60px;
-    /* Allow vertical overflow so bottom items aren't clipped */
-    overflow-y: visible;
+    overflow: hidden;
 }
 
 .timeline--horizontal .timeline__wrap {
-    /* Clip items horizontally (past nav buttons) but allow vertical overflow (prevent bottom clipping) */
-    overflow-x: hidden;
-    overflow-y: visible;
+    overflow: hidden;
     white-space: nowrap;
+    position: relative;
+    z-index: 2;
 }
 
 .timeline--horizontal .timeline-divider {
@@ -609,8 +639,21 @@
     border-top-color: var(--timeline-active-outline-color);
 }
 
+/* Make the active pointer look integrated with the card (avoid a thick "seam" line) */
+.timeline--horizontal .timeline__item.timeline__item--active .timeline__content::after {
+    border-left-width: 11px;
+    border-right-width: 11px;
+    border-top-width: 11px;
+}
+
 .timeline--horizontal .timeline__item--bottom.timeline__item--active .timeline__content::before {
     border-bottom-color: var(--timeline-active-outline-color);
+}
+
+.timeline--horizontal .timeline__item--bottom.timeline__item--active .timeline__content::after {
+    border-left-width: 11px;
+    border-right-width: 11px;
+    border-bottom-width: 11px;
 }
 
 .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--active.timeline__item--left .timeline__content::before {
@@ -896,6 +939,12 @@
 .timeline__item:hover .timeline__content {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Horizontal mode: keep hover shadow, but don't translate cards upward.
+   This avoids node-1 clipping without impacting divider/dot layout. */
+.timeline--horizontal .timeline__item:hover .timeline__content {
+    transform: none;
 }
 
 /* Error UI */

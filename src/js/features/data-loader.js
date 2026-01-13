@@ -131,14 +131,40 @@ function applyDataAttributes(container, config) {
   if (config.layoutMode) {
     container.setAttribute('data-mode', config.layoutMode);
   }
-  if (config.visibleItems !== undefined) {
-    container.setAttribute('data-visible-items', config.visibleItems);
+  if (config.moveItems !== undefined) {
+    container.setAttribute('data-move-items', config.moveItems);
   }
   if (config.minWidth !== undefined) {
     container.setAttribute('data-min-width', config.minWidth);
   }
   if (config.maxWidth !== undefined) {
     container.setAttribute('data-max-width', config.maxWidth);
+  }
+  /* Additional mappings so JSON config becomes authoritative (JSON > JS > HTML)
+     These attributes are the keys the timeline engine reads from dataset. */
+  if (config.startIndex !== undefined) {
+    container.setAttribute('data-start-index', config.startIndex);
+  }
+  if (config.horizontalStartPosition !== undefined) {
+    container.setAttribute('data-horizontal-start-position', config.horizontalStartPosition);
+  }
+  if (config.verticalStartPosition !== undefined) {
+    container.setAttribute('data-vertical-start-position', config.verticalStartPosition);
+  }
+  if (config.verticalTrigger !== undefined) {
+    container.setAttribute('data-vertical-trigger', config.verticalTrigger);
+  }
+  if (config.rtlMode !== undefined) {
+    container.setAttribute('data-rtl-mode', String(config.rtlMode));
+  }
+  if (config.nodeColor !== undefined) {
+    container.setAttribute('data-node-color', config.nodeColor);
+  }
+  if (config.lineColor !== undefined) {
+    container.setAttribute('data-line-color', config.lineColor);
+  }
+  if (config.navColor !== undefined) {
+    container.setAttribute('data-nav-color', config.navColor);
   }
 }
 
@@ -176,11 +202,11 @@ export function renderTimelineFromData(containerSelector, data, config) {
     // Add timeline heading if provided
     if (config.timelineName && config.timelineName.trim() !== '') {
       const existingHeading = container.previousElementSibling;
-      if (existingHeading && existingHeading.classList.contains('timeline__heading')) {
+      if (existingHeading && existingHeading.classList.contains('timeline__title')) {
         existingHeading.textContent = config.timelineName;
       } else {
         const heading = document.createElement('h1');
-        heading.className = 'timeline__heading';
+        heading.className = 'timeline__title';
         heading.textContent = config.timelineName;
         container.parentNode.insertBefore(heading, container);
       }
@@ -207,7 +233,10 @@ export function renderTimelineFromData(containerSelector, data, config) {
 export function timelineFromData(containerSelector, data, options) {
   const container = renderTimelineFromData(containerSelector, data, options);
   if (!container) return;
-  timeline([container], options || {});
+  // Wait for images to settle before running layout to avoid height miscalculations
+  waitForImages(container).then(() => {
+    timeline([container], options || {});
+  });
 }
 
 /**
@@ -267,8 +296,12 @@ export function loadDataFromJson(url, containerSelector) {
       delete config.nodes;
 
       renderTimelineFromData(containerSelector, dataToUse, config);
-      timeline([container], {});
-      handleDeepLinking();
+      // Ensure images finish loading before calling the layout engine so heights are correct
+      waitForImages(container).then(() => {
+        timeline([container], {});
+        showTimelineTitle(container);
+        handleDeepLinking();
+      });
     })
     .catch(error => {
       console.error('Timeline: Error loading JSON:', error);
@@ -277,11 +310,64 @@ export function loadDataFromJson(url, containerSelector) {
       if (cachedData && cachedData.length > 0) {
         console.log('Timeline: Using cached data as fallback');
         renderTimelineFromData(containerSelector, cachedData, {});
-        timeline([container], {});
+        waitForImages(container).then(() => {
+          timeline([container], {});
+          showTimelineTitle(container);
+        });
       } else {
         showTimelineError(container, 'load-failed', 'Failed to load timeline data: ' + error.message);
       }
     });
+}
+
+/**
+ * Wait for all images inside a container to either load or error.
+ * Resolves immediately if there are no images.
+ */
+function waitForImages(container) {
+  if (!container) return Promise.resolve();
+  const imgs = Array.from(container.querySelectorAll('img'));
+  if (imgs.length === 0) return Promise.resolve();
+
+  return new Promise((resolve) => {
+    let remaining = imgs.length;
+
+    const checkDone = () => {
+      remaining -= 1;
+      if (remaining <= 0) resolve();
+    };
+
+    imgs.forEach((img) => {
+      if (img.complete) {
+        checkDone();
+      } else {
+        const onSettled = () => {
+          img.removeEventListener('load', onSettled);
+          img.removeEventListener('error', onSettled);
+          checkDone();
+        };
+        img.addEventListener('load', onSettled);
+        img.addEventListener('error', onSettled);
+      }
+    });
+
+    // Fallback safety: resolve after 1s even if some images hang
+    setTimeout(() => resolve(), 1000);
+  });
+}
+
+/**
+ * Show the timeline title (previous sibling with .timeline__title class)
+ * This is called after the timeline layout is complete to fade it in.
+ */
+function showTimelineTitle(container) {
+  if (!container) return;
+  const title = container.previousElementSibling;
+  if (title && title.classList.contains('timeline__title')) {
+    // Trigger reflow to ensure transition works
+    title.offsetHeight;
+    title.classList.add('timeline__title--visible');
+  }
 }
 
 /**
