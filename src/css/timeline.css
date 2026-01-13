@@ -113,49 +113,158 @@
     z-index: 2;
 }
 
-/* Mobile layout: single column, left-aligned, stacked */
+/* Mobile layout: vertical timeline, left-aligned, stacked items */
+.timeline--mobile {
+    padding: 0;
+}
+
+.timeline--mobile::before {
+    left: 10px !important;
+    margin: 0 !important;
+}
+
 .timeline--mobile .timeline__item {
+    left: 0;
     padding-left: 40px;
     padding-right: 0;
     width: 100%;
     margin-bottom: 20px;
 }
 
+.timeline--mobile .timeline__item::after {
+    left: 2px;
+    margin: 0;
+    right: auto;
+    transform: translateY(-50%);
+}
+
 .timeline--mobile .timeline__content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    max-height: none;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 10px;
+    padding: 8px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 60px 70px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    row-gap: 4px;
+    align-items: start;
+    min-height: auto;
+}
+
+/* Triangle pointers for mobile left-aligned layout */
+.timeline--mobile .timeline__content::before {
+    content: '';
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 10px solid transparent;
+    border-right: 12px solid #CCC;
+    border-left: none;
+    border-top: 10px solid transparent;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.timeline--mobile .timeline__content::after {
+    content: '';
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-bottom: 9px solid transparent;
+    border-right: 10px solid #FFF;
+    border-left: none;
+    border-top: 9px solid transparent;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
 }
 
 .timeline--mobile .timeline__image {
-    max-height: 80px;
-    width: auto;
-    flex-shrink: 0;
-    margin-bottom: 0;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
     border-radius: 4px;
-}
-
-.timeline--mobile .timeline__content > div {
-    flex: 1;
-    min-width: 0;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0;
 }
 
 .timeline--mobile .timeline__date {
-    font-size: 0.85rem;
-    margin-bottom: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #333;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    white-space: nowrap;
+    padding-top: 0;
+    align-self: center;
 }
 
 .timeline--mobile .timeline__heading {
-    font-size: 0.95rem;
-    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    color: #333;
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
+    line-height: 1.2;
 }
 
 .timeline--mobile .timeline__summary {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: #555;
     -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    grid-column: 3;
+    grid-row: 2;
+    min-width: 0;
+}
+
+/* Collapse to two columns when no image is present */
+.timeline--mobile .timeline__content:not(:has(.timeline__image)) {
+    grid-template-columns: 70px 1fr;
+}
+
+.timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__date {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__heading {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__summary {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* JS fallback: when image is absent, add .no-image to the content element
+   Mirror the :has() rules so older browsers work when demo JS adds .no-image */
+.timeline--mobile .timeline__content.no-image {
+    grid-template-columns: 70px 1fr;
+}
+.timeline--mobile .timeline__content.no-image .timeline__date {
+    grid-column: 1;
+    grid-row: 1;
+}
+.timeline--mobile .timeline__content.no-image .timeline__heading {
+    grid-column: 2;
+    grid-row: 1;
+}
+.timeline--mobile .timeline__content.no-image .timeline__summary {
+    grid-column: 2;
+    grid-row: 2;
 }
 
 /* Vertical layout: side-by-side alternating */
@@ -789,46 +898,19 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Loading spinner styles */
-.timeline__loader-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: #ffffff;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.timeline__loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.timeline__loader-spinner {
-    width: 120px;
-    max-width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-}
-
-/* Error display styles */
+/* Error UI */
 .timeline__error {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
-    padding: 60px 20px;
     text-align: center;
-    background-color: #f9f9f9;
+    padding: 24px 16px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     margin: 20px auto;
     max-width: 600px;
+    background: #fff;
 }
 
 .timeline__error-icon {
@@ -873,6 +955,61 @@
     border: 1px solid #ffc107;
     border-radius: 6px;
     padding: 12px 16px;
+}
+
+/* Micro-screen responsive rules (progressive column hiding)
+   1) <=420px: hide summary (keep Image | Date | Heading)
+   2) <=360px: hide image (Date | Heading/Summary)
+   3) <=320px: compact mode - show only date
+*/
+@media (max-width: 420px) {
+    .timeline--mobile .timeline__summary {
+        display: none;
+    }
+    .timeline--mobile .timeline__content {
+        grid-template-columns: 60px 70px 1fr;
+    }
+}
+
+@media (max-width: 360px) {
+    .timeline--mobile .timeline__image {
+        display: none;
+    }
+    .timeline--mobile .timeline__content {
+        grid-template-columns: 70px 1fr;
+        grid-template-rows: auto auto;
+    }
+    .timeline--mobile .timeline__date {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        align-self: center;
+    }
+    .timeline--mobile .timeline__heading {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .timeline--mobile .timeline__summary {
+        display: block;
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+
+@media (max-width: 320px) {
+    .timeline--mobile .timeline__heading,
+    .timeline--mobile .timeline__summary,
+    .timeline--mobile .timeline__image {
+        display: none;
+    }
+    .timeline--mobile .timeline__content {
+        grid-template-columns: 1fr;
+        padding: 6px;
+    }
+    .timeline--mobile .timeline__date {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: center;
+    }
 }
 
 .timeline__error-solution strong {

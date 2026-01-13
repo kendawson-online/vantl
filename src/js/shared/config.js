@@ -27,12 +27,3 @@ export const timelineBasePath = (function() {
 })();
 
 // Minimum time (ms) to keep the loading spinner visible
-let timelineLoaderMinMs = 1300;
-export function getTimelineLoaderMinMs() {
-  return timelineLoaderMinMs;
-}
-export function setTimelineLoaderMinMs(value) {
-  if (typeof value === 'number' && value >= 0) {
-    timelineLoaderMinMs = value;
-  }
-}

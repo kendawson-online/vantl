@@ -1,5 +1,4 @@
 import { timelineBasePath } from '../shared/config.js';
-import { hideTimelineLoader } from './loader-ui.js';
 
 export function showTimelineError(container, errorType, details) {
   if (!container) return;
@@ -33,7 +32,6 @@ export function showTimelineError(container, errorType, details) {
     solution: 'Please check the browser console for more details.'
   };
 
-  hideTimelineLoader();
   // mark container as error state so timeline visuals (lines, nav buttons) can be hidden via CSS
   container.classList.add('timeline--error');
   container.innerHTML = '';

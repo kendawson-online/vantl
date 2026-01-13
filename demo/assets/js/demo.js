@@ -95,3 +95,41 @@ function showAlert(msg = null) {
         return false;
     }
 }
+
+// -----------------------------
+// JS fallback for missing image
+// Adds `.no-image` to `.timeline__content` nodes when an image is absent
+// -----------------------------
+function applyNoImageFallback(root = document) {
+    const contents = (root || document).querySelectorAll('.timeline__content');
+    contents.forEach(c => {
+        const img = c.querySelector('.timeline__image');
+        if (!img) {
+            c.classList.add('no-image');
+            return;
+        }
+
+        // If image exists, check load state
+        if (img.complete) {
+            if (img.naturalWidth === 0) c.classList.add('no-image'); else c.classList.remove('no-image');
+        } else {
+            img.addEventListener('load', () => c.classList.remove('no-image'), { once: true });
+            img.addEventListener('error', () => c.classList.add('no-image'), { once: true });
+        }
+    });
+}
+
+// Observe timeline item containers for dynamic insertions
+function observeTimelineInsertions() {
+    const containers = document.querySelectorAll('.timeline__items');
+    containers.forEach(container => {
+        const mo = new MutationObserver(() => applyNoImageFallback(container));
+        mo.observe(container, { childList: true, subtree: true });
+    });
+}
+
+// Run fallback on DOMContentLoaded and start observing dynamic inserts
+document.addEventListener('DOMContentLoaded', function() {
+    applyNoImageFallback(document);
+    observeTimelineInsertions();
+});

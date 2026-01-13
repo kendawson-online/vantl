@@ -1,5 +1,4 @@
 import { timelineBasePath } from '../shared/config.js';
-import { showTimelineLoader, hideTimelineLoader } from './loader-ui.js';
 import { showTimelineError } from './error-ui.js';
 import { applyTimelineColors } from './colors.js';
 import { handleDeepLinking } from './deep-linking.js';
@@ -203,15 +202,12 @@ export function renderTimelineFromData(containerSelector, data, config) {
 }
 
 /**
- * Initialize timeline from data (with skipLoader option)
+ * Initialize timeline from provided data
  */
 export function timelineFromData(containerSelector, data, options) {
   const container = renderTimelineFromData(containerSelector, data, options);
   if (!container) return;
-  
-  // Skip loader for programmatic timelines (data already loaded)
-  const mergedOptions = Object.assign({}, options, { skipLoader: true });
-  timeline([container], mergedOptions);
+  timeline([container], options || {});
 }
 
 /**
@@ -224,8 +220,6 @@ export function loadDataFromJson(url, containerSelector) {
     showTimelineError(null, 'missing-element', 'Timeline container not found: ' + containerSelector);
     return;
   }
-
-  showTimelineLoader();
 
   // Check cache first
   const cacheKey = 'timeline_cache_' + url;
@@ -273,7 +267,7 @@ export function loadDataFromJson(url, containerSelector) {
       delete config.nodes;
 
       renderTimelineFromData(containerSelector, dataToUse, config);
-      timeline([container], { skipLoader: true });
+      timeline([container], {});
       handleDeepLinking();
     })
     .catch(error => {
@@ -283,12 +277,10 @@ export function loadDataFromJson(url, containerSelector) {
       if (cachedData && cachedData.length > 0) {
         console.log('Timeline: Using cached data as fallback');
         renderTimelineFromData(containerSelector, cachedData, {});
-        timeline([container], { skipLoader: true });
+        timeline([container], {});
       } else {
         showTimelineError(container, 'load-failed', 'Failed to load timeline data: ' + error.message);
       }
-      
-      hideTimelineLoader();
     });
 }
 

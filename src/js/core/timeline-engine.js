@@ -1,4 +1,3 @@
-import { showTimelineLoader, hideTimelineLoader } from '../features/loader-ui.js';
 import { showTimelineError } from '../features/error-ui.js';
 import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
@@ -105,12 +104,6 @@ export function timeline(collection, options) {
   let resizeTimer;
   let currentIndex = 0;
   const eventListeners = new Map(); // Track listeners for cleanup
-
-  const skipLoader = options && options.skipLoader === true;
-  if (!skipLoader) {
-    showTimelineLoader();
-  }
-  let shouldHideLoader = !skipLoader;
 
   const defaultSettings = {
     minWidth: { type: 'integer', defaultValue: 600 },
@@ -692,11 +685,6 @@ export function timeline(collection, options) {
         tl.timelineEl.style.opacity = 1;
       });
     }, 500);
-
-    if (shouldHideLoader) {
-      hideTimelineLoader();
-      shouldHideLoader = false;
-    }
   }
 
   try {
@@ -714,10 +702,5 @@ export function timeline(collection, options) {
     });
   } catch (e) {
     console.error('Timeline initialization failed:', e);
-  } finally {
-    if (shouldHideLoader) {
-      hideTimelineLoader();
-      shouldHideLoader = false;
-    }
   }
 }
