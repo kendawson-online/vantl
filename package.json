@@ -30,7 +30,6 @@
   "bugs": {
     "url": "https://github.com/kendawson-online/vantl/issues"
   },
-
   "files": [
     "dist",
     "src/css",

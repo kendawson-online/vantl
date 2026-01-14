@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Vanilla Timeline - JSON - Horizontal</title>
-    
     <!-- load timeline styles from CDN -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.css"> -->
-
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
     <!-- load timeline styles from LOCAL BUILD for testing -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <!-- load demo specific styles -->
@@ -21,7 +19,7 @@
     <!-- Page content -->
     <div class="wrapper">
 
-      <!-- Horizontal Timeline -->
+      <!-- Horizontal Timeline: With Images -->
       <div id="horizontal" class="timeline" data-json-config="../../assets/data/horizontal.json">
         <div class="timeline__wrap">
           <div class="timeline__items"></div>
@@ -82,7 +80,7 @@
     </div>
 
     <!-- load timeline JS functions from CDN -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
     
     <!-- load timeline JS functions from LOCAL BUILD for development testing -->
     <script src="../../../dist/timeline.min.js"></script>
@@ -92,9 +90,8 @@
     <script src="../../assets/js/accordion.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // DEV USE: temporarily disabled while we test new layout code
-        // fetchMinWidthAndTest();
-        // loadInstructions();
+        fetchMinWidthAndTest();
+        loadInstructions();
       });
     </script>
 

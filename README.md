@@ -35,14 +35,14 @@ Load stylesheet and Javascript functions to your document via CDN links:
 <html>
 <head>
   <!-- load stylesheet -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css">
 </head>
 <body>
    
   <!-- your timeline will go here --> 
   
   <!-- load functions -->
-  <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>
 </body>
 </html>
 ````
@@ -87,7 +87,7 @@ Add one line of code at the bottom to initialize your timeline. It goes after th
 
 ````html
   <!-- load functions -->
-  <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>
 
   <!-- initialize the timeline -->
   <script>
@@ -110,7 +110,7 @@ Note: if you're using <a href="https://jquery.com" target="_blank">jQuery</a> in
 
 ````html
     <!-- load functions -->
-    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@2/dist/timeline.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>
 
     <!-- initialize timeline with jQuery -->
     <script>
@@ -151,7 +151,6 @@ Here are the available data attributes:
 | `data-mode` | string | `'vertical'` | Layout mode: `'vertical'` or `'horizontal'` |
 | `data-min-width` | number | `600` | Minimum viewport width (px) to maintain horizontal mode |
 | `data-max-width` | number | `600` | Maximum viewport width (px) to maintain vertical mode |
-| `data-visible-items` | number | `3` | Number of items in horizontal viewport |
 | `data-move-items` | number | `1` | Items to scroll per navigation click (horizontal) |
 | `data-start-index` | number | `0` | Initial item index (horizontal mode) |
 | `data-horizontal-start-position` | string | `'top'` | First item alignment in horizontal layout: `'top'` or `'bottom'` |
@@ -399,6 +398,19 @@ You can report issues and open pull requests on GitHub:
 ## License
 
 [MIT License](LICENSE)
+
+---
+
+**Note (optional Swiper integration):**
+
+You may see a Rollup warning during `npm run build` similar to:
+
+```
+(!) Unresolved dependencies
+swiper (imported by "src/adapters/swiper-adapter.js")
+```
+
+This is expected when Swiper is optional (not installed) because the adapter attempts to load Swiper at runtime via an ESM CDN, dynamic import, or `window.Swiper` (UMD). The build still completes; if you want Rollup to stop warning, add `external: ['swiper']` to `rollup.config.js`, or install `swiper` locally to include it in the bundle.
 
 
 ## Credits

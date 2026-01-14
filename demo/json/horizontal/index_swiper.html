@@ -3,34 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla Timeline - JSON - Vertical</title>
-
+    <title>Vanilla Timeline - JSON - Horizontal</title>
     <!-- load timeline styles from CDN -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
-
     <!-- load timeline styles from LOCAL BUILD for testing -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
-
+    <!-- Load SwiperJS styles from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
   </head>
   <body>
 
+    <!-- Page top notification area -->
+    <div id="topnotice" class="topnotice"></div>
+
+    <!-- Page content -->
     <div class="wrapper">
 
-      <!-- Vertical Timeline: With Images -->
-      <div id="vertical" class="timeline" data-json-config="../../assets/data/vertical.json">
+      <!-- Horizontal Timeline: With Images -->
+      <div id="horizontal" class="timeline" data-json-config="../../assets/data/horizontal-swiper.json">
         <div class="timeline__wrap">
           <div class="timeline__items"></div>
         </div>
       </div>
-
+      
       <!-- Instructions (accordion menu) -->
-      <button id="instructions" class="hidethis accordion" title="Click to toggle this menu">How to Create a Vertical Timeline: Step by Step Instructions</button>
+      <button id="instructions" class="hidethis accordion" title="Click to toggle this menu">How to Create a Horizontal Timeline: Step by Step Instructions</button>
       <div class="panel">
         <!-- Content -->
         <div class="textcontainer">
-          <h1 class="mainhead">Creating the Vertical Timeline:</h1>
+          <h1 class="mainhead">Creating the Horizontal Timeline:</h1>
           <!-- step 1 -->
           <div class="step">
             <div><img src="../../assets/img/1-circle.svg" width="50" alt="1"/></div>
@@ -56,7 +59,7 @@
           </div>
           <!-- step 3 code -->
           <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/12d9efbd5bc5b02dd391f32d193b7966.js"></script>
+            <script src="https://gist.github.com/kendawson-online/579e9f92e46d07de039940c8bb729d7c.js"></script>
           </div>  
           <!-- step 4 -->
           <div class="step">
@@ -74,12 +77,15 @@
             <div class="steptext">Save the file and load your HTML page in a browser</div>
           </div>      
         </div>
-      </div>      
+      </div>
 
     </div>
 
     <!-- load timeline JS functions from CDN -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
+
+    <!-- Load SwiperJS JS functions from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     
     <!-- load timeline JS functions from LOCAL BUILD for development testing -->
     <script src="../../../dist/timeline.min.js"></script>
@@ -89,6 +95,7 @@
     <script src="../../assets/js/accordion.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        fetchMinWidthAndTest();
         // loadInstructions();
       });
     </script>

@@ -2,6 +2,7 @@ import { showTimelineError } from '../features/error-ui.js';
 import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
+import SwiperAdapter from '../../adapters/swiper-adapter.js';
 
 /**
  * Calculate and apply responsive scaling for horizontal timeline based on viewport height
@@ -148,6 +149,7 @@ export function timeline(collection, options) {
     verticalStartPosition: { type: 'string', acceptedValues: ['left', 'right'], defaultValue: 'left' },
     verticalTrigger: { type: 'string', defaultValue: '15%' },
     /* visibleItems is deprecated and ignored; visible count is computed at runtime */
+    useSwiper: { type: 'string', acceptedValues: ['false', 'true', 'auto'], defaultValue: 'false' }
   };
 
   function testValues(value, settingName) {
@@ -334,6 +336,18 @@ export function timeline(collection, options) {
       settings.startIndex = Math.max(0, items.length - 1);
     }
 
+    // Swiper integration settings (optional)
+    // Accept via data attributes (data-use-swiper="true|auto") or via options.swiperAdapter / options.useSwiper
+    if (data.useSwiper !== undefined || data.useswiper !== undefined) {
+      const val = data.useSwiper !== undefined ? data.useSwiper : data.useswiper;
+      settings.useSwiper = val === 'true' || val === 'auto' ? val : (val === 'true');
+    }
+    if (options) {
+      if (options.useSwiper !== undefined) settings.useSwiper = options.useSwiper;
+      if (options.swiperOptions !== undefined) settings.swiperOptions = options.swiperOptions;
+      if (options.swiperAdapter !== undefined) settings.swiperAdapter = options.swiperAdapter;
+    }
+
     enhanceInlineItems(timelineEl, items);
 
     if (!timelineEl.id) {
@@ -346,7 +360,8 @@ export function timeline(collection, options) {
       scroller,
       items,
       settings,
-      listeners: [] // Store listeners for cleanup
+      listeners: [], // Store listeners for cleanup
+      adapter: null
     });
   }
 
@@ -626,6 +641,34 @@ export function timeline(collection, options) {
         item.addEventListener('click', activateHandler);
         tl.listeners.push({ element: item, type: 'click', handler: activateHandler });
       });
+
+      // Initialize optional Swiper adapter if requested
+      (async function tryInitAdapter(){
+        try {
+          const useSwiper = tl.settings && (tl.settings.swiperAdapter || tl.settings.useSwiper);
+          if (!useSwiper) return;
+
+          // If a custom adapter instance/factory provided in settings, use it
+          if (tl.settings.swiperAdapter) {
+            const provided = tl.settings.swiperAdapter;
+            if (typeof provided === 'function') {
+              // factory - call to create instance
+              tl.adapter = provided();
+            } else {
+              tl.adapter = provided;
+            }
+          } else {
+            // Fallback to built-in adapter scaffold which will attempt to import 'swiper'
+            tl.adapter = new SwiperAdapter();
+          }
+
+          if (tl.adapter && typeof tl.adapter.init === 'function') {
+            await tl.adapter.init(tl.timelineEl, timelineRegistry[timelineId], tl.settings.swiperOptions || {});
+          }
+        } catch (e) {
+          console.warn('Timeline: Swiper adapter initialization failed', e);
+        }
+      })();
     }
   }
 
@@ -701,6 +744,11 @@ export function timeline(collection, options) {
     if (tl.observer) {
       tl.observer.disconnect();
       tl.observer = null;
+    }
+    // Destroy adapter if present
+    if (tl.adapter && typeof tl.adapter.destroy === 'function') {
+      try { tl.adapter.destroy(); } catch (e) { /* ignore */ }
+      tl.adapter = null;
     }
     
     tl.timelineEl.classList.remove('timeline--horizontal', 'timeline--mobile');

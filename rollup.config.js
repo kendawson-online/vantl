@@ -4,6 +4,7 @@ const postcss = require('rollup-plugin-postcss');
 
 module.exports = {
   input: 'src/js/timeline.js',
+  external: ['swiper'],
   output: { file: 'dist/timeline.min.js', format: 'iife', name: 'Timeline', sourcemap: true },
   plugins: [
     postcss({

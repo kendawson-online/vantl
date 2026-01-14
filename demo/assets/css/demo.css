@@ -405,3 +405,8 @@ footer a:link {
   display: none;
   overflow: hidden;
 }
+
+.demoheading {
+  margin: 90px 0 90px 0;
+  text-align: center;
+}

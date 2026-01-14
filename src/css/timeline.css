@@ -37,6 +37,11 @@
     margin-bottom: 8px;
 }
 
+/* Vertical (non-mobile) cards: center date above the centered image */
+.timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__date {
+    text-align: center;
+}
+
 .timeline__heading {
     font-size: 1.1rem;
     font-weight: 700;
@@ -301,22 +306,66 @@
 @media (min-width: 768px) {
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item {
         width: 50%;
-        max-width: 500px;
         padding: 10px 40px 10px 0;
     }
 
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item::after {
+        right: -10px;
+        left: auto;
+        transform: translateY(-50%);
+    }
+
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--left {
-        margin-left: 0;
-        margin-right: auto;
-        padding-left: 0;
-        padding-right: 40px;
+        left: 0;
+        padding: 10px 40px 10px 0;
     }
 
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--right {
-        margin-left: auto;
-        margin-right: 0;
-        padding-left: 40px;
-        padding-right: 0;
+        left: 50%;
+        padding: 10px 0 10px 40px;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--right::after {
+        left: -10px;
+        right: auto;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--left .timeline__content::before {
+        border-bottom: 10px solid transparent;
+        border-left: 12px solid #CCC;
+        border-top: 10px solid transparent;
+        right: -12px;
+        left: auto;
+        z-index: 1;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--left .timeline__content::after {
+        border-bottom: 9px solid transparent;
+        border-left: 11px solid #FFF;
+        border-top: 9px solid transparent;
+        right: -10px;
+        left: auto;
+        z-index: 2;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--right .timeline__content::before {
+        border-bottom: 10px solid transparent;
+        border-right: 12px solid #CCC;
+        border-left: none;
+        border-top: 10px solid transparent;
+        left: -12px;
+        right: auto;
+        z-index: 1;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__item--right .timeline__content::after {
+        border-bottom: 9px solid transparent;
+        border-right: 11px solid #FFF;
+        border-left: none;
+        border-top: 9px solid transparent;
+        left: -10px;
+        right: auto;
+        z-index: 2;
     }
 
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content {
@@ -325,6 +374,17 @@
         gap: 8px;
         padding: 16px;
         max-height: none;
+        position: relative;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content::before,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content::after {
+        content: '';
+        height: 0;
+        position: absolute;
+        transform: translateY(-50%);
+        top: 50%;
+        width: 0;
     }
 
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__image {

@@ -66,10 +66,17 @@ export function openTimelineModal(itemEl) {
 
   if (html) {
     modalText.innerHTML = html;
-  } else if (content) {
-    modalText.innerHTML = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
   } else {
-    modalText.innerHTML = '';
+    // If the item contains inline modal HTML (rendered by data-loader or present in markup), prefer it
+    const domModal = itemEl.querySelector('.timeline__modal-content .timeline__content-full');
+    if (domModal && domModal.innerHTML && domModal.innerHTML.trim() !== '') {
+      modalText.innerHTML = domModal.innerHTML;
+    }
+    else if (content) {
+      modalText.innerHTML = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
+    } else {
+      modalText.innerHTML = '';
+    }
   }
 
   setTimeout(function() {

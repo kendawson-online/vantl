@@ -1,12 +1,13 @@
 {
-  "timelineName": "Vertical Timeline from JSON File",
-  "layoutMode": "vertical",
-  "maxWidth": 1200,
-  "verticalStartPosition": "right",
+  "timelineName": "Horizontal Timeline from JSON File",
+  "layoutMode": "horizontal",
+  "useSwiper": true,
+  "moveItems": 4,
+  "minWidth": 699,
   "nodeColor": "#0097ff",
   "lineColor": "#0097ff",
-  "navColor": "#00caff", 
-  "lastupdated": "2026-01-12T16:20:13.475Z",
+  "navColor": "#00caff",  
+  "lastupdated": "2026-01-12T16:10:55.245Z",  
   "nodes": [
     {
       "id": 1,

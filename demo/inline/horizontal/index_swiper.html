@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla Timeline - Inline - Vertical</title>
-    <!-- load timeline styles from CDN -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
-    <!-- load timeline styles from LOCAL BUILD for testing -->
+    <title>Vanilla Timeline - Inline - Horizontal</title>
+    <!-- Load SwiperJS styles from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    <!-- load timeline.css styles -->
     <link rel="stylesheet" href="../../../src/css/timeline.css">
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
@@ -14,14 +14,15 @@
   <body>
 
     <div class="wrapper">
-        
-      <h1 class="demoheading">Inline Demo - Vertical Layout</h1>
 
-      <div id="vertical" class="timeline" 
-           data-mode="vertical" 
-           data-max-width="1600"
-           data-vertical-start-position="right"
-           data-vertical-trigger="15%"
+      <h1 class="demoheading">Inline Demo - Horizontal Layout</h1>
+
+      <div id="horizontal" class="timeline" 
+           data-mode="horizontal" 
+           data-use-swiper="true"
+           data-move-items="1" 
+           data-min-width="700"
+           data-horizontal-start-position="bottom"
            data-node-color="#5f0b41"
            data-line-color="#5f0b41"
            data-nav-color="#b4157b"
@@ -219,12 +220,11 @@
 
     </div>
 
-    <!-- load timeline JS functions from CDN -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
-    
-    <!-- load timeline JS functions from LOCAL BUILD for development testing -->
-    <script src="../../../dist/timeline.min.js"></script>
+    <!-- Load SwiperJS JS functions from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
+    <!-- load timeline.js functions -->
+    <script src="../../../dist/timeline.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // initialize app after document loads
