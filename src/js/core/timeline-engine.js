@@ -942,8 +942,8 @@ export function timeline(collection, options) {
 
   try {
     setUpTimelines();
-
-    window.addEventListener('resize', () => {
+    // Attach resize handler (stored so it can be removed in tests)
+    const resizeHandler = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         const newWinWidth = window.innerWidth;
@@ -952,7 +952,30 @@ export function timeline(collection, options) {
           winWidth = newWinWidth;
         }
       }, 250);
-    });
+    };
+    window.addEventListener('resize', resizeHandler);
+
+    // Expose a test helper to allow tests to perform cleanup of timelines and listeners
+    // This is intentionally a non-public API for testing only.
+    timeline._test_destroyAll = function() {
+      // Clean up each timeline
+      timelines.forEach((tl) => {
+        try {
+          resetTimelines(tl);
+        } catch (e) {
+          // ignore
+        }
+      });
+      // Clear timelines array
+      timelines.length = 0;
+      // Clear any pending resize timer
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+        resizeTimer = null;
+      }
+      // Remove resize handler
+      try { window.removeEventListener('resize', resizeHandler); } catch (e) { /* ignore */ }
+    };
   } catch (e) {
     console.error('Timeline initialization failed:', e);
   }

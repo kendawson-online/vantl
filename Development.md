@@ -263,6 +263,7 @@ tests/
   ├── utils.test.js         # Color utilities
   ├── colors.test.js        # Theming system
   ├── modals.test.js        # Modal lifecycle & interactions
+  ├── deep-linking.test.js  # Deep-linking behavior
   ├── engine.test.js        # Engine helpers (resolveSide)
   └── config.test.js        # Path resolution
 ```
@@ -415,7 +416,7 @@ npm run build
 | `config.js` | Medium | 60%+ | ✅ 50%+ |
 | `modals.js` | Medium | 60%+ | ✅ Completed (16 tests) |
 | `timeline-engine.js` | Medium | 50%+ | ⏳ In progress — `resolveSide()` unit tests added (5 tests) |
-| `deep-linking.js` | Low | 40%+ | ⏳ TODO |
+| `deep-linking.js` | Low | 40%+ | ⏳ In progress — tests added (3) |
 
 ### Common Testing Patterns
 

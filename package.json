@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
+    "@vitest/coverage-v8": "^4.0.17",
     "cssnano": "^7.1.2",
     "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
