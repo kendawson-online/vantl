@@ -201,6 +201,24 @@ timeline(el, { verticalStartPosition: 'right' });
 
 ---
 
+#### `sameSideNodes`
+
+**Type:** `string | boolean`  
+**Default:** `false`  
+**Accepted Values:** `'top'`, `'bottom'`, `'left'`, `'right'`, `true`, `false`  
+**Description:** Force all nodes to appear on the same side. When set to an explicit string the value will be used for the corresponding orientation (e.g. `'top'`/`'bottom'` for horizontal, `'left'`/`'right'` for vertical). When set to `true` the library will follow the orientation-specific start position (`horizontalStartPosition` / `verticalStartPosition`). If the timeline switches orientation due to responsive breakpoints, explicit values are mapped between orientations (`top -> left`, `bottom -> right`) unless the orientation-specific start position is explicitly provided. In `rtlMode` the left/right mapping is inverted to preserve before/after semantics.
+
+```javascript
+timeline(el, { sameSideNodes: 'top' });
+```
+
+```html
+<div class="timeline" data-same-side-nodes="true"></div>
+```
+
+
+---
+
 #### `verticalTrigger`
 
 **Type:** `string`  
@@ -237,6 +255,43 @@ timeline(el, { rtlMode: true });
 ```
 
 ---
+
+#### `useSwiper`
+
+**Type:** `string | boolean`  
+**Default:** `'false'`  
+**Accepted Values:** `'false'`, `'true'`, `'auto'` or boolean `true`/`false`  
+**Description:** Opt-in SwiperJS integration. When enabled the timeline will attempt to initialize a Swiper-based carousel using the built-in adapter or a custom adapter provided via `swiperAdapter`. Use `'auto'` to prefer an ESM/UMD CDN or dynamic import when available.
+
+```javascript
+timeline(el, { useSwiper: 'auto', swiperOptions: { loop: true } });
+```
+
+---
+
+#### `swiperOptions`
+
+**Type:** `object`  
+**Default:** `{}`  
+**Description:** Options object forwarded to the Swiper instance when using the Swiper adapter. See Swiper docs for available options.
+
+```javascript
+timeline(el, { useSwiper: true, swiperOptions: { slidesPerView: 3 } });
+```
+
+---
+
+#### `swiperAdapter`
+
+**Type:** `function | object`  
+**Default:** `undefined`  
+**Description:** Provide a custom adapter instance or factory. If a function is provided it will be called as a factory to create the adapter instance. The adapter should implement `init(container, registry, options)`, `destroy()`, and navigation methods the engine expects.
+
+```javascript
+// factory-based adapter
+timeline(el, { swiperAdapter: () => new MyAdapter() });
+```
+
 
 #### `nodeColor`
 
@@ -357,14 +412,14 @@ timeline(el, { navColor: '#f2f2f2' });
 
 ### Caching
 
-**Cache Key:** `vjs_<timelineId>` (if container has `id` attribute)  
-**Cache Validation:** Compares `lastupdated` field  
+**Cache Key:** `timeline_cache_<url>` — cached per-JSON-URL (the loader stores an object with `data` and `timestamp` under a key derived from the JSON URL).  
+**Cache Validation:** Compares the JSON `lastupdated` field (or timestamp) to decide whether to replace cache.  
 **Cache Location:** `localStorage`
 
 **Clear cache:**
 ```javascript
-clearTimelineCache(); // Clear all
-clearTimelineCache('timelineId'); // Clear specific
+clearTimelineCache(); // Clear all cached JSON timelines
+clearTimelineCache('/data/my-timeline.json'); // Clear cache for specific JSON URL
 ```
 
 ---
@@ -383,6 +438,7 @@ clearTimelineCache('timelineId'); // Clear specific
 | `data-start-index` | `startIndex` | `data-start-index="3"` |
 | `data-horizontal-start-position` | `horizontalStartPosition` | `data-horizontal-start-position="bottom"` |
 | `data-vertical-start-position` | `verticalStartPosition` | `data-vertical-start-position="right"` |
+| `data-same-side-nodes` | `sameSideNodes` | `data-same-side-nodes="true"` |
 | `data-vertical-trigger` | `verticalTrigger` | `data-vertical-trigger="20%"` |
 | `data-rtl-mode` | `rtlMode` | `data-rtl-mode="true"` |
 | `data-node-color` | `nodeColor` | `data-node-color="#2d6cdf"` |
@@ -501,13 +557,13 @@ processTimelineData(jsonObject, '#mytimeline');
 
 ---
 
-### `clearTimelineCache(timelineId)`
+### `clearTimelineCache(url)`
 
-Clear cached JSON data from localStorage.
+Clear cached JSON data from `localStorage` created by `loadDataFromJson()`.
 
 ```javascript
-clearTimelineCache(); // Clear all
-clearTimelineCache('myTimelineId'); // Clear specific
+clearTimelineCache(); // Clear all timeline caches
+clearTimelineCache('/data/my-timeline.json'); // Clear cache for specific JSON URL
 ```
 
 ---
@@ -647,21 +703,25 @@ timeline(el, { nodeColor: '#2d6cdf' });
 
 ## Priority Order
 
-When multiple configuration sources exist:
+When multiple configuration sources exist the effective precedence depends on how the timeline is initialized:
 
-1. **Data attributes** (highest priority)
-2. **JavaScript API options**
-3. **JSON config**
-4. **Default values** (lowest priority)
+- If the timeline is initialized via a JSON loader (`data-json-config` or `timelineFromData()`), the JSON config is treated as authoritative and is applied to the container before initialization. Effective precedence in this case is:
+  1. **JSON config** (highest) — JSON values are written to `data-*` attributes by the loader
+  2. **JavaScript API options**
+  3. **HTML data attributes**
+  4. **Default values** (lowest)
 
-Example:
+- If the timeline is initialized directly (no JSON loader), precedence is:
+  1. **HTML data attributes** (highest)
+  2. **JavaScript API options**
+  3. **Default values** (lowest)
+
+Example (JSON authoritative):
 ```html
-<div class="timeline" 
-     data-mode="horizontal" 
-     data-json-config="/data.json">
-</div>
+<div class="timeline" data-json-config="/data.json"></div>
 <script>
-timeline(el, { mode: 'vertical' }); // Ignored - data-mode takes precedence
+  // Values inside /data.json will be applied to the container and take precedence
+  // over inline data-* attributes when the loader runs.
 </script>
 ```
 

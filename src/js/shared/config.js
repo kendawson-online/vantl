@@ -1,5 +1,19 @@
-// Shared configuration values
-// Auto-detect the timeline.js script location to build correct image paths
+/**
+ * Shared configuration and path resolution
+ */
+
+/**
+ * Resolve the base path for loading timeline assets (images, sprites, etc.)
+ *
+ * Auto-detects script location and maps to the correct asset directory:
+ * - dist/timeline.min.js  → src/images
+ * - src/js/timeline.js    → src/images
+ * - Custom override via window.TimelineConfig.basePath
+ *
+ * Fallback: ../src/images (relative to demo pages)
+ *
+ * @type {string}
+ */
 export const timelineBasePath = (function() {
   // Check for user override
   if (typeof window !== 'undefined' && 
@@ -26,4 +40,11 @@ export const timelineBasePath = (function() {
   return '../src/images';
 })();
 
-// Minimum time (ms) to keep the loading spinner visible
+/**
+ * Minimum duration (ms) to display loading spinner
+ *
+ * Even if data loads quickly, show spinner for at least this duration
+ * to avoid visual flashing.
+ *
+ * @type {number}
+ */

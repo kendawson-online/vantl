@@ -1,9 +1,30 @@
-// Utility helpers shared across modules
+/**
+ * Shared utility functions for color and styling calculations
+ */
+
+/**
+ * Get a contrasting overlay color for the given background color
+ *
+ * Returns a semi-transparent dark or light overlay color based on the brightness
+ * of the input color to ensure sufficient contrast.
+ *
+ * @param {string} bgColor - CSS color value (hex, rgb, or rgba)
+ * @returns {string} - 'rgba(0, 0, 0, 0.2)' for bright backgrounds, 'rgba(255, 255, 255, 0.3)' for dark
+ */
 export function getContrastColor(bgColor) {
   const brightness = getColorBrightness(bgColor);
   return brightness > 128 ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)';
 }
 
+/**
+ * Calculate perceived brightness of a color using relative luminance
+ *
+ * Uses the standard formula (RGB to perceived brightness) to determine if a color
+ * is light (> 128) or dark (< 128). Handles hex (#fff, #ffffff), rgb(), and rgba() formats.
+ *
+ * @param {string} color - CSS color value (hex, rgb, or rgba)
+ * @returns {number} - Brightness value 0-255 (or 128 if input invalid)
+ */
 export function getColorBrightness(color) {
   let rgb;
   if (!color || typeof color !== 'string') return 128;

@@ -1,5 +1,25 @@
+/**
+ * Timeline color theming
+ *
+ * Applies dynamic color customization to timeline elements using CSS custom properties.
+ * Automatically calculates accessible navigation arrow colors based on background brightness.
+ */
+
 import { getContrastColor, getColorBrightness } from '../shared/utils.js';
 
+/**
+ * Apply color customization to a timeline
+ *
+ * Sets CSS custom properties for node, line, and navigation colors. Automatically
+ * calculates arrow color (light/dark) for accessible navigation based on navColor brightness.
+ *
+ * @param {HTMLElement} container - Timeline container element
+ * @param {Object} config - Color configuration
+ * @param {string} [config.nodeColor] - CSS color for timeline nodes (circle or box)
+ * @param {string} [config.lineColor] - CSS color for timeline connector line
+ * @param {string} [config.navColor] - CSS color for navigation buttons/arrows
+ * @returns {void}
+ */
 export function applyTimelineColors(container, config) {
   let nodeColor = config.nodeColor || null;
   let lineColor = config.lineColor || null;

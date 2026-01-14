@@ -4,11 +4,38 @@ Vantl is a lightweight, responsive timeline library created with vanilla Javascr
 
 <table align="center">
   <tr>
-    <td><img src="demo/assets/img/horizontal-screenshot.png" width="650"></td>
-  </tr>
-</table>
-
+```
+(!) Unresolved dependencies
+swiper (imported by "src/adapters/swiper-adapter.js")
+```
 <br/>
+
+More about using Swiper with Vantl:
+
+- **Optional only:** Swiper is not a hard dependency — the built-in adapter will try the following at runtime: an ESM CDN import (when provided), a dynamic `import('swiper')` (if installed locally), or `window.Swiper` (UMD CDN). If none are available the timeline falls back to the default carousel behavior.
+- **How to enable:** set `data-use-swiper="true"` (HTML) or `useSwiper: 'true'` / `useSwiper: 'auto'` (JS). You can also provide an adapter instance or factory via `swiperAdapter` and pass Swiper options with `swiperOptions`.
+
+Examples:
+
+UMD CDN (load before `timeline.min.js` for `window.Swiper` fallback):
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/swiper@latest/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
+<script src="dist/timeline.min.js"></script>
+```
+
+ESM CDN (module script — adapter will attempt ESM import when `useSwiper` is enabled):
+
+```html
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/swiper@latest/swiper-bundle.esm.browser.min.js';
+  import './dist/timeline.min.js';
+  timeline(document.querySelectorAll('.timeline'), { useSwiper: 'auto' });
+</script>
+```
+
+If you prefer bundling Swiper into your build, install it locally and update `rollup.config.js` as needed (or remove `external: ['swiper']`).
 
 ## Features
 
@@ -155,6 +182,7 @@ Here are the available data attributes:
 | `data-start-index` | number | `0` | Initial item index (horizontal mode) |
 | `data-horizontal-start-position` | string | `'top'` | First item alignment in horizontal layout: `'top'` or `'bottom'` |
 | `data-vertical-start-position` | string | `'left'` | First item alignment in vertical layout: `'left'` or `'right'` |
+| `data-same-side-nodes` | string|boolean | `false` | If set, forces all nodes to the same side. Accepts `'top'`/`'bottom'` (horizontal) or `'left'`/`'right'` (vertical). Use `data-same-side-nodes="true"` to follow the orientation-specific start position (`data-horizontal-start-position` / `data-vertical-start-position`). |
 | `data-vertical-trigger` | string | `'15%'` | Scroll trigger distance: percentage or px (e.g., `'20%'` or `'150px'`) |
 | `data-rtl-mode` | boolean | `false` | Right to left mode: `true` or `false` (only works in horizontal mode and overrides `startIndex` setting) |
 | `data-node-color` | string | — | Node circle color (hex/rgb/hsl) |
@@ -322,6 +350,7 @@ All options can be set via JavaScript API, data attributes, or with JSON config.
 | `startIndex` | number | `0` | Initial item index (horizontal mode) |
 | `horizontalStartPosition` | string | `'top'` | First item alignment: `'top'` or `'bottom'` |
 | `verticalStartPosition` | string | `'left'` | First item alignment: `'left'` or `'right'` |
+| `sameSideNodes` | string|boolean | `false` | Force all nodes to the same side. Accepted literal values: `'top'`, `'bottom'`, `'left'`, `'right'`. Use `true` to follow the orientation-specific start position (`horizontalStartPosition` / `verticalStartPosition`). |
 | `verticalTrigger` | string | `'15%'` | Scroll trigger distance: percentage or px (e.g., `'20%'` or `'150px'`) |
 | `rtlMode` | boolean | `false` | Right-to-left mode (horizontal) |
 | `nodeColor` | string | — | Node circle color (hex/rgb/hsl) |
@@ -349,8 +378,8 @@ Override the auto-detected image path:
 loadDataFromJson('/data/timeline.json', '#myTimeline');
 
 // Clear cache
-clearTimelineCache();             // Clear all
-clearTimelineCache('timelineId'); // Clear specific
+clearTimelineCache();                         // Clear all cached JSON timelines
+clearTimelineCache('/data/my-timeline.json'); // Clear cache for specific JSON URL
 
 // Navigate to node (horizontal mode)
 navigateTimelineToNodeIndex(containerElement, 5);

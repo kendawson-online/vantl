@@ -1,5 +1,21 @@
+/**
+ * Timeline modal popups
+ *
+ * Manages a singleton modal dialog for displaying detailed timeline item information.
+ * Auto-populates from data-modal-* attributes or extracted heading/image/content.
+ */
+
 import { modalState } from '../shared/state.js';
 
+/**
+ * Create the global modal and overlay elements
+ *
+ * Creates a single modal instance that is reused for all timeline items.
+ * Sets up event listeners for close button, overlay click, and ESC key.
+ * Safe to call multiple times (does nothing if modal already exists).
+ *
+ * @returns {void}
+ */
 export function createTimelineModal() {
   if (modalState.modal) return;
 
@@ -41,6 +57,26 @@ export function createTimelineModal() {
 }
 
 export function openTimelineModal(itemEl) {
+  /**
+   * Open the modal and populate with data from a timeline item
+   *
+   * Populates modal with item data from attributes:
+   * - data-modal-title: Modal heading (required)
+   * - data-modal-content: Modal body text (plain text, newlines become paragraphs)
+   * - data-modal-image: Modal image src
+   * - data-modal-html: Modal body HTML (overrides data-modal-content)
+   *
+   * Falls back to extracting from DOM if attributes missing:
+   * - First heading (h1-h6) → title
+   * - First image → image
+   * - Inline modal content div
+   *
+   * Adds 'timeline-modal-show' class after 10ms delay for CSS transitions.
+   * Hides body scrollbar while modal is open.
+   *
+   * @param {HTMLElement} itemEl - Timeline item element to open modal for
+   * @returns {void}
+   */
   if (!modalState.modal) {
     createTimelineModal();
   }
@@ -80,13 +116,26 @@ export function openTimelineModal(itemEl) {
   }
 
   setTimeout(function() {
-    modalState.modal.classList.add('timeline-modal-show');
-    modalState.overlay.classList.add('timeline-modal-show');
-    document.body.style.overflow = 'hidden';
+    // Check if modal still exists (defensive against cleanup race conditions)
+    if (modalState.modal && modalState.overlay) {
+      modalState.modal.classList.add('timeline-modal-show');
+      modalState.overlay.classList.add('timeline-modal-show');
+      document.body.style.overflow = 'hidden';
+    }
   }, 10);
 }
 
 export function closeTimelineModal() {
+  /**
+   * Close the modal and restore page scroll
+   *
+   * Removes 'timeline-modal-show' class from modal and overlay, triggering CSS transition.
+   * Restores body scrollbar visibility.
+   *
+   * Safe to call when modal is not open (no-op if modal doesn't exist).
+   *
+   * @returns {void}
+   */
   if (modalState.modal) {
     modalState.modal.classList.remove('timeline-modal-show');
     modalState.overlay.classList.remove('timeline-modal-show');

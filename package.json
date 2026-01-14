@@ -14,14 +14,19 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "cssnano": "^7.1.2",
+    "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
     "rollup": "^4.55.1",
-    "rollup-plugin-postcss": "^4.0.2"
+    "rollup-plugin-postcss": "^4.0.2",
+    "vitest": "^4.0.17"
   },
   "repository": {
     "type": "git",

@@ -1,13 +1,44 @@
-// Swiper adapter scaffold - optional addon
-// Attempts to dynamically import Swiper when initialized.
+/**
+ * Swiper carousel adapter for timeline
+ *
+ * Optional integration with Swiper (https://swiperjs.com/) for touch-friendly carousel navigation.
+ * Dynamically loads Swiper library with fallback strategies and gracefully degrades if unavailable.
+ *
+ * Swiper resolution order:
+ *  1. ESM CDN URL provided via options.swiperCdn
+ *  2. NPM-installed package (dynamic import)
+ *  3. Global window.Swiper (UMD CDN bundle)
+ *
+ * If Swiper not found, timeline still functions normally without carousel.
+ */
 
 export default class SwiperAdapter {
+  /**
+   * Create adapter instance
+   */
   constructor() {
+    /** @type {Object|null} Swiper library instance */
     this.swiper = null;
+    /** @type {HTMLElement|null} Timeline wrap element (Swiper container) */
     this._container = null;
+    /** @type {Object} Original DOM state (classes, attributes) for restoration on destroy */
     this._original = {};
   }
 
+  /**
+   * Initialize Swiper for timeline
+   *
+   * Attempts to resolve Swiper library and configure it for timeline carousel mode.
+   * Adds required Swiper classes (swiper, swiper-wrapper, swiper-slide) to DOM.
+   * Gracefully returns null if Swiper unavailable.
+   *
+   * @param {HTMLElement} timelineEl - Timeline container element
+   * @param {Object} timelineApi - Timeline API object (unused, for future extensibility)
+   * @param {Object} [options={}] - Swiper configuration options
+   * @param {string} [options.swiperCdn] - ESM CDN URL for Swiper library
+   * @param {...any} [options.otherOptions] - Additional Swiper options (passed to Swiper constructor)
+   * @returns {Promise<Object|null>} Swiper instance, or null if initialization failed or library unavailable
+   */
   async init(timelineEl, timelineApi, options = {}) {
     this._container = timelineEl.querySelector('.timeline__wrap');
     if (!this._container) {

@@ -201,12 +201,327 @@ The codebase is organized into three layers:
 - `maxWidth` - For vertical timelines, switches to horizontal when viewport width exceeds this value (default: 600px)
 - Mode switching happens on window resize with 250ms debounce
 - See `setUpTimelines()` in `timeline-engine.js`
+ - `sameSideNodes` option: when enabled, the engine computes an "effective side" on each layout pass so all nodes render on the same side. Explicit string values (`'top'|'bottom'|'left'|'right'`) are used for the matching orientation; `true` defers to the orientation-specific start position. When orientation flips due to breakpoints, horizontal values map to vertical (`top -> left`, `bottom -> right`) unless an orientation-specific start position is explicitly provided. `rtlMode` inverts left/right mapping to preserve before/after semantics. See `timeline-engine.js` for `resolveSide()` logic.
 
 ## Testing
 
+The project uses **Vitest** with **jsdom** for unit testing. Tests run in a simulated browser environment without needing a real browser.
+
+### Why Test?
+
+- **Prevent regressions** - Catch bugs before they reach users
+- **Document behavior** - Tests show how code should work
+- **Enable refactoring** - Change implementation with confidence
+- **Memory leak detection** - Verify event listener cleanup
+- **Faster debugging** - Isolated tests pinpoint issues quickly
+
+### Test Setup
+
+Already configured! The test suite is ready to use:
+
+```bash
+# Run all tests (watch mode - auto-reruns on file changes)
+npm test
+
+# Run once (CI mode)
+npm test -- --run
+
+# Run with coverage report
+npm run test:coverage
+
+# Coverage output location
+# - Text summary: terminal
+# - HTML report: coverage/index.html
+```
+
+Note: For DOM tests that rely on async behavior (like `setTimeout`), use Vitest's fake timers to avoid race conditions and unhandled errors. Recommended pattern:
+
+```javascript
+// in test file
+import { vi } from 'vitest';
+
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+
+afterEach(() => {
+  vi.runAllTimers();
+  vi.clearAllTimers();
+  vi.useRealTimers();
+});
+
+// When testing code that creates/destroys global DOM elements (e.g. a shared modal), ensure tests reset that shared state between tests.
+```
+
+### Test Structure
+
+```
+tests/
+├── setup.js                  # Global test configuration
+└── unit/
+   ├── data-loader.test.js   # Data normalization & rendering
+   ├── utils.test.js         # Color utilities
+   ├── colors.test.js        # Theming system
+   ├── modals.test.js        # Modal lifecycle & interactions
+   └── config.test.js        # Path resolution
+```
+
+### Writing Tests
+
+**Example: Testing a pure function**
+
+```javascript
+// src/js/shared/utils.js
+export function getColorBrightness(color) {
+  // ... implementation
+}
+
+// tests/unit/utils.test.js
+import { describe, it, expect } from 'vitest';
+import { getColorBrightness } from '../../src/js/shared/utils.js';
+
+describe('shared/utils', () => {
+  describe('getColorBrightness', () => {
+    it('calculates brightness for hex colors', () => {
+      expect(getColorBrightness('#FFFFFF')).toBeGreaterThan(200);
+      expect(getColorBrightness('#000000')).toBeLessThan(50);
+    });
+
+    it('handles malformed input gracefully', () => {
+      expect(getColorBrightness(null)).toBe(128);
+      expect(getColorBrightness('invalid')).toBe(128);
+    });
+  });
+});
+```
+
+**Example: Testing DOM manipulation**
+
+```javascript
+// tests/unit/colors.test.js
+import { describe, it, expect, beforeEach } from 'vitest';
+import { applyTimelineColors } from '../../src/js/features/colors.js';
+
+describe('features/colors', () => {
+  let container;
+
+  beforeEach(() => {
+    // Create fresh DOM element for each test
+    container = document.createElement('div');
+  });
+
+  it('sets CSS custom properties', () => {
+    const config = { nodeColor: '#ff0000' };
+    applyTimelineColors(container, config);
+    
+    const value = container.style.getPropertyValue('--timeline-node-color');
+    expect(value).toBe('#ff0000');
+  });
+});
+```
+
+### Test Guidelines
+
+#### ✅ DO Test:
+
+1. **Pure functions** - Functions with predictable inputs/outputs
+   - `normalizeItemData()`, `sanitizeContent()`, `getColorBrightness()`
+2. **Error handling** - Null checks, fallbacks, validation
+3. **Edge cases** - Empty arrays, missing fields, malformed data
+4. **Public APIs** - Exported functions that users call
+5. **Business logic** - Core algorithms, calculations, transformations
+
+#### ❌ DON'T Test:
+
+1. **CSS styling** - Visual appearance (use visual regression tests instead)
+2. **Third-party libraries** - Assume Swiper, jsdom work correctly
+3. **Implementation details** - Internal helper functions not exported
+4. **Browser APIs** - Assume `fetch()`, `IntersectionObserver` work
+5. **Animations** - Timing-dependent visual effects (E2E tests better)
+
+### Running Tests During Development
+
+**Recommended workflow:**
+
+```bash
+# 1. Start watch mode in a terminal
+npm test
+
+# 2. Make code changes in your editor
+# 3. Tests auto-rerun and show results immediately
+# 4. Fix failing tests before committing
+```
+
+**Before committing:**
+
+```bash
+# Run tests once
+npm test -- --run
+
+# Check coverage (aim for 60%+ on core modules)
+npm run test:coverage
+
+# Build to verify no bundler issues
+npm run build
+```
+
+### Adding Tests for New Features
+
+**When you add a new feature, add tests:**
+
+1. **Create test file** in `tests/unit/` matching source file name
+   - `src/js/features/my-feature.js` → `tests/unit/my-feature.test.js`
+
+2. **Export testable functions** from source
+   ```javascript
+   // src/js/features/my-feature.js
+   export function myHelper(input) {
+     // implementation
+   }
+   ```
+
+3. **Write tests for public API**
+   ```javascript
+   // tests/unit/my-feature.test.js
+   import { describe, it, expect } from 'vitest';
+   import { myHelper } from '../../src/js/features/my-feature.js';
+
+   describe('features/my-feature', () => {
+     describe('myHelper', () => {
+       it('handles valid input', () => {
+         expect(myHelper('test')).toBe('expected');
+       });
+
+       it('handles edge cases', () => {
+         expect(myHelper(null)).toBe('fallback');
+       });
+     });
+   });
+   ```
+
+4. **Run tests to verify**
+   ```bash
+   npm test -- --run
+   ```
+
+### Test Coverage Goals
+
+| Module | Priority | Target Coverage | Current Status |
+|--------|----------|----------------|----------------|
+| `data-loader.js` | High | 70%+ | ✅ 60%+ |
+| `utils.js` | High | 80%+ | ✅ 90%+ |
+| `colors.js` | High | 70%+ | ✅ 85%+ |
+| `config.js` | Medium | 60%+ | ✅ 50%+ |
+| `modals.js` | Medium | 60%+ | ✅ Completed (16 tests) |
+| `timeline-engine.js` | Medium | 50%+ | ⏳ TODO (cleanup logic) |
+| `deep-linking.js` | Low | 40%+ | ⏳ TODO |
+
+### Common Testing Patterns
+
+**Pattern 1: Test with DOM cleanup**
+
+```javascript
+import { beforeEach, afterEach } from 'vitest';
+
+describe('DOM tests', () => {
+  beforeEach(() => {
+    document.body.innerHTML = ''; // Clean slate
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = ''; // Cleanup
+  });
+
+  it('creates elements', () => {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    expect(document.body.children.length).toBe(1);
+  });
+});
+```
+
+**Pattern 2: Test async functions**
+
+```javascript
+import { describe, it, expect } from 'vitest';
+
+describe('async functions', () => {
+  it('fetches data', async () => {
+    const result = await myAsyncFunction();
+    expect(result).toBeDefined();
+  });
+});
+```
+
+**Pattern 3: Mock optional dependencies**
+
+```javascript
+import { vi } from 'vitest';
+
+// Already configured in tests/setup.js
+// Swiper is mocked automatically for tests
+```
+
+### Debugging Failing Tests
+
+```bash
+# Run specific test file
+npx vitest tests/unit/utils.test.js
+
+# Run tests matching pattern
+npx vitest --grep "color"
+
+# See verbose output
+npx vitest --reporter=verbose
+
+# Debug in VS Code
+# 1. Set breakpoint in test file
+# 2. Run "Debug: JavaScript Debug Terminal"
+# 3. Run: npm test
+```
+
+### CI/CD Integration (Future)
+
+When ready to add continuous integration:
+
+```yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test -- --run
+      - run: npm run test:coverage
+```
+
+### Test Best Practices
+
+1. **Keep tests fast** - Unit tests should run in milliseconds
+2. **One assertion per test** - Or at least one concept per test
+3. **Descriptive names** - `it('handles null input gracefully')` not `it('test 1')`
+4. **Avoid test interdependence** - Each test should run in isolation
+5. **Test behavior, not implementation** - Focus on "what" not "how"
+
+### Resources
+
 ### Manual Testing
 
-Test all initialization methods:
+**Before manual testing, run unit tests:**
+
+```bash
+npm test -- --run
+```
+
+Manual tests verify visual behavior and user interactions that unit tests can't cover.
+
+### Test all initialization methods:
 
 ```bash
 # 1. Test JSON auto-init
@@ -247,6 +562,12 @@ open "demo/deeplink.html?timeline=timeline&id=3"
 3. **Verify `dist/` contains latest code**
 4. **Commit all changes** including `dist/` directory
 5. **Tag release**: `git tag v2.0.1`
+
+### Notes on Optional Swiper Integration
+
+- The Swiper integration is optional and provided via an adapter (`src/adapters/swiper-adapter.js`). The engine accepts `useSwiper`, `swiperOptions`, and `swiperAdapter` settings.
+- At runtime the built-in adapter will attempt an ESM CDN import, a dynamic `import('swiper')` (if installed locally), or `window.Swiper` (UMD CDN). To avoid Rollup "unresolved dependency" warnings for optional `swiper`, add `external: ['swiper']` to `rollup.config.js` or install `swiper` locally in your dev environment.
+- Demo pages may use the UMD CDN (script tag before `timeline.min.js`) or an ESM module script for modern usage.
 
 ### Manual Publish
 
@@ -385,13 +706,20 @@ const constraints = {
 
 These can be overridden per-timeline via inline styles if needed.
 
-## Resources
+### Resources
 
+- **Vitest Docs:** https://vitest.dev/
+- **jsdom:** https://github.com/jsdom/jsdom
 - **Rollup Docs:** https://rollupjs.org/
 - **IntersectionObserver API:** https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
 - **CSS Custom Properties:** https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
 - **ES6 Modules:** https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
+- **Testing Best Practices:** https://kentcdodds.com/blog/common-mistakes-with-react-testing-library (applies to all testing)
 
 ## Questions?
+
+Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)
+
+## Manual Testing
 
 Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)

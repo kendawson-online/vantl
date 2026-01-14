@@ -6,7 +6,13 @@ import SwiperAdapter from '../../adapters/swiper-adapter.js';
 
 /**
  * Calculate and apply responsive scaling for horizontal timeline based on viewport height
+ *
+ * Automatically adjusts node dimensions, image sizes, and font sizes to fit the available
+ * viewport height while respecting minimum and maximum constraints. Uses CSS custom properties
+ * to apply scaling dynamically without rebuilding the DOM.
+ *
  * @param {HTMLElement} timelineEl - The timeline container element
+ * @returns {void}
  */
 function calculateHorizontalScale(timelineEl) {
   if (!timelineEl || !timelineEl.classList.contains('timeline--horizontal')) {
@@ -104,6 +110,12 @@ function clampInt(value, min, max) {
   return Math.max(min, Math.min(max, n));
 }
 
+/**
+ * Check if URL deep-link should update this specific timeline instance
+ * @param {HTMLElement} timelineEl - Timeline container element
+ * @returns {boolean} - True if this timeline should respond to URL deep-link
+ * @private
+ */
 function shouldUpdateDeepLinkForTimeline(timelineEl) {
   if (typeof window === 'undefined' || !window.location) return false;
   const params = new URLSearchParams(window.location.search);
@@ -117,6 +129,13 @@ function shouldUpdateDeepLinkForTimeline(timelineEl) {
   return true;
 }
 
+/**
+ * Update browser URL with current timeline item ID for deep linking
+ * @param {HTMLElement} timelineEl - Timeline container element
+ * @param {string|number} nodeId - ID of the current node
+ * @returns {void}
+ * @private
+ */
 function updateDeepLinkUrl(timelineEl, nodeId) {
   if (!timelineEl || !nodeId || typeof window === 'undefined' || !window.history) return;
   if (!shouldUpdateDeepLinkForTimeline(timelineEl)) return;
@@ -131,12 +150,36 @@ function updateDeepLinkUrl(timelineEl, nodeId) {
 }
 
 export function timeline(collection, options) {
+  /**
+   * Initialize and render timeline(s) for the provided element(s)
+   *
+   * Main API entry point. Accepts a DOM element or collection and initializes timeline(s)
+   * with responsive mode switching, IntersectionObserver animation, event handling, and cleanup.
+   *
+   * @param {HTMLElement|NodeList|HTMLCollection} collection - Target element(s) to initialize timeline
+   * @param {Object} [options] - Configuration options (overrides data attributes)
+   * @param {string} [options.mode='vertical'] - 'horizontal' or 'vertical' layout
+   * @param {number} [options.minWidth=600] - Width below which to switch to vertical (for horizontal)
+   * @param {number} [options.maxWidth=600] - Width above which to switch to horizontal (for vertical)
+   * @param {string} [options.horizontalStartPosition='top'] - 'top' or 'bottom' for horizontal
+   * @param {string} [options.verticalStartPosition='left'] - 'left' or 'right' for vertical
+   * @param {number} [options.startIndex=0] - Initial index to display
+   * @param {number} [options.moveItems=1] - Number of items to scroll with nav buttons
+   * @param {boolean} [options.rtlMode=false] - Right-to-left layout support
+   * @param {string} [options.verticalTrigger='15%'] - When to show items in vertical (px or %)
+   * @param {string} [options.useSwiper='false'] - 'true'|'false'|'auto' for Swiper carousel
+   * @param {string} [options.sameSideNodes='false'] - Render all nodes on same side (feature)
+   * @param {Object} [options.nodeColor] - CSS color for timeline nodes
+   * @param {Object} [options.lineColor] - CSS color for timeline line
+   * @param {Object} [options.navColor] - CSS color for navigation elements
+   * @returns {void}
+   */
   const timelines = [];
   const warningLabel = 'Timeline:';
   let winWidth = window.innerWidth;
   let resizeTimer;
   let currentIndex = 0;
-  const eventListeners = new Map(); // Track listeners for cleanup
+  const eventListeners = new Map(); // Track event listeners for cleanup on destroy/reset
 
   const defaultSettings = {
     minWidth: { type: 'integer', defaultValue: 600 },
@@ -148,9 +191,62 @@ export function timeline(collection, options) {
     startIndex: { type: 'integer', defaultValue: 0 },
     verticalStartPosition: { type: 'string', acceptedValues: ['left', 'right'], defaultValue: 'left' },
     verticalTrigger: { type: 'string', defaultValue: '15%' },
-    /* visibleItems is deprecated and ignored; visible count is computed at runtime */
-    useSwiper: { type: 'string', acceptedValues: ['false', 'true', 'auto'], defaultValue: 'false' }
+    useSwiper: { type: 'string', acceptedValues: ['false', 'true', 'auto'], defaultValue: 'false' },
+    sameSideNodes: { type: 'string', acceptedValues: ['top', 'bottom', 'left', 'right', 'true', 'false'], defaultValue: 'false' }
   };
+
+  // Helper to resolve effective side based on sameSideNodes setting and orientation
+  /**
+   * Resolve the effective node side for sameSideNodes feature
+   *
+   * When sameSideNodes is enabled, determines which side (top/bottom/left/right) all timeline
+   * nodes should render on, based on configuration and orientation. Handles RTL mode and
+   * responsive orientation switching.
+   *
+   * @param {Object} settings - Timeline settings object
+   * @param {string} mode - 'horizontal' or 'vertical'
+   * @param {boolean} rtl - Right-to-left mode flag
+   * @returns {string|null} - 'top'|'bottom'|'left'|'right' or null if sameSideNodes disabled
+   * @private
+   */
+  function resolveSide(settings, mode, rtl) {
+    // mode: 'horizontal' or 'vertical'
+    const hDefault = 'top';
+    const vDefault = 'left';
+
+    let s = settings.sameSideNodes;
+    if (s === undefined || s === false || s === 'false') return null;
+
+    // Normalize string values
+    if (s === 'true' || s === true) {
+      // Boolean true: use orientation-specific start position (explicit or default)
+      if (mode === 'horizontal') return settings.horizontalStartPosition || hDefault;
+      return settings.verticalStartPosition || vDefault;
+    }
+
+    // s is an explicit string: could be 'top'|'bottom'|'left'|'right'
+    s = String(s).toLowerCase();
+    if (mode === 'horizontal') {
+      // If explicit horizontal string provided, prefer it
+      if (s === 'top' || s === 'bottom') return s;
+      // If explicit vertical string provided, map to horizontal (left->top, right->bottom)
+      if (s === 'left') return 'top';
+      if (s === 'right') return 'bottom';
+      return hDefault;
+    }
+
+    // vertical mode: prefer explicit verticalStartPosition if provided in settings
+    if (settings.verticalStartPosition) return settings.verticalStartPosition;
+    // Map explicit horizontal string to vertical side
+    if (s === 'top') {
+      return rtl ? 'right' : 'left';
+    }
+    if (s === 'bottom') {
+      return rtl ? 'left' : 'right';
+    }
+    if (s === 'left' || s === 'right') return s;
+    return vDefault;
+  }
 
   function testValues(value, settingName) {
     if (typeof value !== 'number' && value % 1 !== 0) {
@@ -396,10 +492,12 @@ export function timeline(collection, options) {
       });
 
       const transformString = `translateY(${evenIndexTallest}px)`;
+      // Determine effective horizontal start side (top/bottom) based on sameSideNodes or explicit setting
+      const effectiveHSide = resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode) || tl.settings.horizontalStartPosition;
       tl.items.forEach((item, i) => {
         if (i % 2 === 0) {
           item.style.height = `${evenIndexTallest}px`;
-          if (tl.settings.horizontalStartPosition === 'bottom') {
+          if (effectiveHSide === 'bottom') {
             item.classList.add('timeline__item--bottom');
             addTransforms(item, transformString);
           } else {
@@ -407,7 +505,7 @@ export function timeline(collection, options) {
           }
         } else {
           item.style.height = `${oddIndexTallest}px`;
-          if (tl.settings.horizontalStartPosition !== 'bottom') {
+          if (effectiveHSide !== 'bottom') {
             item.classList.add('timeline__item--bottom');
             addTransforms(item, transformString);
           } else {
@@ -681,7 +779,9 @@ export function timeline(collection, options) {
       } else {
         lastVisibleIndex = i;
       }
-      const divider = tl.settings.verticalStartPosition === 'left' ? 1 : 0;
+      // Determine effective vertical start side (left/right) based on sameSideNodes or explicit setting
+      const effectiveVSide = resolveSide(tl.settings, 'vertical', tl.settings.rtlMode) || tl.settings.verticalStartPosition;
+      const divider = effectiveVSide === 'left' ? 1 : 0;
       if (i % 2 === divider && window.innerWidth > tl.settings.minWidth) {
         item.classList.add('timeline__item--right');
       } else {

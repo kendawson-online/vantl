@@ -1,3 +1,10 @@
+/**
+ * JSON data loading and timeline rendering
+ *
+ * Handles JSON fetching with caching, data normalization, DOM rendering, and timeline initialization.
+ * Includes Lorem Ipsum fallbacks and image error handling.
+ */
+
 import { timelineBasePath } from '../shared/config.js';
 import { showTimelineError } from './error-ui.js';
 import { applyTimelineColors } from './colors.js';
@@ -6,10 +13,21 @@ import { timeline } from '../core/timeline-engine.js';
 import { LOREM_PARAGRAPH, LOREM_FULL } from '../shared/lipsum.js';
 
 /**
- * Normalize item data to standard 5-field schema
- * Fields: date, heading, summary, content (HTML), image
+ * Normalize raw item data to standard timeline schema
+ *
+ * Converts various data formats to consistent 5-field structure.
+ * Uses Lorem Ipsum placeholders for missing fields.
+ *
+ * @param {Object} rawData - Raw item data from JSON or user
+ * @param {string} [rawData.id] - Optional unique identifier
+ * @param {string} [rawData.date] - Date label (any format)
+ * @param {string} [rawData.heading] - Item title
+ * @param {string} [rawData.summary] - Short text (shown in node)
+ * @param {string} [rawData.content] - Detailed HTML content (shown in modal)
+ * @param {string} [rawData.image] - Image URL (shown in node and modal)
+ * @returns {Object} Normalized item object with all 5+ fields populated
  */
-function normalizeItemData(rawData) {
+export function normalizeItemData(rawData) {
   const normalized = {
     id: rawData.id || null,
     date: rawData.date || 'DD/MM/YYYY',
@@ -23,11 +41,15 @@ function normalizeItemData(rawData) {
 }
 
 /**
- * Sanitize HTML content - remove potentially problematic tags
- * Allow: p, strong, em, u, a, ul, ol, li, br, blockquote
- * Strip: script, iframe, form, input, h1, h2
+ * Sanitize HTML content for safe display in timeline
+ *
+ * Removes dangerous tags (script, form, input, h1, h2) while preserving safe markup.
+ * Allowed tags: p, strong, em, u, a, ul, ol, li, br, blockquote, h3-h6
+ *
+ * @param {string} html - Raw HTML string
+ * @returns {string} Sanitized HTML safe for DOM injection
  */
-function sanitizeContent(html) {
+export function sanitizeContent(html) {
   if (!html) return '';
   
   let clean = html;
@@ -53,9 +75,20 @@ function sanitizeContent(html) {
 }
 
 /**
- * Create DOM node from normalized item data
+ * Create a DOM element for a timeline item
+ *
+ * Builds the DOM structure for a single timeline node from normalized item data.
+ * Creates:
+ * - Date label
+ * - Optional image (with fallback to missing-image.svg on error)
+ * - Heading
+ * - Summary (body text, truncated by CSS)
+ * - Optional inline modal content (for detailed view)
+ *
+ * @param {Object} item - Normalized item data (from normalizeItemData)
+ * @returns {HTMLElement} Complete DOM element ready to insert into timeline
  */
-function createItemNode(item) {
+export function createItemNode(item) {
   const normalized = normalizeItemData(item);
   
   const itemEl = document.createElement('div');
@@ -170,6 +203,22 @@ function applyDataAttributes(container, config) {
 
 /**
  * Render timeline from data array
+ *
+ * Constructs the complete timeline DOM structure from an array of item data.
+ * Creates .timeline__wrap and .timeline__items containers if missing.
+ * Applies configuration (colors, options, heading) to the container.
+ * Initializes timeline after rendering.
+ *
+ * @param {string} containerSelector - CSS selector for timeline container element
+ * @param {Array<Object>} data - Array of item objects (raw or normalized)
+ * @param {Object} [config] - Configuration object
+ * @param {string} [config.timelineName] - Heading to display above timeline
+ * @param {string} [config.mode] - 'horizontal' or 'vertical'
+ * @param {string} [config.nodeColor] - CSS color for nodes
+ * @param {string} [config.lineColor] - CSS color for line
+ * @param {string} [config.navColor] - CSS color for nav
+ * @param {...any} [config.otherSettings] - Any other timeline options (see timeline-engine.js)
+ * @returns {HTMLElement|null} - Timeline container element, or null if container not found
  */
 export function renderTimelineFromData(containerSelector, data, config) {
   const container = document.querySelector(containerSelector);
@@ -230,6 +279,17 @@ export function renderTimelineFromData(containerSelector, data, config) {
 /**
  * Initialize timeline from provided data
  */
+/**
+ * Create and initialize timeline from data array
+ *
+ * Convenience function that combines renderTimelineFromData + timeline initialization.
+ * Waits for lazy-loaded images before calculating layout to avoid dimension errors.
+ *
+ * @param {string} containerSelector - CSS selector for timeline container
+ * @param {Array<Object>} data - Array of item objects
+ * @param {Object} [options] - Timeline configuration (same as renderTimelineFromData)
+ * @returns {void}
+ */
 export function timelineFromData(containerSelector, data, options) {
   const container = renderTimelineFromData(containerSelector, data, options);
   if (!container) return;
@@ -240,7 +300,17 @@ export function timelineFromData(containerSelector, data, options) {
 }
 
 /**
- * Load timeline data from JSON file and initialize
+ * Fetch JSON data from URL, cache it, and initialize timeline
+ *
+ * Fetches timeline data from a JSON file with localStorage caching.
+ * Shows loading spinner during fetch. Auto-initializes timeline after data loads.
+ * Handles errors gracefully with error UI display.
+ *
+ * Cache validation: Stored with timestamp, expires after 1 hour.
+ *
+ * @param {string} url - URL to JSON file containing timeline data array
+ * @param {string} containerSelector - CSS selector for timeline container
+ * @returns {void}
  */
 export function loadDataFromJson(url, containerSelector) {
   const container = document.querySelector(containerSelector);
@@ -371,7 +441,13 @@ function showTimelineTitle(container) {
 }
 
 /**
- * Clear timeline cache
+ * Clear cached JSON data for a specific URL or all timeline caches
+ *
+ * Removes cached data from localStorage. If URL provided, clears only that URL's cache.
+ * If no URL provided, clears all timeline caches (keys starting with 'timeline_cache_').
+ *
+ * @param {string} [url] - URL key to clear, or omit to clear all timeline caches
+ * @returns {void}
  */
 export function clearTimelineCache(url) {
   if (typeof(Storage) === 'undefined') {
@@ -398,7 +474,14 @@ export function clearTimelineCache(url) {
 }
 
 /**
- * Process timeline data (alias for renderTimelineFromData for backwards compat)
+ * Process and render timeline data (alias for renderTimelineFromData)
+ *
+ * Alternative API for rendering timeline. Equivalent to renderTimelineFromData.
+ *
+ * @param {string} containerSelector - CSS selector for timeline container
+ * @param {Array<Object>} data - Array of item objects
+ * @param {Object} [config] - Timeline configuration
+ * @returns {HTMLElement|null} - Timeline container element, or null if container not found
  */
 export function processTimelineData(containerSelector, data, config) {
   return renderTimelineFromData(containerSelector, data, config);

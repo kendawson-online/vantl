@@ -1,5 +1,29 @@
+/**
+ * Error handling and display for timeline
+ *
+ * Shows user-friendly error messages when timeline initialization fails.
+ * Prevents broken DOM from affecting page layout.
+ */
+
 import { timelineBasePath } from '../shared/config.js';
 
+/**
+ * Display error message in timeline container
+ *
+ * Replaces timeline content with an error card showing icon, title, message, and solution.
+ * Supports predefined error types or custom messages.
+ *
+ * Error types:
+ *  - 'json-load': Failed to fetch JSON file (network error, CORS, 404)
+ *  - 'json-parse': JSON file exists but contains invalid JSON
+ *  - 'missing-element': Container element not found on page
+ *  - 'invalid-config': Configuration options out of valid range
+ *
+ * @param {HTMLElement|null} container - Timeline container element to show error in
+ * @param {string} errorType - Error type key (see list above)
+ * @param {string} [details] - Optional additional details to log to console
+ * @returns {void}
+ */
 export function showTimelineError(container, errorType, details) {
   if (!container) return;
 
