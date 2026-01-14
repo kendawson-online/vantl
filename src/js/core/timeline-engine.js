@@ -110,6 +110,49 @@ function clampInt(value, min, max) {
   return Math.max(min, Math.min(max, n));
 }
 
+// Exported resolver for testing and external use
+/**
+ * Resolve the effective node side for sameSideNodes feature
+ *
+ * This is the same logic used internally by the timeline engine but
+ * exposed as a top-level export to allow unit testing.
+ *
+ * @param {Object} settings - Timeline settings object
+ * @param {string} mode - 'horizontal' or 'vertical'
+ * @param {boolean} rtl - Right-to-left mode flag
+ * @returns {string|null}
+ */
+export function resolveSide(settings, mode, rtl) {
+  const hDefault = 'top';
+  const vDefault = 'left';
+
+  let s = settings && settings.sameSideNodes;
+  if (s === undefined || s === false || s === 'false') return null;
+
+  if (s === 'true' || s === true) {
+    if (mode === 'horizontal') return settings.horizontalStartPosition || hDefault;
+    return settings.verticalStartPosition || vDefault;
+  }
+
+  s = String(s).toLowerCase();
+  if (mode === 'horizontal') {
+    if (s === 'top' || s === 'bottom') return s;
+    if (s === 'left') return 'top';
+    if (s === 'right') return 'bottom';
+    return hDefault;
+  }
+
+  if (settings && settings.verticalStartPosition) return settings.verticalStartPosition;
+  if (s === 'top') {
+    return rtl ? 'right' : 'left';
+  }
+  if (s === 'bottom') {
+    return rtl ? 'left' : 'right';
+  }
+  if (s === 'left' || s === 'right') return s;
+  return vDefault;
+}
+
 /**
  * Check if URL deep-link should update this specific timeline instance
  * @param {HTMLElement} timelineEl - Timeline container element

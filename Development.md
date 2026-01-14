@@ -259,11 +259,12 @@ afterEach(() => {
 tests/
 ├── setup.js                  # Global test configuration
 └── unit/
-   ├── data-loader.test.js   # Data normalization & rendering
-   ├── utils.test.js         # Color utilities
-   ├── colors.test.js        # Theming system
-   ├── modals.test.js        # Modal lifecycle & interactions
-   └── config.test.js        # Path resolution
+  ├── data-loader.test.js   # Data normalization & rendering
+  ├── utils.test.js         # Color utilities
+  ├── colors.test.js        # Theming system
+  ├── modals.test.js        # Modal lifecycle & interactions
+  ├── engine.test.js        # Engine helpers (resolveSide)
+  └── config.test.js        # Path resolution
 ```
 
 ### Writing Tests
@@ -413,7 +414,7 @@ npm run build
 | `colors.js` | High | 70%+ | ✅ 85%+ |
 | `config.js` | Medium | 60%+ | ✅ 50%+ |
 | `modals.js` | Medium | 60%+ | ✅ Completed (16 tests) |
-| `timeline-engine.js` | Medium | 50%+ | ⏳ TODO (cleanup logic) |
+| `timeline-engine.js` | Medium | 50%+ | ⏳ In progress — `resolveSide()` unit tests added (5 tests) |
 | `deep-linking.js` | Low | 40%+ | ⏳ TODO |
 
 ### Common Testing Patterns

@@ -1,9 +1,23 @@
-/**\n * Deep linking support for timeline navigation\n *\n * Allows users to link directly to specific timeline items via URL parameters.\n * Implements browser back/forward history integration.\n */
+/**
+ * Deep linking support for timeline navigation
+ *
+ * Allows users to link directly to specific timeline items via URL parameters.
+ * Implements browser back/forward history integration.
+ */
 
 import { timelineRegistry } from '../shared/state.js';
 
 /**
- * Handle deep link URL parameters and navigate to specific timeline item\n *\n * Looks for URL parameters:  *  - ?id=nodeId - ID of the timeline item to show\n *  - ?timeline=timelineId - Specific timeline (optional, for multiple timelines)\n *\n * If found, scrolls timeline into view and highlights the item.\n *\n * @param {string} containerSelector - CSS selector for fallback timeline container\n * @returns {void}\n */
+ * Handle deep link URL parameters and navigate to specific timeline item
+ *
+ * Looks for URL parameters:  *  - ?id=nodeId - ID of the timeline item to show
+ *  - ?timeline=timelineId - Specific timeline (optional, for multiple timelines)
+ *
+ * If found, scrolls timeline into view and highlights the item.
+ *
+ * @param {string} containerSelector - CSS selector for fallback timeline container
+ * @returns {void}
+ */
 export function handleDeepLinking(containerSelector) {
   const urlParams = new URLSearchParams(window.location.search);
   const timelineId = urlParams.get('timeline');
