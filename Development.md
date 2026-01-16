@@ -109,6 +109,20 @@ npm run dev
 # (alias)
 # npm run serve
 ```
+
+Accessibility notes:
+- When using JSON data, each node may include an optional `ariaLabel` field (or `aria-label`) to provide a screen-reader friendly label for the node. Example:
+
+```
+{
+  "id": 1,
+  "date": "10/01/2023",
+  "ariaLabel": "Node 1: Date October 1st, 2023. Title: Colored Tiles",
+  "heading": "Colored Tiles"
+}
+```
+
+The library will also auto-generate an accessible label from the node date and heading when an explicit `ariaLabel` is not provided. For inline HTML, use `data-aria-label` on the `.timeline__item` element to provide the same explicit label.
 ```
 
 Demo pages are located in `demo/` and organized by initialization method:
