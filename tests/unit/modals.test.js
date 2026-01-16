@@ -30,6 +30,17 @@ describe('features/modals', () => {
       expect(modalState.overlay.classList.contains('timeline-modal-overlay')).toBe(true);
     });
 
+    it('applies dialog accessibility attributes', () => {
+      createTimelineModal();
+
+      expect(modalState.modal.getAttribute('role')).toBe('dialog');
+      expect(modalState.modal.getAttribute('aria-modal')).toBe('true');
+      const labelledBy = modalState.modal.getAttribute('aria-labelledby');
+      const title = modalState.modal.querySelector('.timeline-modal__title');
+      expect(labelledBy).toBeTruthy();
+      expect(title.id).toBe(labelledBy);
+    });
+
     it('appends modal and overlay to document body', () => {
       createTimelineModal();
       
@@ -113,6 +124,19 @@ describe('features/modals', () => {
 
       expect(document.body.style.overflow).toBe('hidden');
     });
+
+    it('should focus the first focusable control when opened', () => {
+      const mockItem = document.createElement('div');
+      mockItem.setAttribute('data-item-id', '1');
+      mockItem.innerHTML = '<p>Content</p>';
+      document.body.appendChild(mockItem);
+
+      openTimelineModal(mockItem);
+      vi.runAllTimers();
+
+      const closeBtn = modalState.modal.querySelector('.timeline-modal__close');
+      expect(document.activeElement).toBe(closeBtn);
+    });
   });
 
   describe('closeTimelineModal', () => {
@@ -163,6 +187,23 @@ describe('features/modals', () => {
 
       // Overflow should be restored
       expect(document.body.style.overflow).toBe('');
+    });
+
+    it('restores focus to the previously active element', () => {
+      const trigger = document.createElement('button');
+      document.body.appendChild(trigger);
+      trigger.focus();
+
+      const mockItem = document.createElement('div');
+      mockItem.setAttribute('data-item-id', '1');
+      mockItem.innerHTML = '<p>Content</p>';
+      document.body.appendChild(mockItem);
+
+      openTimelineModal(mockItem);
+      vi.runAllTimers();
+      closeTimelineModal();
+
+      expect(document.activeElement).toBe(trigger);
     });
   });
 

@@ -492,130 +492,217 @@ timeline(timelines, {
 
 ## Global Functions
 
+## `timeline()` Function Reference
+
+Initialize one or more timeline containers and attach interactive behavior (navigation, responsive switching, modal binding, deep-link updates, and optional Swiper integration).
+
+Signature:
+
+```javascript
+timeline(collection, options)
+```
+
+Parameters:
+- `collection` (HTMLElement | NodeList | HTMLCollection): A single DOM element, or a collection/NodeList of timeline container elements to initialize.
+- `options` (Object, optional): Configuration object — same keys as the data-attribute options but provided in JS. See the Options table below.
+
+Returns:
+- `void` — The function initializes timelines in-place. Internally timelines are registered for programmatic control and cleanup via internal registry helpers. Use helpers like `navigateTimelineToNodeIndex()` and `clearTimelineCache()` for control.
+
+Lifecycle and behavior:
+- Auto-wires event listeners (resize, navigation buttons, keyboard, item click handlers) and stores references for proper teardown.
+- Responsible for responsive mode switching (horizontal <-> vertical) using `minWidth`/`maxWidth` settings.
+- If `useSwiper` is enabled/auto-detected the function will negotiate a Swiper adapter and initialize carousel behavior.
+- When used with JSON loaders, settings may be written to `data-*` attributes prior to calling `timeline()` so that the DOM reflects authoritative configuration.
+
+Destroy / Cleanup:
+- The library tracks event listeners and internal state for each timeline instance. Use the test helper `timeline._test_destroyAll()` (testing only) or call page-specific cleanup functions the app exposes to remove listeners and DOM state when necessary.
+
+Options (JS keys and corresponding `data-*` attributes)
+
+- `mode` / `data-mode` (string) — `'vertical'|'horizontal'`. Default: `'vertical'`.
+- `minWidth` / `data-min-width` (number) — Minimum viewport width (px) to preserve horizontal layout. Default: `600`.
+- `maxWidth` / `data-max-width` (number) — Maximum viewport width (px) to preserve vertical layout. Default: `600`.
+- `moveItems` / `data-move-items` (number) — Number of items to advance when nav is used. Default: `1`.
+- `startIndex` / `data-start-index` (number) — Initial visible item index (0-based) in horizontal mode. Default: `0`.
+- `horizontalStartPosition` / `data-horizontal-start-position` (string) — `'top'|'bottom'`. Default: `'top'`.
+- `verticalStartPosition` / `data-vertical-start-position` (string) — `'left'|'right'`. Default: `left`.
+- `sameSideNodes` / `data-same-side-nodes` (string|boolean) — Force same-side rendering; accepts `'top'|'bottom'|'left'|'right'` or boolean `true` to follow orientation-specific start position. Default: `false`.
+- `verticalTrigger` / `data-vertical-trigger` (string) — When to reveal items in vertical mode (percentage or px). Default: `'15%'`.
+- `rtlMode` / `data-rtl-mode` (boolean) — Right-to-left layout support for horizontal mode. Default: `false`.
+- `useSwiper` / `data-use-swiper` (string) — `'false'|'true'|'auto'` to enable Swiper integration. Default: `'false'`.
+- `swiperAdapter` (object) — Optional adapter instance to override default Swiper adapter detection.
+- `swiperOptions` (object) — Options forwarded to Swiper adapter when enabled.
+- `nodeColor` / `data-node-color` (string) — CSS color for node circles.
+- `lineColor` / `data-line-color` (string) — CSS color for center line.
+- `navColor` / `data-nav-color` (string) — CSS color for nav buttons.
+- `minHeight` / `data-min-height` (number) — (internal/layout tuning) minimum node height for scaling behavior.
+
+Events & Hooks
+- The core library does not expose an event emitter, but you can observe DOM changes and standard events:
+  - Click handlers on `.timeline__item` are used to open modals when item attributes exist.
+  - Navigation buttons have standard click handlers and update internal state.
+  - For advanced control, use `navigateTimelineToNodeIndex(container, index)` and the modal helpers in this API.
+
+Examples
+
+Basic initialization for all timelines on a page:
+
+```javascript
+timeline(document.querySelectorAll('.timeline'));
+```
+
+Horizontal timeline with options:
+
+```javascript
+timeline(document.querySelectorAll('.timeline-horizontal'), {
+  mode: 'horizontal',
+  minWidth: 700,
+  moveItems: 2,
+  nodeColor: '#2d6cdf'
+});
+```
+
+jQuery usage (plugin wrapper):
+
+```javascript
+$('.timeline').timeline({ mode: 'horizontal' });
+```
+
+Guidance:
+- Prefer JSON-based initialization for content-driven timelines (use `data-json-config` + `loadDataFromJson()`). Use `timeline()` directly for programmatic or inline HTML scenarios.
+- When re-initializing a timeline, ensure any prior instance was properly destroyed/cleared to avoid duplicate listeners and stale state.
+
+
 All functions are exposed on `window` object:
 
 ### `loadDataFromJson(url, containerSelector)`
 
-Load and render timeline from JSON file.
+Fetch a JSON file, process its contents, render items into the target container, and initialize the timeline. Note: this function performs asynchronous network activity but does not return a Promise — it triggers render + initialization when the fetch completes.
 
 ```javascript
+// load and initialize timeline inside #mytimeline
 loadDataFromJson('/data/timeline.json', '#mytimeline');
 ```
 
-**Parameters:**
-- `url` - JSON file URL
-- `containerSelector` - CSS selector for timeline container
+Parameters:
+- `url` (string): URL or relative path to a JSON file containing timeline configuration and items.
+- `containerSelector` (string): CSS selector for the target timeline container (e.g., `#mytimeline` or `.timeline`).
 
-**Returns:** Promise (resolves when timeline initialized)
+Returns: `void` — initialization is performed asynchronously when the JSON loads.
+
+Notes:
+- The loader caches successful JSON responses in `localStorage` under keys named `timeline_cache_<url>` (see `clearTimelineCache`). The cache stores `{ data, timestamp }` and the loader uses the JSON `lastupdated` value (if present) to decide whether to update the cache; there is no automatic time-based expiry implemented in the loader.
+- On success the loader calls `renderTimelineFromData()` and then initializes the timeline with `timeline()` after images settle.
+- Deep-linking (`?timeline=...&id=...`) is handled automatically after initialization.
 
 ---
 
 ### `renderTimelineFromData(containerSelector, data, config)`
 
-Render timeline items from data array.
+Render timeline DOM nodes from a plain data array without automatically initializing behavior (no event wiring, no nav, no Swiper). Use this when you want to render markup now and control initialization separately.
 
 ```javascript
-renderTimelineFromData('#mytimeline', 
-  [
-    { title: 'Event 1', content: '...' },
-    { title: 'Event 2', content: '...' }
-  ],
-  { layoutMode: 'vertical', nodeColor: '#2d6cdf' }
-);
+renderTimelineFromData('#mytimeline', dataArray, { nodeColor: '#2d6cdf' });
 ```
 
-**Parameters:**
-- `containerSelector` - CSS selector
-- `data` - Array of item objects
-- `config` - Configuration object
+Parameters:
+- `containerSelector` (string): CSS selector or element reference where items will be rendered.
+- `data` (Array): Array of timeline item objects. Each item may include fields such as `id`, `title`, `content`, `image`, `date`, `nodeColor`, and `data-node-id`.
+- `config` (Object, optional): Configuration that may influence rendering (e.g., `layoutMode`, `nodeColor`). These values set data attributes on the container but do not initialize behavior.
+
+Returns: `HTMLElement` or `null` — reference to the rendered container (or `null` on error).
+
+When to use:
+- Use `renderTimelineFromData()` if you want to pre-render HTML (server-side or static snapshot) and call `timeline()` later to attach behavior.
 
 ---
 
 ### `timelineFromData(containerSelector, data, options)`
 
-Render items and initialize timeline.
+Convenience utility that calls `renderTimelineFromData()` and then initializes the timeline behavior via `timeline()`. Equivalent to render + timeline initialization in one call.
 
 ```javascript
 timelineFromData('#mytimeline', dataArray, { mode: 'horizontal' });
 ```
 
-**Difference from `renderTimelineFromData`:**
-- Also calls `timeline()` to initialize
-- Combines rendering + initialization in one step
+Parameters:
+- `containerSelector` (string|HTMLElement): Target container selector or element.
+- `data` (Array): Timeline item objects.
+- `options` (Object, optional): Timeline initialization options (same shape as `timeline()` options).
+
+Returns: `void` (initializes the timeline in-place).
+
+Notes:
+- `timelineFromData()` will write authoritative values from `options` into `data-*` attributes on the container prior to calling `timeline()` so subsequent calls and deep-link behavior use the expected config.
 
 ---
 
 ### `processTimelineData(json, containerSelector)`
 
-Process JSON data and render timeline.
+Internal helper that normalizes JSON payloads into the internal item format used by rendering functions and writes configuration values to the container.
 
 ```javascript
 processTimelineData(jsonObject, '#mytimeline');
 ```
 
-**Used internally by:** `loadDataFromJson()`
+Parameters:
+- `json` (Object): The parsed JSON file contents. May include metadata (timelineName, layoutMode) and an `items` array.
+- `containerSelector` (string): Selector for the target container.
+
+Returns: `Object` — normalized data object containing `items` and resolved `config`.
+
+Use cases:
+- Useful when you need to validate or transform incoming JSON before rendering (e.g., date parsing, defaulting fields).
 
 ---
 
 ### `clearTimelineCache(url)`
 
-Clear cached JSON data from `localStorage` created by `loadDataFromJson()`.
+Remove cached JSON entries stored by `loadDataFromJson()` in `localStorage`.
 
 ```javascript
-clearTimelineCache(); // Clear all timeline caches
-clearTimelineCache('/data/my-timeline.json'); // Clear cache for specific JSON URL
+clearTimelineCache(); // remove all timeline caches
+clearTimelineCache('/data/my-timeline.json'); // remove specific cache key
 ```
+
+Parameters:
+- `url` (string, optional): If provided, only the cache entry for that URL is removed. If omitted, all timeline-related cache keys are cleared.
+
+Returns: `void`.
+
+Notes:
+- Cache keys are namespaced; clearing avoids stale data during development or when deployments update JSON schemas.
 
 ---
 
-### `openTimelineModal(itemElement)`
+### `openTimelineModal(itemElement)` / `closeTimelineModal()` / `createTimelineModal()`
 
-Open modal popup for a timeline item.
+Modal helpers to render and control a single global modal used for displaying rich timeline content.
 
-```javascript
-const item = document.querySelector('.timeline__item');
-openTimelineModal(item);
-```
+`createTimelineModal()`
+- Ensures a global modal DOM node exists and wires close handlers. Called automatically on first `openTimelineModal()`.
 
-**Reads from attributes:**
-- `data-modal-title`
-- `data-modal-content`
-- `data-modal-image`
-- `data-modal-html`
+`openTimelineModal(itemElement)`
+- Opens the modal and reads modal content from attributes on `itemElement`:
+  - `data-modal-title`
+  - `data-modal-content`
+  - `data-modal-image`
+  - `data-modal-html` (raw HTML)
 
----
+`closeTimelineModal()`
+- Closes the currently open modal and removes active classes.
 
-### `closeTimelineModal()`
-
-Close the currently open modal.
+Examples:
 
 ```javascript
+const el = document.querySelector('.timeline__item[data-node-id="3"]');
+openTimelineModal(el);
+// later
 closeTimelineModal();
 ```
 
----
-
-### `createTimelineModal()`
-
-Create the global modal element (called automatically on first use).
-
-```javascript
-createTimelineModal(); // Usually not needed manually
-```
-
----
-
-### `handleTimelineDeepLinking(containerSelector)`
-
-Handle URL-based deep linking to specific nodes.
-
-```javascript
-handleTimelineDeepLinking('#mytimeline');
-```
-
-**URL Format:** `?timeline=containerId&id=nodeId`
-
-**Called automatically by:** `loadDataFromJson()`
+Returns: `void`.
 
 ---
 
@@ -628,9 +715,68 @@ const container = document.querySelector('.timeline');
 navigateTimelineToNodeIndex(container, 5);
 ```
 
-**Note:** Currently a placeholder; full integration pending.
+Description:
+
+- Scrolls the timeline to display the item at the given zero-based `index`.
+- Intended primarily for horizontal timelines (no-op for vertical layouts).
+- Updates the browser URL for deep-linking when the timeline container has an `id` (the `timeline` query parameter) or a `data-timeline-id` attribute.
+
+Parameters:
+
+- `container` (HTMLElement): The timeline container element (e.g., `document.getElementById('myTimeline')`).
+- `index` (number): Zero-based index of the item to navigate to.
+
+Behavior and notes:
+
+- The function requires the timeline to be initialized and registered (for example with `timeline()` or via `loadDataFromJson()` auto-init). If the timeline isn't registered the call will warn and return.
+- For deep-link support the container should have an `id` (or `data-timeline-id`) so the URL may include `?timeline=<id>&id=<nodeId>`.
+- When used together with the JSON loader the JSON configuration is authoritative for settings; call `navigateTimelineToNodeIndex()` after initialization completes.
+
+Example (JSON loader + navigation):
+
+```javascript
+// load JSON and then navigate (ensure init completed)
+loadDataFromJson('/data/my-timeline.json', '#myTimeline');
+// later, navigate programmatically
+const el = document.querySelector('#myTimeline');
+navigateTimelineToNodeIndex(el, 2);
+```
 
 ---
+
+## Testing & Internals
+
+The library exposes several utility and testing helpers that are useful for developers and for unit tests. These functions are part of the public module exports but some are primarily intended for internal/testing use.
+
+### Utility / Rendering Helpers
+
+- `normalizeItemData(rawData)` — Normalize raw JSON or input data into the internal item schema (fields: `id`, `date`, `heading`, `summary`, `content`, `image`). Useful for validating and unit-testing data transformations.
+- `sanitizeContent(html)` — Sanitizes incoming HTML to remove dangerous tags while preserving safe markup used in modal content.
+- `createItemNode(item)` — Build a single `.timeline__item` DOM node from normalized item data. Attaches click handlers to open modals when appropriate.
+ - `applyTimelineColors(container, config)` — Apply color-related configuration to a container by setting CSS custom properties (node, line, nav colors) and calculating accessible contrast for nav elements. Useful when programmatically applying theme colors prior to initialization.
+ - `showTimelineError(container, errorType, details)` — Display an inline error UI for a timeline container (used when JSON fails to load or no data is available). `errorType` is a short string (e.g., `load-failed`, `no-data`) and `details` may contain a developer message.
+
+### Utilities
+
+- `getColorBrightness(color)` — Returns perceived brightness (0-255) for a CSS color string. Used by theming utilities.
+- `getContrastColor(bgColor)` — Returns an rgba overlay color that contrasts with the provided background color.
+
+### Paths / Config
+
+- `timelineBasePath` (constant) — Resolved base path for loading images and assets. Can be overridden by setting `window.TimelineConfig.basePath` before loading the script.
+
+### Internal State (exports — use with caution)
+
+- `timelineRegistry` — Internal registry object that stores runtime timeline instances and their control methods. Exposed for advanced programmatic access and for tests, but consider it internal and subject to change.
+- `modalState` — Internal object tracking the global modal state (open/closed, current item). Intended for feature coordination and tests; not a stable public API.
+
+### Testing & Internal Hooks
+
+- `timeline._test_destroyAll()` — Test-only helper exposed on the `timeline` function in builds; removes timeline instances, clears timers and removes resize handlers. Intended for unit tests to clean up global state. Marked internal — avoid relying on it in production code.
+- `resolveSide(settings, mode, rtl)` — Engine helper exported for unit testing of `sameSideNodes` logic.
+
+Additions to the docs above cover these helpers where relevant (rendering, theming, and testing).
+
 
 ## Event Handling
 
@@ -682,6 +828,13 @@ Timeline uses CSS variables for theming:
   --timeline-node-bg: #FFF;
   --timeline-nav-color: #FFF;
   --timeline-nav-border: #DDD;
+  --timeline-active-outline-color: #000;
+  /* Horizontal sizing helpers used by the engine's responsive scaling */
+  --timeline-h-node-width: 200px;
+  --timeline-h-node-min-height: 180px;
+  --timeline-h-image-size: 100px;
+  --timeline-h-title-font-size: 18px;
+  --timeline-h-text-font-size: 11px;
 }
 ```
 

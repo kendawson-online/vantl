@@ -12,6 +12,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['tests/setup.js'],
+    exclude: ['tests/playwright/**/*', '**/node_modules/**', '**/dist/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],

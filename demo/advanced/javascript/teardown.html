@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced — Teardown & Re-init</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>Teardown & Re-init</h1>
+        <p>Demonstrates how to safely remove and recreate a timeline instance.</p>
+      </header>
+
+      <section>
+        <div id="teardown-tl" class="timeline" data-test="teardown-tl"></div>
+        <p>
+          <button id="btn-destroy" class="btn danger" data-test="teardown-destroy">Destroy Timeline</button>
+          <button id="btn-reinit" class="btn success" data-test="teardown-reinit">Re-init Timeline</button>
+        </p>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var items = [
+          { id: 1, title: 'A', content: 'Alpha' },
+          { id: 2, title: 'B', content: 'Beta' },
+          { id: 3, title: 'C', content: 'Gamma' }
+        ];
+
+        function init() {
+          timelineFromData('#teardown-tl', items, { mode: 'horizontal', minWidth: 600 });
+          console.log('timeline initialized');
+        }
+
+        function destroy() {
+          var el = document.querySelector('#teardown-tl');
+          // Basic teardown: remove inner HTML and any global state if needed
+          el.innerHTML = '';
+          console.log('timeline destroyed (DOM cleared)');
+        }
+
+        document.getElementById('btn-destroy').addEventListener('click', destroy);
+        document.getElementById('btn-reinit').addEventListener('click', function () {
+          destroy();
+          init();
+        });
+
+        init();
+      });
+    </script>
+
+  </body>
+</html>

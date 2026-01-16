@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { normalizeItemData, sanitizeContent, createItemNode } from '../../src/js/features/data-loader.js';
 
 describe('features/data-loader', () => {
@@ -50,6 +50,23 @@ describe('features/data-loader', () => {
       expect(node.querySelector('.timeline__date')).toBeTruthy();
       expect(node.querySelector('.timeline__heading')).toBeTruthy();
       expect(node.querySelector('.timeline__modal-content')).toBeTruthy();
+    });
+
+    it('adds list semantics and keyboard activation', () => {
+      const item = { id: 99, date: '01/01/2026', heading: 'Key', summary: 'S', content: '<p>c</p>' };
+      const node = createItemNode(item);
+      window.openTimelineModal = vi.fn();
+
+      expect(node.getAttribute('role')).toBe('listitem');
+      expect(node.getAttribute('tabindex')).toBe('0');
+
+      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      node.dispatchEvent(enterEvent);
+      expect(window.openTimelineModal).toHaveBeenCalledTimes(1);
+
+      const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
+      node.dispatchEvent(spaceEvent);
+      expect(window.openTimelineModal).toHaveBeenCalledTimes(2);
     });
   });
 });

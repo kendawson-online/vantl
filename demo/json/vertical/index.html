@@ -19,7 +19,7 @@
     <div class="wrapper">
 
       <!-- Vertical Timeline: With Images -->
-      <div id="vertical" class="timeline" data-json-config="../../assets/data/vertical.json">
+      <div id="vertical" class="timeline" data-json-config="../../assets/data/vertical.json" data-test="timeline-vertical">
         <div class="timeline__wrap">
           <div class="timeline__items"></div>
         </div>
@@ -28,53 +28,19 @@
       <!-- Instructions (accordion menu) -->
       <button id="instructions" class="hidethis accordion" title="Click to toggle this menu">How to Create a Vertical Timeline: Step by Step Instructions</button>
       <div class="panel">
-        <!-- Content -->
-        <div class="textcontainer">
-          <h1 class="mainhead">Creating the Vertical Timeline:</h1>
-          <!-- step 1 -->
-          <div class="step">
-            <div><img src="../../assets/img/1-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Include links to CSS/Javascript files in your HTML document from the CDN</div>
-          </div>   
-          <!-- step 1 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/945b52576405c65fc37b3b3f97089b6c.js"></script>
-          </div>
-          <!-- step 2 -->
-          <div class="step">
-            <div><img src="../../assets/img/2-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Add code for the timeline HTML elements</div>
-          </div>
-          <!-- step 2 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/9880fb24bec2af299a9b9f2de4f7ee8a.js"></script>
-          </div> 
-          <!-- step 3 -->
-          <div class="step">
-            <div><img src="../../assets/img/3-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Create a .json file which contains your timeline data</div>
-          </div>
-          <!-- step 3 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/12d9efbd5bc5b02dd391f32d193b7966.js"></script>
-          </div>  
-          <!-- step 4 -->
-          <div class="step">
-            <div><img src="../../assets/img/4-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Add a data attribute to HTML element with <span class="tooltip"><span class="tooltiptext">Path to your JSON file should be relative to the HTML document containing the timeline or, an absolute path</span> path to your JSON file</span></div>
-          </div>
-          <!-- step 4 code -->
-          <div class="scriptwrapper">
-                <span style="color: #494949;">&lt;!-- This goes on the parent element which has class="timeline" --&gt;</span><br/><br/>
-                <span style="font-weight: bold;">&lt;div class="timeline" <span style="color: red;">data-json-config="/path/to/your/data/file.json"</span>&gt;<br/>&nbsp;···<br/>&lt;/div&gt;</span>
-          </div>
-          <!-- step 5 -->
-          <div class="step">
-            <div><img src="../../assets/img/5-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Save the file and load your HTML page in a browser</div>
-          </div>      
-        </div>
-      </div>      
+        <!-- Instructions will be populated by demo/assets/js/instructions.js -->
+      </div>
+      <!-- Inline instructions JSON (placeholder) -->
+      <script id="instructions-data" type="application/json">
+      {
+        "heading": "Creating the Vertical Timeline:",
+        "steps": [
+          { "id": 1, "text": "Include links to CSS/Javascript files in your HTML document.", "code": "<!-- Link timeline CSS and JS -->" },
+          { "id": 2, "text": "Add timeline HTML structure.", "code": "<div class=\"timeline\" data-json-config=\"/path/to/data.json\">..." },
+          { "id": 3, "text": "Create your JSON data file.", "code": "{ \"nodes\": [ /* ... */ ] }" }
+        ]
+      }
+      </script>
 
     </div>
 
@@ -87,9 +53,11 @@
     <!-- load demo specific JS functions -->
     <script src="../../assets/js/demo.js"></script>
     <script src="../../assets/js/accordion.js"></script>
+    <script src="../../assets/js/instructions.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // loadInstructions();
+        // fetchMinWidthAndTest(); (vertical page may not need it)
+        loadInstructions();
       });
     </script>
 

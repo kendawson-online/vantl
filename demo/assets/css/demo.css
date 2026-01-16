@@ -212,6 +212,10 @@ footer a:link {
   margin-bottom: 12px;
 }
 
+.btn-wrapper {
+  padding-top: 20px;
+}
+
 /* Card Layout */
 
 .cardlayout {
@@ -416,4 +420,9 @@ footer a:link {
 .demo-page-head {
   margin: 90px 0 90px 0;
   text-align: center;
+}
+
+.back-footer {
+  margin-top: 60px;
+  margin-bottom: 60px;
 }

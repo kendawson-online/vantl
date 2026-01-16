@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced — Theming</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>Theming — Dynamic Colors</h1>
+        <p>Apply colors at runtime based on data or rules.</p>
+      </header>
+
+      <section>
+        <div id="theme-tl" class="timeline" data-test="theme-tl"></div>
+      </section>
+
+      <section class="code-block"><pre><code>// Map status -> color and render
+    timelineFromData('#theme-tl', items, {
+      nodeColor: '#4CAF50',
+      lineColor: '#81C784'
+    });</code></pre>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var items = [
+          { id: 1, title: 'Complete', content: 'Done', status: 'completed' },
+          { id: 2, title: 'In Progress', content: 'Work ongoing', status: 'in-progress' },
+          { id: 3, title: 'Pending', content: 'Planned work', status: 'pending' }
+        ];
+
+        // choose colors based on status for demo
+        var nodeColor = '#2196F3';
+        var lineColor = '#64B5F6';
+
+        timelineFromData('#theme-tl', items, { mode: 'vertical', nodeColor: nodeColor, lineColor: lineColor });
+      });
+    </script>
+
+  </body>
+</html>

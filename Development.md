@@ -23,11 +23,6 @@ npm install
 
 ## Project Structure
 
-```
-vantl/
-├── src/
-│   ├── js/
-│   │   ├── core/              # Core timeline engine
 │   │   │   └── timeline-engine.js
 │   │   ├── features/          # Optional/modular features
 │   │   │   ├── colors.js      # Color theming
@@ -79,16 +74,12 @@ npm run watch
 
 The build process:
 1. Reads all modules from `src/js/`
-2. Bundles into a single IIFE (Immediately Invoked Function Expression)
-3. Minifies the output
-4. Generates sourcemap for debugging
 5. Outputs to `dist/timeline.min.js`
 
 ## Development Workflow
 
 ### 1. Make Changes
 
-Edit source files in `src/js/` or `src/css/`:
 
 ```bash
 # Run watch mode to auto-rebuild on changes
@@ -96,7 +87,6 @@ npm run watch
 ```
 
 ### 2. Test Locally
-
 Open demo pages in your browser:
 
 ```bash
@@ -109,6 +99,13 @@ python3 -m http.server 8080
 # Then visit:
 # http://localhost:8080/demo/index.html
 # http://localhost:8080/demo/json/vertical/index.html
+
+Alternatively, use the npm script (recommended) once `http-server` is installed as a dev dependency:
+
+```bash
+# start the local dev server on port 8080
+npm run serve:test
+```
 ```
 
 Demo pages are located in `demo/` and organized by initialization method:
@@ -725,3 +722,9 @@ Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://gith
 ## Manual Testing
 
 Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)
+
+## Demo code highlighting
+
+Demo pages can highlight code blocks using Highlight.js. For reproducible, offline demos we prefer a pinned local copy placed in `demo/assets/vendor/` (see `demo/assets/vendor/README.md`). The demo loader will attempt to use `/demo/assets/vendor/highlight.min.js` and `/demo/assets/vendor/github.min.css` when present. If those files are absent the demo will render code blocks without highlighting.
+
+If you prefer CDN-hosted assets instead, you can add the CDN links to demo pages or update `demo/assets/js/instructions.js` to fetch remote copies.

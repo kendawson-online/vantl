@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>jQuery — Swiper Integration</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>jQuery Swiper Integration</h1>
+        <p>Initialize timeline via jQuery with Swiper options. Include Swiper CDN before timeline for UMD global fallback.</p>
+      </header>
+
+      <section>
+        <div id="jq-swiper-tl" class="timeline" data-test="jq-swiper-tl"></div>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      jQuery(function () {
+        var items = [
+          { id: 1, title: 'S1', content: 'One' },
+          { id: 2, title: 'S2', content: 'Two' },
+          { id: 3, title: 'S3', content: 'Three' }
+        ];
+
+        var $el = jQuery('#jq-swiper-tl');
+        var $items = $el.find('.timeline__items');
+        if ($items.length === 0) $el.find('.timeline__wrap').append('<div class="timeline__items"></div>');
+        $items = $el.find('.timeline__items');
+
+        items.forEach(function (it) {
+          $items.append('<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>');
+        });
+
+        $el.timeline({ mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: true } });
+      });
+    </script>
+
+  </body>
+</html>

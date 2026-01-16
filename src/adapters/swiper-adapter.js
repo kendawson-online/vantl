@@ -106,7 +106,12 @@ export default class SwiperAdapter {
     }, options || {});
 
     try {
-      this.swiper = new SwiperLib(this._container, defaultOpts);
+      if (typeof SwiperLib !== 'function') {
+        console.warn('SwiperAdapter: Swiper resolved but is not a constructor');
+        this.swiper = null;
+      } else {
+        this.swiper = new SwiperLib(this._container, defaultOpts);
+      }
     } catch (e) {
       console.warn('SwiperAdapter: failed to initialize Swiper instance', e);
       this.swiper = null;

@@ -93,6 +93,8 @@ export function createItemNode(item) {
   
   const itemEl = document.createElement('div');
   itemEl.className = 'timeline__item';
+  itemEl.setAttribute('role', 'listitem');
+  itemEl.setAttribute('tabindex', '0');
   
   if (normalized.id) {
     itemEl.setAttribute('data-node-id', normalized.id);
@@ -151,6 +153,15 @@ export function createItemNode(item) {
     e.preventDefault();
     if (typeof window.openTimelineModal === 'function') {
       window.openTimelineModal(itemEl);
+    }
+  });
+
+  itemEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (typeof window.openTimelineModal === 'function') {
+        window.openTimelineModal(itemEl);
+      }
     }
   });
 
@@ -237,10 +248,12 @@ export function renderTimelineFromData(containerSelector, data, config) {
     wrap.className = 'timeline__wrap';
     itemsWrap = document.createElement('div');
     itemsWrap.className = 'timeline__items';
+    itemsWrap.setAttribute('role', 'list');
     wrap.appendChild(itemsWrap);
     container.appendChild(wrap);
   } else {
     itemsWrap.innerHTML = '';
+    itemsWrap.setAttribute('role', 'list');
   }
 
   // Apply configuration

@@ -7,6 +7,34 @@
 
 import { modalState } from '../shared/state.js';
 
+let lastFocusedElement = null;
+
+function getFocusableElements(container) {
+  const focusable = container ? container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
+  return Array.from(focusable).filter(el => !el.hasAttribute('disabled'));
+}
+
+function trapFocus(e) {
+  if (!modalState.modal || e.key !== 'Tab') return;
+
+  const focusable = getFocusableElements(modalState.modal);
+  if (focusable.length === 0) return;
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+
+  if (e.shiftKey) {
+    if (active === first || !modalState.modal.contains(active)) {
+      e.preventDefault();
+      last.focus();
+    }
+  } else if (active === last || !modalState.modal.contains(active)) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
 /**
  * Create the global modal and overlay elements
  *
@@ -25,15 +53,21 @@ export function createTimelineModal() {
 
   modalState.modal = document.createElement('div');
   modalState.modal.className = 'timeline-modal';
+  modalState.modal.setAttribute('role', 'dialog');
+  modalState.modal.setAttribute('aria-modal', 'true');
+
+  const titleId = 'timeline-modal-title';
+  modalState.modal.setAttribute('aria-labelledby', titleId);
+
   modalState.modal.innerHTML = `
-    <button class="timeline-modal__close" aria-label="Close modal"></button>
+    <button class="timeline-modal__close" aria-label="Close modal" type="button"></button>
     <div class="timeline-modal__content">
       <img class="timeline-modal__image" src="" alt="" loading="lazy" style="display: none;">
-      <h2 class="timeline-modal__title"></h2>
+      <h2 class="timeline-modal__title" id="${titleId}"></h2>
       <div class="timeline-modal__text"></div>
     </div>
     <div class="timeline-modal__footer">
-      <button class="timeline-modal__close-bottom">Close</button>
+      <button class="timeline-modal__close-bottom" type="button">Close</button>
     </div>
   `;
 
@@ -41,6 +75,7 @@ export function createTimelineModal() {
   const closeBottomBtn = modalState.modal.querySelector('.timeline-modal__close-bottom');
   closeBtn.addEventListener('click', closeTimelineModal);
   closeBottomBtn.addEventListener('click', closeTimelineModal);
+  modalState.modal.addEventListener('keydown', trapFocus);
 
   modalState.modal.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -80,6 +115,8 @@ export function openTimelineModal(itemEl) {
   if (!modalState.modal) {
     createTimelineModal();
   }
+
+  lastFocusedElement = document.activeElement;
 
   const title = itemEl.getAttribute('data-modal-title');
   const content = itemEl.getAttribute('data-modal-content');
@@ -121,6 +158,9 @@ export function openTimelineModal(itemEl) {
       modalState.modal.classList.add('timeline-modal-show');
       modalState.overlay.classList.add('timeline-modal-show');
       document.body.style.overflow = 'hidden';
+
+      const firstFocusable = getFocusableElements(modalState.modal)[0];
+      if (firstFocusable) firstFocusable.focus();
     }
   }, 10);
 }
@@ -140,5 +180,8 @@ export function closeTimelineModal() {
     modalState.modal.classList.remove('timeline-modal-show');
     modalState.overlay.classList.remove('timeline-modal-show');
     document.body.style.overflow = '';
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
   }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>jQuery — Teardown</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>jQuery Teardown</h1>
+        <p>Destroy and re-init pattern using jQuery-created markup.</p>
+      </header>
+
+      <section>
+        <div id="jq-teardown-tl" class="timeline" data-test="jq-teardown-tl"></div>
+        <p>
+          <button id="jq-destroy" class="btn danger" data-test="jq-teardown-destroy">Destroy</button>
+          <button id="jq-reinit" class="btn success" data-test="jq-teardown-reinit">Re-init</button>
+        </p>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      jQuery(function () {
+        var $el = jQuery('#jq-teardown-tl');
+        function render() {
+          $el.html('<div class="timeline__wrap"><div class="timeline__items">' +
+            '<div class="timeline__item"><div class="timeline__content"><h5>A</h5><p>Alpha</p></div></div>' +
+            '<div class="timeline__item"><div class="timeline__content"><h5>B</h5><p>Beta</p></div></div>' +
+            '</div></div>');
+          $el.timeline({ mode: 'horizontal', minWidth: 600 });
+        }
+
+        function destroy() {
+          $el.off();
+          $el.html('');
+          console.log('jQuery teardown: DOM cleared');
+        }
+
+        jQuery('#jq-destroy').on('click', destroy);
+        jQuery('#jq-reinit').on('click', function () { destroy(); render(); });
+
+        render();
+      });
+    </script>
+
+  </body>
+</html>

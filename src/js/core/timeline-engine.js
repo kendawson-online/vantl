@@ -221,7 +221,6 @@ export function timeline(collection, options) {
   const warningLabel = 'Timeline:';
   let winWidth = window.innerWidth;
   let resizeTimer;
-  let currentIndex = 0;
   const eventListeners = new Map(); // Track event listeners for cleanup on destroy/reset
 
   const defaultSettings = {
@@ -590,6 +589,8 @@ export function timeline(collection, options) {
       prevArrow.title = 'Go to previous items';
       nextArrow.textContent = 'Next';
       nextArrow.title = 'Go to next items';
+      prevArrow.setAttribute('aria-label', 'Previous timeline items');
+      nextArrow.setAttribute('aria-label', 'Next timeline items');
       prevArrow.style.top = `${topPosition}px`;
       nextArrow.style.top = `${topPosition}px`;
 
@@ -601,10 +602,16 @@ export function timeline(collection, options) {
       if (tl.activeIndex <= 0) {
         prevArrow.classList.add('timeline-nav-button--at-start');
         prevArrow.title = 'Already at beginning of timeline';
+        prevArrow.setAttribute('aria-disabled', 'true');
+      } else {
+        prevArrow.setAttribute('aria-disabled', 'false');
       }
       if (tl.activeIndex >= maxActiveIndex) {
         nextArrow.classList.add('timeline-nav-button--at-end');
         nextArrow.title = 'Already at end of timeline';
+        nextArrow.setAttribute('aria-disabled', 'true');
+      } else {
+        nextArrow.setAttribute('aria-disabled', 'false');
       }
       tl.timelineEl.appendChild(prevArrow);
       tl.timelineEl.appendChild(nextArrow);
@@ -666,26 +673,30 @@ export function timeline(collection, options) {
       const nextActive = clampInt(tl.activeIndex + (direction * moveItems), 0, maxActiveIndex);
 
       // Scroll position clamps to the last scrollable index, but active highlight can continue.
-      currentIndex = clampInt(nextActive, 0, maxScrollIndex);
+      tl.currentIndex = clampInt(nextActive, 0, maxScrollIndex);
       tl.activeIndex = nextActive;
 
       // Update arrows based on ACTIVE index (linear user expectation)
       if (tl.activeIndex <= 0) {
         arrowPrev.classList.add('timeline-nav-button--at-start');
         arrowPrev.title = 'Already at beginning of timeline';
+        arrowPrev.setAttribute('aria-disabled', 'true');
       } else {
         arrowPrev.classList.remove('timeline-nav-button--at-start');
         arrowPrev.title = 'Go to previous items';
+        arrowPrev.setAttribute('aria-disabled', 'false');
       }
       if (tl.activeIndex >= maxActiveIndex) {
         arrowNext.classList.add('timeline-nav-button--at-end');
         arrowNext.title = 'Already at end of timeline';
+        arrowNext.setAttribute('aria-disabled', 'true');
       } else {
         arrowNext.classList.remove('timeline-nav-button--at-end');
         arrowNext.title = 'Go to next items';
+        arrowNext.setAttribute('aria-disabled', 'false');
       }
 
-      timelinePosition(tl, currentIndex);
+      timelinePosition(tl, tl.currentIndex);
       updateActiveItem(tl, tl.activeIndex);
 
       const activeItem = tl.items[tl.activeIndex];
@@ -712,16 +723,16 @@ export function timeline(collection, options) {
     tl.computedVisibleCount = itemsVisible;
 
     if (tl.settings.rtlMode) {
-      currentIndex = tl.items.length > itemsVisible ? tl.items.length - itemsVisible : 0;
+      tl.currentIndex = tl.items.length > itemsVisible ? tl.items.length - itemsVisible : 0;
     } else {
-      currentIndex = tl.settings.startIndex;
+      tl.currentIndex = tl.settings.startIndex;
     }
 
     // Track the "active" item separately from the scroll position.
     // Usually these are the same, but they can diverge near the end (e.g. last item).
-    tl.activeIndex = currentIndex;
+    tl.activeIndex = tl.currentIndex;
 
-    timelinePosition(tl, currentIndex);
+    timelinePosition(tl, tl.currentIndex);
     updateActiveItem(tl, tl.activeIndex);
     addNavigation(tl);
     addHorizontalDivider(tl);
@@ -736,10 +747,10 @@ export function timeline(collection, options) {
           const maxScrollIndex = Math.max(0, tl.items.length - itemsVisible);
           // Scroll position clamps to maxIndex, but the active highlight can be the actual requested item.
           tl.activeIndex = Math.max(0, Math.min(index, tl.items.length - 1));
-          currentIndex = Math.max(0, Math.min(index, maxScrollIndex));
+          tl.currentIndex = Math.max(0, Math.min(index, maxScrollIndex));
         },
         updatePosition: function() {
-          timelinePosition(tl, currentIndex);
+          timelinePosition(tl, tl.currentIndex);
           updateActiveItem(tl, tl.activeIndex);
           const arrowPrev = tl.timelineEl.querySelector('.timeline-nav-button--prev');
           const arrowNext = tl.timelineEl.querySelector('.timeline-nav-button--next');
@@ -931,6 +942,17 @@ export function timeline(collection, options) {
         setUpVerticalTimeline(tl);
       }
       tl.timelineEl.classList.add('timeline--loaded');
+
+      // Emit an initialization event for this timeline so other components can react
+      try {
+        const timelineId = tl.timelineEl.id || tl.timelineEl.getAttribute('data-timeline-id');
+        const detail = { id: timelineId, settings: tl.settings, api: timelineRegistry[timelineId] };
+        const ev = new CustomEvent('timeline:initialized', { detail });
+        try { tl.timelineEl.dispatchEvent(ev); } catch (e) { /* ignore */ }
+        try { document.dispatchEvent(new CustomEvent('timeline:initialized', { detail })); } catch (e) { /* ignore */ }
+      } catch (e) {
+        // Non-fatal: continue silently
+      }
     });
 
     setTimeout(() => {

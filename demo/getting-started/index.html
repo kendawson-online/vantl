@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Vanilla Timeline — Getting Started</title>
+    <!-- Local (recommended for development) -->
+    <link rel="stylesheet" href="../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../assets/css/demo.css">
+
+    <!--
+      CDN (production) example — uncomment to use CDN instead of local files:
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css">
+    -->
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <header class="demo-page-head">
+        <h1>Getting Started</h1>
+        <p>Small examples to get started quickly. Use the CDN snippet shown below for production, or the local `dist/` files for development.</p>
+      </header>
+
+      <section>
+        <h2>1. Basic HTML timeline (no JS shown)</h2>
+        <p>Drop this HTML into your page. The timeline is a simple markup structure — initialize it with one line of JS below.</p>
+
+        <div class="code-block"><pre><code>&lt;div class="timeline" data-mode="horizontal"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+      &lt;div class="timeline__item"&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;h5&gt;2001&lt;/h5&gt;
+          &lt;p&gt;Example event content.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;!-- more items --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h2>2. Initialize with Vanilla JS (one line)</h2>
+        <div class="code-block"><pre><code>&lt;script src="/path/to/timeline.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  // initialize all timelines on the page
+  timeline(document.querySelectorAll('.timeline'));
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h2>3. Initialize with jQuery (one line)</h2>
+        <div class="code-block"><pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="/path/to/timeline.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  // initialize using jQuery plugin
+  jQuery(function () {
+    $('.timeline').timeline();
+  });
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h2>4. Local dev vs CDN</h2>
+        <p>When developing locally, use the `dist/` files from the repo (run `npm run build`). For production, prefer the CDN snippet.</p>
+
+      </section>
+
+      <hr>
+
+      <section>
+        <h2>Live example</h2>
+
+        <div id="getting-started-tl" class="timeline" data-mode="horizontal" data-test="getting-started-tl">
+          <div class="timeline__wrap">
+            <div class="timeline__items">
+              <div class="timeline__item">
+                <div class="timeline__content">
+                  <h5>2001</h5>
+                  <p>Project kickoff and planning.</p>
+                </div>
+              </div>
+              <div class="timeline__item">
+                <div class="timeline__content">
+                  <h5>2005</h5>
+                  <p>First significant milestone.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <footer class="back-footer">
+        <a class="btn" href="../index.html">Back to Demos</a>
+      </footer>
+
+    </div>
+
+    <!-- Local script (development) -->
+    <script src="../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // initialize the live example
+        timeline(document.querySelectorAll('.timeline'), { minWidth: 600 });
+      });
+    </script>
+
+    <!-- CDN production example (commented) -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>
+    <script>
+      timeline(document.querySelectorAll('.timeline'));
+    </script>
+    -->
+
+  </body>
+</html>

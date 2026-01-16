@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced — API Fetch</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>API Fetch + Error Handling</h1>
+        <p>Simulate remote data loading and show fallback behavior.</p>
+      </header>
+
+      <section>
+        <div id="api-tl" class="timeline" data-test="api-tl"></div>
+      </section>
+
+      <section class="code-block"><pre><code>// Simulate fetch and render
+fetch('/api/timeline')
+  .then(function (res) { return res.json(); })
+  .then(function (data) {
+    return timelineFromData('#api-tl', data.nodes || data, { mode: 'horizontal' });
+  })
+  .catch(function (err) {
+    console.error('Failed to load data', err);
+  });</code></pre>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Simulate API delay
+        function simulateApi() {
+          return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+              resolve({ nodes: [
+                { id: 1, title: '1990s', content: 'Early web' },
+                { id: 2, title: '2000s', content: 'Broadband era' },
+                { id: 3, title: '2010s', content: 'Mobile-first' }
+              ]});
+            }, 500);
+          });
+        }
+
+        simulateApi().then(function (data) {
+          timelineFromData('#api-tl', data.nodes, { mode: 'horizontal', minWidth: 700 });
+        }).catch(function (err) {
+          var el = document.querySelector('#api-tl');
+          el.innerHTML = '<p style="padding:16px;color:#900">Failed to load timeline data</p>';
+          console.error(err);
+        });
+      });
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced — Programmatic Rendering</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>Programmatic Rendering</h1>
+        <p>Use `timelineFromData()` to render timelines from arrays or API responses.</p>
+      </header>
+
+      <section>
+        <div id="prog-tl" class="timeline" data-test="prog-tl"></div>
+      </section>
+
+      <section class="code-block"><pre><code>// Render timeline from JS data
+var items = [
+  {
+    id: 1,
+    title: 'Init',
+    content: 'Project start'
+  },
+  {
+    id: 2,
+    title: 'Build',
+    content: 'Development work'
+  },
+  {
+    id: 3,
+    title: 'Ship',
+    content: 'Release'
+  }
+];
+
+// Render and initialize
+timelineFromData('#prog-tl', items, {
+  mode: 'horizontal',
+  minWidth: 600
+});</code></pre>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var items = [
+          { id: 1, title: 'Init', content: 'Project start' },
+          { id: 2, title: 'Build', content: 'Development work' },
+          { id: 3, title: 'Ship', content: 'Release' }
+        ];
+
+        timelineFromData('#prog-tl', items, { mode: 'horizontal', minWidth: 600 });
+      });
+    </script>
+
+  </body>
+</html>

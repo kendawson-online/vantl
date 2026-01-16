@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Advanced — Swiper Integration</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header class="demo-page-head">
+        <h1>Swiper Integration</h1>
+        <p>Demonstrates `useSwiper` option. Include Swiper CDN to enable full features.</p>
+      </header>
+
+      <section>
+        <div id="swiper-tl" class="timeline" data-test="swiper-tl"></div>
+      </section>
+
+      <section class="code-block"><pre><code>// When Swiper is available (CDN or installed), use `useSwiper: 'auto'` or `true`
+    // Example CDN (include BEFORE timeline.min.js for UMD global):
+    // <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
+    // Example usage:
+    // timelineFromData('#swiper-tl', items, {
+    //   useSwiper: 'auto',
+    //   swiperOptions: { loop: true }
+    // });
+    </code></pre>
+      </section>
+
+      <footer style="margin-top: 40px;">
+        <a class="btn" href="index.html">Back</a>
+      </footer>
+
+    </div>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var items = [
+          { id: 1, title: 'Slide 1', content: 'Content 1' },
+          { id: 2, title: 'Slide 2', content: 'Content 2' },
+          { id: 3, title: 'Slide 3', content: 'Content 3' }
+        ];
+
+        // useSwiper:'auto' will attempt adapter import/fallback. If Swiper missing,
+        // the engine falls back to default behavior.
+        timelineFromData('#swiper-tl', items, { mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: false } });
+      });
+    </script>
+
+  </body>
+</html>

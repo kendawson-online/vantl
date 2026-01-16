@@ -16,10 +16,14 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "test": "vitest",
+    "serve:test": "http-server ./ -p 8080",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "e2e": "npx playwright test"
   },
   "devDependencies": {
+    "http-server": "^14.1.1",
+    "@playwright/test": "^1.57.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@vitest/coverage-v8": "^4.0.17",
     "cssnano": "^7.1.2",
