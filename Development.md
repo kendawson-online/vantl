@@ -104,7 +104,10 @@ Alternatively, use the npm script (recommended) once `http-server` is installed 
 
 ```bash
 # start the local dev server on port 8080
-npm run serve:test
+npm run dev
+
+# (alias)
+# npm run serve
 ```
 ```
 
