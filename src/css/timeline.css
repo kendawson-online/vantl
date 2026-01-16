@@ -198,6 +198,19 @@
     border-right: 12px solid #CCC;
     border-left: none;
     border-top: 10px solid transparent;
+
+/* Visually-hidden helper for accessibility (screen-reader only) */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
     left: -12px;
     top: 50%;
     transform: translateY(-50%);

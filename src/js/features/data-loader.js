@@ -11,6 +11,7 @@ import { applyTimelineColors } from './colors.js';
 import { handleDeepLinking } from './deep-linking.js';
 import { timeline } from '../core/timeline-engine.js';
 import { LOREM_PARAGRAPH, LOREM_FULL } from '../shared/lipsum.js';
+import { formatAccessibleDate } from '../shared/utils.js';
 
 /**
  * Normalize raw item data to standard timeline schema
@@ -138,6 +139,27 @@ export function createItemNode(item) {
   content.appendChild(summaryEl);
 
   itemEl.appendChild(content);
+
+  // Accessibility: create a visually-hidden label and reference it via aria-labelledby
+  // Priority: explicit ariaLabel in item data (ariaLabel or "aria-label"), then generate from date+heading
+  const explicitLabel = item && (item.ariaLabel || item['aria-label'] || item.aria_label);
+  let labelText = '';
+  if (explicitLabel && String(explicitLabel).trim() !== '') {
+    labelText = String(explicitLabel).trim();
+  } else {
+    const formattedDate = formatAccessibleDate(normalized.date);
+    labelText = `Date: ${formattedDate}. Title: ${normalized.heading}`;
+    if (normalized.id) labelText = `Node ${normalized.id}: ` + labelText;
+  }
+  if (labelText) {
+    const labelId = 'tl-label-' + Math.random().toString(36).slice(2, 9);
+    const sr = document.createElement('span');
+    sr.className = 'sr-only';
+    sr.id = labelId;
+    sr.textContent = labelText;
+    itemEl.appendChild(sr);
+    itemEl.setAttribute('aria-labelledby', labelId);
+  }
 
   // Modal content (hidden by default, shown in popup)
   const modalContent = document.createElement('div');

@@ -47,3 +47,66 @@ export function getColorBrightness(color) {
 
   return (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
 }
+
+/**
+ * Format a date string into a human-friendly, locale-aware label.
+ * If parsing fails, returns the original input.
+ * Example output: "October 23rd, 2023"
+ *
+ * @param {string} dateString
+ * @param {string} [locale=navigator.language]
+ * @returns {string}
+ */
+export function formatAccessibleDate(dateString, locale = (typeof navigator !== 'undefined' && navigator.language) || 'en-US') {
+  if (!dateString || typeof dateString !== 'string') return String(dateString);
+  const parsed = Date.parse(dateString);
+  if (Number.isNaN(parsed)) {
+    // Try common MM/DD/YYYY or YYYY-MM-DD heuristics
+    const parts = dateString.split(/[\/-\.]/).map(p => p.trim());
+    if (parts.length === 3) {
+      // Assume MM/DD/YYYY if month <= 12
+      let mm = parseInt(parts[0], 10);
+      let dd = parseInt(parts[1], 10);
+      let yy = parseInt(parts[2], 10);
+      if (!Number.isNaN(mm) && !Number.isNaN(dd) && !Number.isNaN(yy)) {
+        // Normalize year
+        if (yy < 100) yy += 2000;
+        const d = new Date(yy, mm - 1, dd);
+        if (!Number.isNaN(d.getTime())) {
+          return formatDateWithOrdinal(d, locale);
+        }
+      }
+    }
+    return dateString;
+  }
+  const d = new Date(parsed);
+  return formatDateWithOrdinal(d, locale);
+}
+
+function ordinalSuffix(n) {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function formatDateWithOrdinal(dateObj, locale) {
+  try {
+    const fmt = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
+    // Use formatToParts to insert ordinal for day
+    if (typeof Intl.DateTimeFormat.prototype.formatToParts === 'function') {
+      const parts = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' }).formatToParts(dateObj);
+      let month = '';
+      let day = '';
+      let year = '';
+      parts.forEach(p => {
+        if (p.type === 'month') month = p.value;
+        if (p.type === 'day') day = p.value;
+        if (p.type === 'year') year = p.value;
+      });
+      const dayNum = parseInt(day, 10) || dateObj.getDate();
+      return `${month} ${dayNum}${ordinalSuffix(dayNum)}, ${year}`;
+    }
+    return fmt.format(dateObj);
+  } catch (e) {
+    return dateObj.toDateString();
+  }
+}

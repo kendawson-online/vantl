@@ -3,6 +3,7 @@ import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 import SwiperAdapter from '../../adapters/swiper-adapter.js';
+import { formatAccessibleDate } from '../shared/utils.js';
 
 /**
  * Calculate and apply responsive scaling for horizontal timeline based on viewport height
@@ -81,11 +82,48 @@ function ensureInlineModalData(itemEl) {
   }
 }
 
+function ensureAccessibleLabelForInlineItem(itemEl) {
+  if (!itemEl) return;
+  // If an explicit aria-label is present, leave it alone
+  if (itemEl.hasAttribute('aria-label')) return;
+  // If already aria-labelledby, nothing to do
+  if (itemEl.hasAttribute('aria-labelledby')) return;
+
+  // Check for data-aria-label attribute (dataset.ariaLabel)
+  const dataLabel = itemEl.dataset && itemEl.dataset.ariaLabel;
+  let labelText = dataLabel && String(dataLabel).trim();
+
+  // Otherwise, build from existing DOM: date + heading
+  if (!labelText || labelText === '') {
+    const dateEl = itemEl.querySelector('.timeline__date');
+    const headingEl = itemEl.querySelector('.timeline__heading');
+    const dateText = dateEl ? dateEl.textContent.trim() : '';
+    const headingText = headingEl ? headingEl.textContent.trim() : '';
+    if (dateText || headingText) {
+      const formattedDate = dateText ? formatAccessibleDate(dateText) : '';
+      labelText = (dateText ? `Date: ${formattedDate}. ` : '') + (headingText ? `Title: ${headingText}` : '');
+      const idAttr = itemEl.getAttribute('data-node-id');
+      if (idAttr) labelText = `Node ${idAttr}: ` + labelText;
+    }
+  }
+
+  if (labelText && labelText !== '') {
+    const labelId = 'tl-label-' + Math.random().toString(36).slice(2, 9);
+    const sr = document.createElement('span');
+    sr.className = 'sr-only';
+    sr.id = labelId;
+    sr.textContent = labelText;
+    itemEl.appendChild(sr);
+    itemEl.setAttribute('aria-labelledby', labelId);
+  }
+}
+
 function enhanceInlineItems(timelineEl, items) {
   if (!items || !items.length) return;
   items.forEach(function(item){
     if (item.getAttribute('data-modal-bound') === '1') return;
     ensureInlineModalData(item);
+    ensureAccessibleLabelForInlineItem(item);
     const hasModal = item.hasAttribute('data-modal-title') || item.hasAttribute('data-modal-content') || item.hasAttribute('data-modal-image') || item.hasAttribute('data-modal-html');
     if (hasModal) {
       item.addEventListener('click', function(e){
