@@ -1,12 +1,14 @@
-# Ignore Composer vendor directories
-server-tools/vendor/
-vendor/
+# Vendor directories
+
+demo/assets/vendor/
 node_modules/
 
-# OS files
+# Files
 .DS_Store
+*.bak
+*.old
 
-# Documentation
+# Dev stuff
 dev/
 coverage/
 test-results/
