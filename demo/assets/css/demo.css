@@ -26,18 +26,25 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 25px;
-  margin-bottom: 65px;
+  gap: 0;
+  margin-bottom: 30px;
 }
 
-.demologo img {
+.demo-index-logo img {
   margin: 0;
   padding: 0;
 }
 
-.demoheading h1 {
+.demo-index-head h1 {
   font-family: "Delius";
   font-size: 42px;
+  line-height: 42px;
+}
+
+@media (min-width: 850px) {
+  .fbox {
+    gap: 25px;
+  }
 }
 
 .wrapper { 
@@ -406,7 +413,7 @@ footer a:link {
   overflow: hidden;
 }
 
-.demoheading {
+.demo-page-head {
   margin: 90px 0 90px 0;
   text-align: center;
 }

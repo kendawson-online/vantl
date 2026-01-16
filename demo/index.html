@@ -13,10 +13,10 @@
         
         <!-- page heading -->
         <header class="fbox">
-          <div class="demologo">
-            <img src="assets/img/vanilla-flower.jpg" height="65" title="Vanilla Timline" alt="Vanilla Flower"/>
+          <div class="demo-index-logo">
+            <img src="assets/img/vanilla-flower.jpg" height="65" title="Vanilla Timeline" alt="Vanilla Flower"/>
           </div>
-          <div class="demoheading">
+          <div class="demo-index-head">
             <h1>Vanilla Timeline Demos</h1>
           </div>
         </header> 
@@ -24,6 +24,7 @@
         <!-- demo cards -->
         <main class="cardlayout">
 
+          <!-- JSON Files -->
           <div class="card">
             <div class="container">
               <h3>Using a JSON File</h3>
@@ -36,6 +37,19 @@
             </div>
           </div>
 
+          <!-- JSON Timestamps -->
+          <div class="card">
+            <div class="container">
+              <h3>JSON Timestamps</h3>
+              <img src="assets/img/time-clock.svg" height="110"/>
+              <p>Learn how to format JSON timestamps for your timelines using the correct ISO 8601 date string format.</p>
+              <p>
+                <button class="btn secondary" onclick="loadUrl('time.html')">JSON Timestamps</button>
+              </p>
+            </div>
+          </div> 
+
+          <!-- Inline Data Attributes -->
           <div class="card">
             <div class="container">
               <h3>Inline Data Attributes</h3>
@@ -48,6 +62,7 @@
             </div>
           </div>
 
+          <!-- jQuery Usage -->
           <div class="card">
             <div class="container">
               <h3>jQuery Usage</h3>
@@ -60,6 +75,7 @@
             </div>
           </div>
 
+          <!-- Plain Javascript -->
           <div class="card">
             <div class="container">
               <h3>Plain Javascript</h3>
@@ -72,6 +88,7 @@
             </div>
           </div>
 
+          <!-- Deep Linking -->
           <div class="card">
             <div class="container">
               <h3>Deep Linking</h3>
@@ -83,6 +100,7 @@
             </div>
           </div>  
           
+          <!-- Multiple Slideshows -->
           <div class="card">
             <div class="container">
               <h3>Multiple Slideshows</h3>
@@ -94,6 +112,7 @@
             </div>
           </div>       
           
+          <!-- Advanced Usage -->
           <div class="card">
             <div class="container">
               <h3>Advanced Usage</h3>
@@ -105,13 +124,14 @@
             </div>
           </div> 
           
+          <!-- SwiperJS Add-On -->
           <div class="card">
             <div class="container">
-              <h3>JSON Timestamps</h3>
-              <img src="assets/img/time-clock.svg" height="110"/>
-              <p>Learn how to format JSON timestamps for your timelines using the correct ISO 8601 date string format.</p>
+              <h3>SwiperJS Add-On</h3>
+              <a href="https://swiperjs.com" target="_blank" title="Open SwiperJS site in a new tab or window" alt="SwiperJS Logo"><img src="assets/img/swiper-logo.svg" height="110"/></a>
+              <p>Learn how to include <a href="https://swiperjs.com" target="_blank" title="Open SwiperJS site in a new tab or window">SwiperJS</a> as an add-on which works with Vanilla Timeline on touch screen devices.</p>
               <p>
-                <button class="btn danger" onclick="loadUrl('time.html')">JSON Timestamps</button>
+                <button class="btn info" onclick="loadUrl('swiper/horizontal/')">SwiperJS Add-On</button>
               </p>
             </div>
           </div> 
@@ -126,6 +146,8 @@
         </footer>
 
     </div>
+
+    <br/><br/>
 
   </body>
 </html>
