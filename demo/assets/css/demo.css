@@ -1,25 +1,68 @@
-/* Stylesheet for Vanilla Timeline Demos */
+/* 
+* -----------------------------------------------------------------------------------
+* Stylesheet for Vanilla Timeline Demo Pages
+* ----------------------------------------------------------------------------------- 
+*/
 
-/* Google fonts */
-@import url('https://fonts.googleapis.com/css2?family=Delius&display=swap');
+/* Load Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 body { 
     background-color: white;
     color: black;
-    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 16px;
+    font-family: "Roboto", Arial, Helvetica, sans-serif; 
     padding: 10px;
     margin: 0;
 }
 
-/* Google Font: Delius */
-.delius-regular {
+/* hide content */
+.hidethis {
+  display: none;
+  opacity: 0;
+}
+
+/* center content */
+.center {
+  text-align: center;
+}
+
+/* subtle text */
+.graytext {
+  color: gray;
+}
+
+/* subtle link */
+.graylink {
+  color: #3f3f3f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* monospaced font */
+.mono {
+  font-family: monospace;
+}
+
+/* --------------------------------- Google Fonts --------------------------------- */
+.delius {
   font-family: "Delius", cursive;
   font-weight: 400;
   font-style: normal;
 }
 
-/* Demo page styles */
+.roboto {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
 
+/* ----------------------------- Main Logo and Heading ---------------------------- */
+
+/* flexbox which contains logo and title */
 .fbox {
   display: flex;
   flex-direction: row;
@@ -30,52 +73,50 @@ body {
   margin-bottom: 30px;
 }
 
+/* vanilla flower image */
 .demo-index-logo img {
   margin: 0;
   padding: 0;
 }
 
+/* main heading */
 .demo-index-head h1 {
   font-family: "Delius";
   font-size: 42px;
   line-height: 42px;
 }
 
-@media (min-width: 850px) {
-  .fbox {
-    gap: 25px;
-  }
+/* ------------------------------- Demo page header  --------------------------- */
+
+.demo-page-head {
+  width: 85%;
+  margin: 25px 0 25px 0;
 }
 
+/* ------------------------------- Demo page elements --------------------------- */
+
+/* content wrapper */
 .wrapper { 
-  max-width: 1800px; 
+  max-width: 1800px;
   margin: 0 auto; 
 }
 
-.topnotice {
-  width: 97%;
-  text-align: center;
-  margin-bottom: 50px;
+.demo-cdn-link-wrapper {
+  border: 2px solid black; 
+  border-radius: 24px; 
+  padding: 0 0 10px 10px; 
+  width: 96%;
 }
 
-.hidethis {
-  display: none;
-  opacity: 0;
+.demo-cdn-link-head {
+  margin-bottom: 5px;
 }
 
-#instructions {
-  margin-top: 30px;
-}
-
-/* Fade-in animation */
-.fade-in {
-  display: block; /* override .hidethis */
-  animation: fadeIn 360ms ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+.demo-cdn-link-input {
+  width: 96%; 
+  font-size:16px; 
+  padding: 5px;
+  border-radius: 6px;
 }
 
 .textcontainer {
@@ -90,154 +131,6 @@ body {
   font-size: 42px;
   margin-bottom: 20px;
 }
-
-.step {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: left;
-  align-items: center;
-  gap: 10px;
-}
-
-.steptext {
-  font-size: 30px;
-}
-
-.scriptwrapper {
-  margin-top: 25px;
-  padding: 20px;
-  border: 2px solid black;
-  border-radius: 8px;
-}
-
-footer {
-  margin-top: 300px;
-  text-align: center;
-  font-size: 12px;
-  font-family: monospace;
-  color: #3a3a3a;
-  opacity: 0.6;
-}
-
-footer a:link {
-  text-decoration: none;
-}
-
-/* Outline buttons */
-
-.btn {
-  border: 2px solid black;
-  border-radius: 8px;
-  background-color: white;
-  color: black;
-  padding: 14px 28px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Green */
-.success {
-  border-color: #04AA6D;
-  color: green;
-}
-.success:hover {
-  background-color: #04AA6D;
-  color: white;
-}
-
-/* Blue */
-.info {
-  border-color: #2196F3;
-  color: dodgerblue
-}
-.info:hover {
-  background: #2196F3;
-  color: white;
-}
-
-/* Orange */
-.warning {
-  border-color: #ff9800;
-  color: orange;
-}
-.warning:hover {
-  background: #ff9800;
-  color: white;
-}
-
-/* Red */
-.danger {
-  border-color: #f44336;
-  color: red
-}
-.danger:hover {
-  background: #f44336;
-  color: white;
-}
-
-/* Gray */
-.secondary {
-  border-color: #6C757D;
-  color: #6C757D;
-}
-.secondary:hover {
-  background: #e9ecef;
-  color: black;
-}
-
-/* Cards */
-
-.card {
-  width: 330px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  border: 1px solid black;
-  border-radius: 24px;
-}
-
-.card:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
-}
-
-.container {
-  text-align: center;
-  padding: 10px 25px;
-}
-
-.container h3 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.btn-wrapper {
-  padding-top: 20px;
-}
-
-/* Card Layout */
-
-.cardlayout {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  width: 80%;
-  margin: 0 auto;
-}
-
-.txtwarning {
-  font-family: monospace;
-  color: red;
-}
-
-.center {
-  text-align: center;
-}
-
-/* Multiple page */
 
 .timeline-section {
   background: #fff;
@@ -295,15 +188,243 @@ footer a:link {
   line-height: 1.5;
 }
 
-/* Tool Tips */
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
+.back-footer {
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
-/* Tooltip text */
+/* ------------------------------- Demo page footer  --------------------------- */
+
+footer {
+  margin-top: 300px;
+  text-align: center;
+  font-size: 12px;
+  font-family: monospace;
+  color: #3a3a3a;
+  opacity: 0.6;
+}
+
+footer a:link {
+  text-decoration: none;
+}
+
+/* ------------------------------- Alert messages ------------------------------- */
+
+/* top div where alerts appear */
+.topnotice {
+  width: 97%;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.alert {
+  font-size: 12px;
+  color: white;
+  background-color: #f44336; 
+  padding: 8px 15px;
+  width: 98%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  visibility: hidden;
+}
+
+.alerttxt {
+  flex-grow: 1;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+  transform: scale(1.2);
+}
+
+/* ------------------------------- Instructions component --------------------------- */
+
+/* div for instructions accordion menu */
+#instructions {
+  margin-top: 30px;
+}
+
+.step {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+.steptext {
+  font-size: 30px;
+}
+
+.scriptwrapper {
+  margin-top: 25px;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+/* ------------------------------- Accordion menus ------------------------------- */
+
+.accordion {
+  background-color: #dff5fc;
+  color: #444;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+.accordion:after {
+  content: '\25BC'; /* down-triangle */
+  font-size: 18px;
+  color: #444;
+  float: right;
+  margin-left: 5px;
+}
+
+.accordion.accordion--active, .accordion:hover {
+  background-color: #a8ebff;
+}
+
+.accordion.accordion--active:after {
+  content: '\25B2'; /* up-triangle */
+}
+
+.accordion + .panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+
+/* ----------------------- Bootstrap style outline buttons --------------------- */
+
+.btn {
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* green */
+.success {
+  border-color: #04AA6D;
+  color: green;
+}
+.success:hover {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* blue */
+.info {
+  border-color: #2196F3;
+  color: dodgerblue
+}
+.info:hover {
+  background: #2196F3;
+  color: white;
+}
+
+/* orange */
+.warning {
+  border-color: #ff9800;
+  color: orange;
+}
+.warning:hover {
+  background: #ff9800;
+  color: white;
+}
+
+/* red */
+.danger {
+  border-color: #f44336;
+  color: red
+}
+.danger:hover {
+  background: #f44336;
+  color: white;
+}
+
+/* gray */
+.secondary {
+  border-color: #6C757D;
+  color: #6C757D;
+}
+.secondary:hover {
+  background: #e9ecef;
+  color: black;
+}
+
+/* ----------------------- Bootstrap style cards ----------------------- */
+
+.card {
+  width: 330px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border: 1px solid black;
+  border-radius: 24px;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
+}
+
+.container {
+  text-align: center;
+  padding: 10px 25px;
+}
+
+.container h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.btn-wrapper {
+  padding-top: 20px;
+}
+
+.cardlayout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* used on Advanced Javascript text */
+.txtwarning {
+  font-family: monospace;
+  color: red;
+}
+
+/* --------------------------------- Tooltips --------------------------------- */
+
 .tooltip {
   position: relative;
   display: inline-block;
@@ -344,85 +465,34 @@ footer a:link {
   opacity: 1;
 }
 
-/* Alert messages */
-.alert {
-  font-size: 12px;
-  color: white;
-  background-color: #f44336; 
-  padding: 8px 15px;
-  width: 98%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  visibility: hidden;
+/* --------------------------------- Media Queries ------------------------------ */ 
+
+@media (min-width: 850px) {
+  /* Demo Index page: stack logo and heading on small screens */
+  .fbox {
+    gap: 25px;
+  }
 }
 
-.alerttxt {
-  flex-grow: 1;
+@media (min-width: 992px) {
+  .demo-cdn-link-wrapper {
+    width: 65%;
+    padding: 0 0 20px 20px; 
+  }
+  .demo-cdn-link-input {
+    width: 80%;
+  }
 }
 
-/* Alert message close button */
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.closebtn:hover {
-  color: black;
-  transform: scale(1.2);
+/* --------------------------------- Animations --------------------------------- */ 
+
+/* fade-in animation */
+.fade-in {
+  display: block; /* make sure element is visible */
+  animation: fadeIn 360ms ease forwards;
 }
 
-/* Accordion menus */
-
-.accordion {
-  background-color: #dff5fc;
-  color: #444;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  text-align: left;
-  border: none;
-  outline: none;
-  transition: 0.4s;
-}
-
-.accordion:after {
-  content: '\25BC'; /* down-triangle */
-  font-size: 18px;
-  color: #444;
-  float: right;
-  margin-left: 5px;
-}
-
-.accordion.accordion--active, .accordion:hover {
-  background-color: #a8ebff;
-}
-
-.accordion.accordion--active:after {
-  content: '\25B2'; /* up-triangle */
-}
-
-.accordion + .panel {
-  padding: 0 18px;
-  background-color: white;
-  display: none;
-  overflow: hidden;
-}
-
-.demo-page-head {
-  margin: 90px 0 90px 0;
-  text-align: center;
-}
-
-.back-footer {
-  margin-top: 60px;
-  margin-bottom: 60px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

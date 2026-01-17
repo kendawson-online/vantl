@@ -96,6 +96,25 @@ function showAlert(msg = null) {
     }
 }
 
+// copy text to clipboard
+// accepts 1 argument: id of text input to copy to clipboard
+function copytoClipboard(id) {
+  // select text input element
+  var copyText = document.getElementById(id);
+  if (!copyText) { console.error('No id was passed to function copytoClipboard()'); return false; }
+  // select text in the input field
+  copyText.select();
+  // handle mobile devices
+  copyText.setSelectionRange(0, 99999); 
+  // Wait 200ms - gives select() time to run
+  setTimeout(function() {
+    // write text to clipboard
+    navigator.clipboard.writeText(copyText.value); 
+    // alert user
+    alert("Copied to clipboard!\n\n" + copyText.value);
+  }, 200);
+}
+
 // -----------------------------
 // JS fallback for missing image
 // Adds `.no-image` to `.timeline__content` nodes when an image is absent
