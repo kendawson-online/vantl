@@ -62,7 +62,7 @@ export function formatAccessibleDate(dateString, locale = (typeof navigator !== 
   const parsed = Date.parse(dateString);
   if (Number.isNaN(parsed)) {
     // Try common MM/DD/YYYY or YYYY-MM-DD heuristics
-    const parts = dateString.split(/[\/-\.]/).map(p => p.trim());
+      const parts = dateString.split(/[\/\.\-]/).map(p => p.trim());
     if (parts.length === 3) {
       // Assume MM/DD/YYYY if month <= 12
       let mm = parseInt(parts[0], 10);
