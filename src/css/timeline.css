@@ -18,6 +18,9 @@
     --timeline-h-image-size: 100px;
     --timeline-h-title-font-size: 18px;
     --timeline-h-text-font-size: 11px;
+
+    /* Gap for same-side layouts (applies when sameSideNodes is enabled) */
+    --timeline-same-side-gap: 20px;
 }
 
 /* Hide timeline by default to prevent flash of unstyled/incorrectly-styled content.
@@ -94,19 +97,16 @@
 /* Modal content hidden by default */
 .timeline__modal-content {
     display: none;
-}
-
-.timeline__content-full {
     font-size: 1rem;
     line-height: 1.6;
     color: #333;
 }
 
-.timeline__content-full p {
+.timeline__modal-content p {
     margin-bottom: 12px;
 }
 
-.timeline__content-full p:last-child {
+.timeline__modal-content p:last-child {
     margin-bottom: 0;
 }
 
@@ -166,6 +166,15 @@
     margin-bottom: 20px;
 }
 
+/* Gap between items when same-side vertical layout is active (includes mobile) */
+.timeline--same-side:not(.timeline--horizontal) .timeline__item {
+    margin-bottom: var(--timeline-same-side-gap);
+}
+
+.timeline--same-side:not(.timeline--horizontal) .timeline__item:last-child {
+    margin-bottom: 0;
+}
+
 .timeline--mobile .timeline__item::after {
     left: 2px;
     margin: 0;
@@ -198,6 +207,11 @@
     border-right: 12px solid #CCC;
     border-left: none;
     border-top: 10px solid transparent;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
 
 /* Visually-hidden helper for accessibility (screen-reader only) */
 .sr-only {
@@ -210,11 +224,6 @@
     clip: rect(0, 0, 0, 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
-}
-    left: -12px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
 }
 
 .timeline--mobile .timeline__content::after {
@@ -618,6 +627,15 @@
     vertical-align: top;
     white-space: normal;
     width: var(--timeline-h-node-width);
+}
+
+/* Gap between items when same-side horizontal layout is active */
+.timeline--same-side.timeline--horizontal .timeline__item {
+    margin-right: var(--timeline-same-side-gap);
+}
+
+.timeline--same-side.timeline--horizontal .timeline__item:last-child {
+    margin-right: 0;
 }
 
 .timeline--horizontal .timeline__item .timeline__content {

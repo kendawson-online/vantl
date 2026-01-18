@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started with Vanilla Timeline</title>
+    <!-- Load CDN timeline styles — uncomment to use CDN instead of local files -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
+    
+    <!-- Load local timeline styles (recommended for development) -->
+    <link rel="stylesheet" href="../../dist/timeline.min.css">
+
+    <!-- Load demo specific styles -->
+    <link rel="stylesheet" href="../assets/css/demo.css">
+    <link rel="stylesheet" href="../assets/vendor/github.min.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <!-- header block -->
+      <header class="demo-page-head">
+        <h1>Getting Started with Vanilla Timeline</h1>
+        <p>Here is some code you can use to get started quickly.</p> 
+        <p>Use the CDN links shown below to use Vanilla Timeline without installing code to your server.</p>
+        <p class="graytext">(If you are a developer, or prefer not to use CDN links, you can link to files in the <a href="https://github.com/kendawson-online/vantl/tree/main/dist" class="graylink mono" target="_blank" title="Open in a new tab or window">dist</a> directory for offline or local access.)</p>
+      </header>
+
+      <!-- CDN link block -->
+      <section class="demo-cdn-link-wrapper">
+        <h3>CDN Links:</h3>
+        <!-- CDN style link -->
+        <h4 class="demo-cdn-link-head">Add CSS styles to your document &lt;head&gt;</h4>
+        <input 
+          type="text" 
+          id="cdnCss" 
+          class="demo-cdn-link-input" 
+          tabindex="1" 
+          value='<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css" />'
+        >
+        <button 
+          type="button" 
+          id="cdnCopyCss" 
+          class="btn secondary" 
+          tabindex="2" 
+          style="font-size: 14px; padding: 6px;" 
+          onclick="copytoClipboard('cdnCss')"
+        >
+          Copy
+        </button>
+        <br/>
+        <!-- CDN functions link-->
+        <h4 class="demo-cdn-link-head">Add Javascript functions before your closing &lt;body&gt; tag</h4>
+        <input 
+          type="text" 
+          id="cdnJs" 
+          class="demo-cdn-link-input" 
+          tabindex="3" 
+          value='<script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>'
+        >
+        <button 
+          type="button" 
+          id="cdnCopyJs" 
+          class="btn secondary" 
+          tabindex="4" 
+          style="font-size: 14px; padding: 6px;" 
+          onclick="copytoClipboard('cdnJs')"
+        >
+          Copy
+        </button>
+      </section>
+
+      <!-- code snippets -->
+      <section class="demo-section">
+        <h2>1. Creating a basic HTML timeline</h2>
+        <p>Drop this HTML into your page. The timeline is a simple markup structure &mdash; initialize it with the line of Javascript below.</p>
+
+<div class="code-block">
+<pre><code class="language-html">
+&lt;div class="timeline" data-mode="horizontal"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+
+      &lt;!-- Node: 1 --&gt;
+      &lt;div class="timeline__item" data-aria-label=""&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;div class="timeline__date"&gt;
+            Jan. 2, 1987
+          &lt;/div&gt;
+          &lt;img class="timeline__image" src="/path/to/your/image-1.jpg" alt=""&gt;
+          &lt;h3 class="timeline__heading"&gt;Node 1 Heading&lt;/h3&gt;
+          &lt;div class="timeline__summary"&gt;
+            &lt;!-- short, text-only summary goes here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="timeline__modal-content"&gt;
+          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Node: 2 --&gt;
+      &lt;div class="timeline__item" data-aria-label=""&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;div class="timeline__date"&gt;
+            Jan. 5, 1987
+          &lt;/div&gt;
+          &lt;img class="timeline__image" src="/path/to/your/image-2.jpg" alt=""&gt;
+          &lt;h3 class="timeline__heading"&gt;Node 2 Heading&lt;/h3&gt;
+          &lt;div class="timeline__summary"&gt;
+            &lt;!-- short, text-only summary goes here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="timeline__modal-content"&gt;
+          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Node: 3 --&gt;
+      &lt;div class="timeline__item" data-aria-label=""&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;div class="timeline__date"&gt;
+            Jan. 21, 1987
+          &lt;/div&gt;
+          &lt;img class="timeline__image" src="/path/to/your/image-3.jpg" alt=""&gt;
+          &lt;h3 class="timeline__heading"&gt;Node 3 Heading&lt;/h3&gt;
+          &lt;div class="timeline__summary"&gt;
+            &lt;!-- short, text-only summary goes here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="timeline__modal-content"&gt;
+          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Node: 4 --&gt;
+      &lt;div class="timeline__item" data-aria-label=""&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;div class="timeline__date"&gt;
+            Feb. 1, 1987
+          &lt;/div&gt;
+          &lt;img class="timeline__image" src="/path/to/your/image-4.jpg" alt=""&gt;
+          &lt;h3 class="timeline__heading"&gt;Node 4 Heading&lt;/h3&gt;
+          &lt;div class="timeline__summary"&gt;
+            &lt;!-- short, text-only summary goes here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="timeline__modal-content"&gt;
+          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Node: 5 --&gt;
+      &lt;div class="timeline__item" data-aria-label=""&gt;
+        &lt;div class="timeline__content"&gt;
+          &lt;div class="timeline__date"&gt;
+            Feb. 12, 1987
+          &lt;/div&gt;
+          &lt;img class="timeline__image" src="/path/to/your/image-5.jpg" alt=""&gt;
+          &lt;h3 class="timeline__heading"&gt;Node 5 Heading&lt;/h3&gt;
+          &lt;div class="timeline__summary"&gt;
+            &lt;!-- short, text-only summary goes here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="timeline__modal-content"&gt;
+          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+
+        <h2>2. Initialize with plain Javascript</h2>
+
+<div class="code-block">
+<pre><code>
+  &lt;!-- Load CDN timeline functions --&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    // initialize all timelines on the page
+    timeline(document.querySelectorAll('.timeline'));
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</div>
+      </section>
+
+      <br/><br/>
+
+      <section style="margin: 0 auto; padding: 20px; width: 65%; height: 400px; border: 2px solid black; border-radius: 36px; max-width: 1800px;">
+        
+        <h2>Live example</h2>
+
+        <br/>
+        
+        <!-- Begin Timeline Example -->
+        <div id="quick-start-tl" class="timeline" data-mode="horizontal" data-same-side-nodes="top" data-test="quick-start-tl">
+          <div class="timeline__wrap">
+            <div class="timeline__items">
+
+                <!-- Node: 1 -->
+                <div class="timeline__item" data-aria-label="">
+                  <div class="timeline__content">
+                    <div class="timeline__date">
+                      Jan. 2, 1987
+                    </div>
+                    <img class="timeline__image" src="../assets/img/sample8.jpg" alt="">
+                    <h3 class="timeline__heading">Node 1 Heading</h3>
+                    <div class="timeline__summary">
+                      <!-- short, text-only summary goes here -->
+                    </div>
+                  </div>
+                  <div class="timeline__modal-content">
+                    <!-- full description of event goes here (HTML is OK here) -->
+                  </div>
+                </div>
+
+                <!-- Node: 2 -->
+                <div class="timeline__item" data-aria-label="">
+                  <div class="timeline__content">
+                    <div class="timeline__date">
+                      Jan. 5, 1987
+                    </div>
+                    <img class="timeline__image" src="../assets/img/sample12.jpg" alt="">
+                    <h3 class="timeline__heading">Node 2 Heading</h3>
+                    <div class="timeline__summary">
+                      <!-- short, text-only summary goes here -->
+                    </div>
+                  </div>
+                  <div class="timeline__modal-content">
+                    <!-- full description of event goes here (HTML is OK here) -->
+                  </div>
+                </div>
+
+                <!-- Node: 3 -->
+                <div class="timeline__item" data-aria-label="">
+                  <div class="timeline__content">
+                    <div class="timeline__date">
+                      Jan. 21, 1987
+                    </div>
+                    <img class="timeline__image" src="../assets/img/sample10.jpg" alt="">
+                    <h3 class="timeline__heading">Node 3 Heading</h3>
+                    <div class="timeline__summary">
+                      <!-- short, text-only summary goes here -->
+                    </div>
+                  </div>
+                  <div class="timeline__modal-content">
+                    <!-- full description of event goes here (HTML is OK here) -->
+                  </div>
+                </div>
+
+                <!-- Node: 4 -->
+                <div class="timeline__item" data-aria-label="">
+                  <div class="timeline__content">
+                    <div class="timeline__date">
+                      Feb. 1, 1987
+                    </div>
+                    <img class="timeline__image" src="../assets/img/sample4.jpg" alt="">
+                    <h3 class="timeline__heading">Node 4 Heading</h3>
+                    <div class="timeline__summary">
+                      <!-- short, text-only summary goes here -->
+                    </div>
+                  </div>
+                  <div class="timeline__modal-content">
+                    <!-- full description of event goes here (HTML is OK here) -->
+                  </div>
+                </div>
+
+                <!-- Node: 5 -->
+                <div class="timeline__item" data-aria-label="">
+                  <div class="timeline__content">
+                    <div class="timeline__date">
+                      Feb. 12, 1987
+                    </div>
+                    <img class="timeline__image" src="../assets/img/sample9.jpg" alt="">
+                    <h3 class="timeline__heading">Node 5 Heading</h3>
+                    <div class="timeline__summary">
+                      <!-- short, text-only summary goes here -->
+                    </div>
+                  </div>
+                  <div class="timeline__modal-content">
+                    <!-- full description of event goes here (HTML is OK here) -->
+                  </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- End Timeline Example -->
+
+      </section>
+
+      <footer class="btn-footer">
+        <a class="btn secondary" href="../index.html">❮ Back to Demos</a>
+        <a class="btn success space-left" href="../inline/horizontal/">Inline Data Attributes ❯</a>
+      </footer>
+
+    </div>
+
+    <!-- Load CDN timeline functions — uncomment to use CDN instead of local files -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
+
+    <!-- Load local timeline functions (recommended for development) -->
+    <script src="../../dist/timeline.min.js"></script>
+
+    <!-- Load highligher.js -->
+    <script src="../assets/vendor/highlight.min.js"></script>
+
+    <!-- Load demo specific functions -->
+     <script src="../assets/js/demo.js"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // highlight blocks of code
+        hljs.highlightAll();
+        // initialize the timeline
+        timeline(document.querySelectorAll('.timeline'), { minWidth: 600 });
+      });
+    </script>
+
+  </body>
+</html>

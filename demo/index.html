@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla Timeline - Demos</title>
+    <title>Vanilla Timeline Demos</title>
+    <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
-    <script src="assets/js/demo.js"></script>
   </head>
   <body>
 
@@ -14,78 +14,72 @@
         <!-- page heading -->
         <header class="fbox">
           <div class="demo-index-logo">
-            <img src="assets/img/vanilla-flower.jpg" height="65" title="Vanilla Timeline" alt="Vanilla Flower"/>
+            <img src="assets/img/vanilla-flower.jpg" height="65" title="Vanilla Timeline" alt="Logo" aria-hidden="true" />
           </div>
           <div class="demo-index-head">
             <h1>Vanilla Timeline Demos</h1>
           </div>
         </header> 
 
+        <!-- javascript disabled warning -->
         <noscript>
-          <div class="noscript-fallback" style="padding:16px; background:#fff3cd; border:1px solid #ffeeba; margin:12px;">
-            <strong>JavaScript is disabled.</strong>
-            <p>Use the links below to open demos directly:</p>
-            <ul>
-              <li><a href="getting-started/">Getting Started</a></li>
-              <li><a href="inline/horizontal/">Inline — Horizontal</a></li>
-              <li><a href="inline/vertical/">Inline — Vertical</a></li>
-              <li><a href="jquery/horizontal/">jQuery — Horizontal</a></li>
-              <li><a href="jquery/vertical/">jQuery — Vertical</a></li>
-              <li><a href="json/horizontal/">JSON — Horizontal</a></li>
-              <li><a href="json/vertical/">JSON — Vertical</a></li>
-              <li><a href="time.html">JSON Timestamps</a></li>
-              <li><a href="multiple.html">Multiple Slideshows</a></li>
-              <li><a href="deeplink.html">Deep Linking</a></li>
-              <li><a href="advanced.html">Advanced Usage</a></li>
-              <li><a href="swiper/horizontal/">Swiper Add-On</a></li>
-            </ul>
+          <div class="noscript">
+            <h2>JavaScript is disabled!</h2>
+            <p>To use the Vanilla Timeline library, or to view these demos, you must have a Javascript-enabled browser. Please check your settings and reload.</p>
           </div>
         </noscript>
         
         <!-- demo cards -->
         <main class="cardlayout">
 
-          <!-- Getting Started -->
+          <!-- Quic Start -->
           <div class="card">
-            <div class="container">
-              <h3>Getting Started</h3>
-              <img src="assets/img/idx_card_js.png" width="275" />
-              <p>Quick start examples: basic HTML + single-line JS/jQuery init. CDN and local-dev snippets included.</p>
+            <div class="card-body">
+
+              <h3>Quick Start</h3>
+              <img src="assets/img/idx_card_start.png" width="275" />
+              <p>Learn how to get started quickly. Copy/Paste code snippets you can use to build your own custom timelines. </p>
               <p class="btn-wrapper">
-                <a class="btn warning" href="getting-started/" data-test="open-getting-started">Open</a>
+                <a class="btn info" href="quick-start/" data-test="open-quick-start">Start</a>
               </p>
+
             </div>
           </div>
 
           <!-- Inline Data Attributes -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>Inline Data Attributes</h3>
               <img src="assets/img/idx_card_inline.png" width="275" style="margin: 10px 0;"/>
               <p>Learn how to use inline data attributes on your timeline HTML element to modify settings.</p>
               <p class="btn-wrapper">
-                <a class="btn info" href="inline/horizontal/" data-test="open-inline-horizontal">Horizontal</a>
-                <a class="btn info" href="inline/vertical/" data-test="open-inline-vertical">Vertical</a>
+                <a class="btn success" href="inline/horizontal/" data-test="open-inline-horizontal">Horizontal</a>
+                <a class="btn success" href="inline/vertical/" data-test="open-inline-vertical">Vertical</a>
               </p>
+
             </div>
           </div>
 
           <!-- jQuery Usage -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>jQuery Usage</h3>
               <img src="assets/img/idx_card_jquery.png" width="275"/>
               <p>Learn how to use Jquery to initialize your timeline. (This method assumes you have the <a href="https://jquery.com" target="_blank">jQuery</a> library loaded)</p>
               <p class="btn-wrapper">
-                <a class="btn warning" href="jquery/horizontal/" data-test="open-jquery-horizontal">Horizontal</a>
-                <a class="btn warning" href="jquery/vertical/" data-test="open-jquery-vertical">Vertical</a>
+                <a class="btn success" href="jquery/horizontal/" data-test="open-jquery-horizontal">Horizontal</a>
+                <a class="btn success" href="jquery/vertical/" data-test="open-jquery-vertical">Vertical</a>
               </p>
+
             </div>
           </div>
 
           <!-- JSON Files -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>Using a JSON File</h3>
               <img src="assets/img/idx_card_json.png" width="275"/>
               <p>Learn how to create timelines using an external JSON file to store your data.</p>
@@ -93,66 +87,77 @@
                 <a class="btn success" href="json/horizontal/" title="Create a horizontal timeline from a JSON file" data-test="open-json-horizontal">Horizontal</a>
                 <a class="btn success" href="json/vertical/" title="Create a vertical timeline from a JSON file" data-test="open-json-vertical">Vertical</a>
               </p>
+
             </div>
           </div>
 
           <!-- JSON Timestamps -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>JSON Timestamps</h3>
               <img src="assets/img/time-clock.svg" height="110"/>
               <p>Learn how to format JSON timestamps for your timelines using the correct ISO 8601 date string format.</p>
               <p class="btn-wrapper">
                 <a class="btn secondary" href="time.html" data-test="open-time">JSON Timestamps</a>
               </p>
+
             </div>
           </div> 
 
           <!-- Multiple Slideshows -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>Multiple Slideshows</h3>
-              <img src="assets/img/two-timelines.png" height="110"/>
+              <img src="assets/img/two-timelines.png" width="150"/>
               <p>Learn how to create multiple slideshows on a single page</p>
               <p class="btn-wrapper">
                 <a class="btn secondary" href="multiple.html" data-test="open-multiple">Multiple Slideshows</a>
               </p>
+
             </div>
           </div>       
 
           <!-- Deep Linking -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>Deep Linking</h3>
               <img src="assets/img/idx_card_deeplink.png" height="110"/>
               <p>Learn how to create a link to a specific slide within the slideshow</p>
               <p class="btn-wrapper">
                 <a class="btn secondary" href="deeplink.html" data-test="open-deeplink">Deep Linking</a>
               </p>
+
             </div>
           </div>  
           
           <!-- Advanced Usage -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>Advanced Usage</h3>
               <img src="assets/img/advanced.jpg" height="110"/>
               <p>Use a combination of methods and Javascript to generate timelines. <span class="txtwarning">Requires knowledge of Javascript!</span></p>
               <p class="btn-wrapper">
                 <a class="btn danger" href="advanced.html" data-test="open-advanced">Advanced Usage</a>
               </p>
+
             </div>
           </div> 
           
           <!-- SwiperJS Add-On -->
           <div class="card">
-            <div class="container">
+            <div class="card-body">
+
               <h3>SwiperJS Add-On</h3>
               <a href="https://swiperjs.com" target="_blank" title="Open SwiperJS site in a new tab or window" alt="SwiperJS Logo"><img src="assets/img/swiper-logo.svg" height="110"/></a>
               <p>Learn how to include <a href="https://swiperjs.com" target="_blank" title="Open SwiperJS site in a new tab or window">SwiperJS</a> as an add-on which works with Vanilla Timeline on touch screen devices.</p>
               <p class="btn-wrapper">
                 <a class="btn info" href="swiper/horizontal/" data-test="open-swiper">SwiperJS Add-On</a>
               </p>
+
             </div>
           </div> 
 
@@ -168,6 +173,8 @@
     </div>
 
     <br/><br/>
+    <!-- load demo specific JS functions -->
+    <script src="assets/js/demo.js"></script>
 
   </body>
 </html>

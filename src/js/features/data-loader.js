@@ -164,10 +164,7 @@ export function createItemNode(item) {
   // Modal content (hidden by default, shown in popup)
   const modalContent = document.createElement('div');
   modalContent.className = 'timeline__modal-content';
-  const contentFull = document.createElement('div');
-  contentFull.className = 'timeline__content-full';
-  contentFull.innerHTML = sanitizeContent(normalized.content);
-  modalContent.appendChild(contentFull);
+  modalContent.innerHTML = sanitizeContent(normalized.content);
   itemEl.appendChild(modalContent);
 
   // Click handler to open modal
@@ -250,7 +247,7 @@ function applyDataAttributes(container, config) {
  * @param {string} [config.nodeColor] - CSS color for nodes
  * @param {string} [config.lineColor] - CSS color for line
  * @param {string} [config.navColor] - CSS color for nav
- * @param {...any} [config.otherSettings] - Any other timeline options (see timeline-engine.js)
+ * @param {Record<string, any>} [config.otherSettings] - Any other timeline options (see timeline-engine.js)
  * @returns {HTMLElement|null} - Timeline container element, or null if container not found
  */
 export function renderTimelineFromData(containerSelector, data, config) {

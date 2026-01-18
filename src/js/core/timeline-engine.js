@@ -574,22 +574,42 @@ export function timeline(collection, options) {
       const transformString = `translateY(${evenIndexTallest}px)`;
       // Determine effective horizontal start side (top/bottom) based on sameSideNodes or explicit setting
       const effectiveHSide = resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode) || tl.settings.horizontalStartPosition;
+      const isSameSide = !!resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode); // True if sameSideNodes is enabled
+      if (isSameSide) {
+        tl.timelineEl.classList.add('timeline--same-side');
+      } else {
+        tl.timelineEl.classList.remove('timeline--same-side');
+      }
       tl.items.forEach((item, i) => {
         if (i % 2 === 0) {
           item.style.height = `${evenIndexTallest}px`;
           if (effectiveHSide === 'bottom') {
             item.classList.add('timeline__item--bottom');
-            addTransforms(item, transformString);
+            if (isSameSide) {
+              // When sameSideNodes is set, don't apply transform to maintain same-side rendering
+            } else {
+              addTransforms(item, transformString);
+            }
           } else {
             item.classList.add('timeline__item--top');
           }
         } else {
           item.style.height = `${oddIndexTallest}px`;
-          if (effectiveHSide !== 'bottom') {
-            item.classList.add('timeline__item--bottom');
-            addTransforms(item, transformString);
+          if (isSameSide) {
+            // When sameSideNodes is enabled, apply the same side as effectiveHSide
+            if (effectiveHSide === 'bottom') {
+              item.classList.add('timeline__item--bottom');
+            } else {
+              item.classList.add('timeline__item--top');
+            }
           } else {
-            item.classList.add('timeline__item--top');
+            // When sameSideNodes is disabled, alternate sides
+            if (effectiveHSide !== 'bottom') {
+              item.classList.add('timeline__item--bottom');
+              addTransforms(item, transformString);
+            } else {
+              item.classList.add('timeline__item--top');
+            }
           }
         }
       });
@@ -873,11 +893,29 @@ export function timeline(collection, options) {
       }
       // Determine effective vertical start side (left/right) based on sameSideNodes or explicit setting
       const effectiveVSide = resolveSide(tl.settings, 'vertical', tl.settings.rtlMode) || tl.settings.verticalStartPosition;
-      const divider = effectiveVSide === 'left' ? 1 : 0;
-      if (i % 2 === divider && window.innerWidth > tl.settings.minWidth) {
-        item.classList.add('timeline__item--right');
+      const isSameSide = !!resolveSide(tl.settings, 'vertical', tl.settings.rtlMode); // True if sameSideNodes is enabled
+
+      if (isSameSide) {
+        tl.timelineEl.classList.add('timeline--same-side');
       } else {
-        item.classList.add('timeline__item--left');
+        tl.timelineEl.classList.remove('timeline--same-side');
+      }
+
+      if (isSameSide) {
+        // When sameSideNodes is enabled, apply the same side to all items
+        if (effectiveVSide === 'right') {
+          item.classList.add('timeline__item--right');
+        } else {
+          item.classList.add('timeline__item--left');
+        }
+      } else {
+        // When sameSideNodes is disabled, alternate based on index
+        const divider = effectiveVSide === 'left' ? 1 : 0;
+        if (i % 2 === divider && window.innerWidth > tl.settings.minWidth) {
+          item.classList.add('timeline__item--right');
+        } else {
+          item.classList.add('timeline__item--left');
+        }
       }
     });
     for (let i = 0; i < lastVisibleIndex; i += 1) {

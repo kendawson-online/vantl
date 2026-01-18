@@ -20,6 +20,7 @@
 import { createTimelineModal, openTimelineModal, closeTimelineModal } from './features/modals.js';
 import { handleDeepLinking, navigateToNodeIndex } from './features/deep-linking.js';
 import { renderTimelineFromData, timelineFromData, loadDataFromJson, processTimelineData, clearTimelineCache } from './features/data-loader.js';
+import './features/keyboard.js';
 import { timeline } from './core/timeline-engine.js';
 import '../css/timeline.css';
 

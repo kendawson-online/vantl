@@ -141,7 +141,7 @@ export function openTimelineModal(itemEl) {
     modalText.innerHTML = html;
   } else {
     // If the item contains inline modal HTML (rendered by data-loader or present in markup), prefer it
-    const domModal = itemEl.querySelector('.timeline__modal-content .timeline__content-full');
+    const domModal = itemEl.querySelector('.timeline__modal-content');
     if (domModal && domModal.innerHTML && domModal.innerHTML.trim() !== '') {
       modalText.innerHTML = domModal.innerHTML;
     }

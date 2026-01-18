@@ -24,7 +24,7 @@ describe('core/timeline initialized event', () => {
                 <h3 class="timeline__heading">Test</h3>
                 <p>Summary</p>
               </div>
-              <div class="timeline__modal-content"><div class="timeline__content-full"><p>Full</p></div></div>
+              <div class="timeline__modal-content"><p>Full</p></div>
             </div>
           </div>
         </div>

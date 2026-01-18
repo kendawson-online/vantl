@@ -73,7 +73,17 @@ export default class SwiperAdapter {
     }
 
     if (!SwiperLib) {
-      console.warn('SwiperAdapter: Swiper library not found (tried options.swiperCdn, dynamic import, and window.Swiper)');
+      // Friendly, one-time notice. Remember via localStorage.
+      try {
+        const seen = typeof Storage !== 'undefined' && localStorage.getItem('swiperJSLib');
+        if (!(seen === '0' || seen === 'false')) {
+          console.log('SwiperAdapter: Swiper library not found (tried options.swiperCdn, dynamic import, and window.Swiper)');
+          if (typeof Storage !== 'undefined') localStorage.setItem('swiperJSLib', '0');
+        }
+      } catch (e) {
+        // no-op if storage inaccessible
+        console.log('SwiperAdapter: Swiper library not found (tried options.swiperCdn, dynamic import, and window.Swiper)');
+      }
       return null;
     }
 
@@ -111,6 +121,9 @@ export default class SwiperAdapter {
         this.swiper = null;
       } else {
         this.swiper = new SwiperLib(this._container, defaultOpts);
+        try {
+          if (typeof Storage !== 'undefined') localStorage.setItem('swiperJSLib', '1');
+        } catch (_) { /* ignore storage errors */ }
       }
     } catch (e) {
       console.warn('SwiperAdapter: failed to initialize Swiper instance', e);

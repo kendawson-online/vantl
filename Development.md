@@ -131,6 +131,21 @@ Demo pages are located in `demo/` and organized by initialization method:
 - `demo/jquery/` - jQuery plugin
 - `demo/json/` - JSON auto-init
 
+### What to do after making code changes
+
+After you modify files under `src/`, follow these steps before committing or running E2E tests:
+
+1. Run `npm run build` to update `dist/` so demo pages use the latest bundle.
+2. Run unit tests: `npm test -- --run` to verify behavior in the jsdom environment.
+3. Run Playwright tests (container recommended): see `tests/playwright/README.md`.
+4. Start a dev server and manually check demo pages in a browser to validate visuals and keyboard/ARIA behaviors:
+
+```bash
+# serve the repo and inspect demo pages
+npm run dev
+# open http://localhost:8080/demo/inline/horizontal/index.html
+```
+
 ### 3. Verify Build Output
 
 ```bash

@@ -1,6 +1,14 @@
 # Dockerfile for running Playwright E2E tests
 # Uses Playwright's official image with browsers preinstalled
 FROM mcr.microsoft.com/playwright:v1.57.0-jammy
+ARG NPM_VERSION=11.7.0
+RUN npm install -g npm@$NPM_VERSION
+
+# Metadata labels for clarity
+LABEL org.opencontainers.image.title="vantl-playwright-e2e" \
+	org.opencontainers.image.description="Vantl Playwright E2E test image" \
+	org.opencontainers.image.version="npm-${NPM_VERSION}" \
+	org.opencontainers.image.source="https://github.com/kendawson-online/vantl"
 
 WORKDIR /workspace
 
