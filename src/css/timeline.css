@@ -446,10 +446,9 @@
 
     .timeline--horizontal .timeline__image {
         order: 1;
-        max-width: 100px;
-        max-height: 100px;
-        width: auto;
-        height: auto;
+        width: var(--timeline-h-image-size);
+        height: var(--timeline-h-image-size);
+        object-fit: cover;
         margin-bottom: 0;
     }
 
@@ -621,7 +620,7 @@
 .timeline--horizontal .timeline__item {
     display: inline-block;
     left: 0;
-    padding: 0 0 40px;
+    padding: 0 0 60px;
     position: relative;
     transition: none;
     vertical-align: top;
@@ -636,6 +635,18 @@
 
 .timeline--same-side.timeline--horizontal .timeline__item:last-child {
     margin-right: 0;
+}
+
+/* Same-side top mode: nodes below the timeline */
+.timeline--same-side.timeline--horizontal .timeline__item--top {
+    padding: 0 0 60px;
+    vertical-align: bottom;
+}
+
+/* Same-side bottom mode: nodes above the timeline */
+.timeline--same-side.timeline--horizontal .timeline__item--bottom {
+    padding: 60px 0 0;
+    vertical-align: top;
 }
 
 .timeline--horizontal .timeline__item .timeline__content {
@@ -660,6 +671,17 @@
     right: auto;
     transform: translate(-50%, -50%);
     top: 100%;
+}
+
+/* Same-side layouts: position dots on the divider line */
+.timeline--same-side.timeline--horizontal .timeline__item--top::after {
+    /* Top mode: divider is at bottom of item minus 30px padding zone */
+    top: calc(100% - 30px);
+}
+
+.timeline--same-side.timeline--horizontal .timeline__item--bottom::after {
+    /* Bottom mode: divider is at 30px from top */
+    top: 30px;
 }
 
 .timeline--horizontal .timeline__item .timeline__item__inner {
@@ -696,7 +718,7 @@
 }
 
 .timeline--horizontal .timeline__item--bottom {
-    padding: 40px 0 0;
+    padding: 60px 0 0;
 }
 
 .timeline--horizontal .timeline__item--bottom::after {
@@ -1095,6 +1117,86 @@
     border: 1px solid #ffc107;
     border-radius: 6px;
     padding: 12px 16px;
+}
+
+/* Responsive horizontal timeline scaling for smaller screens */
+/* Medium screens (tablets in landscape, small laptops) */
+@media (max-width: 1024px) {
+    .timeline--horizontal {
+        --timeline-h-node-width: 180px;
+        --timeline-h-node-min-height: 160px;
+        --timeline-h-image-size: 90px;
+    }
+}
+
+/* Small screens (tablets in portrait, large phones in landscape) */
+@media (max-width: 768px) {
+    .timeline--horizontal {
+        --timeline-h-node-width: 160px;
+        --timeline-h-node-min-height: 140px;
+        --timeline-h-image-size: 80px;
+        --timeline-h-title-font-size: 16px;
+        --timeline-h-text-font-size: 10px;
+    }
+    /* Hide summary text on smaller screens to save space */
+    .timeline--horizontal .timeline__summary {
+        display: none;
+    }
+}
+
+/* Very small screens (phones in landscape) */
+@media (max-width: 640px) {
+    .timeline--horizontal {
+        --timeline-h-node-width: 140px;
+        --timeline-h-node-min-height: 120px;
+        --timeline-h-image-size: 70px;
+        --timeline-h-title-font-size: 14px;
+        padding: 0 40px;
+    }
+    /* Keep summary hidden */
+    .timeline--horizontal .timeline__summary {
+        display: none;
+    }
+}
+
+/* Extra small screens (small phones in landscape) */
+@media (max-width: 480px) {
+    .timeline--horizontal {
+        --timeline-h-node-width: 120px;
+        --timeline-h-node-min-height: 100px;
+        --timeline-h-image-size: 60px;
+        --timeline-h-title-font-size: 13px;
+        padding: 0 30px;
+    }
+    /* Show only image and date - hide heading and summary */
+    .timeline--horizontal .timeline__heading {
+        font-size: 12px;
+        margin: 0 0 4px;
+        line-height: 1.2;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .timeline--horizontal .timeline__summary {
+        display: none;
+    }
+}
+
+/* Ultra-compact mode for tiny screens */
+@media (max-width: 360px) {
+    .timeline--horizontal {
+        --timeline-h-node-width: 100px;
+        --timeline-h-node-min-height: 90px;
+        --timeline-h-image-size: 50px;
+        --timeline-h-title-font-size: 11px;
+        padding: 0 20px;
+    }
+    /* Show only image and date */
+    .timeline--horizontal .timeline__heading {
+        font-size: 11px;
+        -webkit-line-clamp: 1;
+    }
 }
 
 /* Micro-screen responsive rules (progressive column hiding)

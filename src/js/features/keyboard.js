@@ -77,6 +77,15 @@ function bindHotkeys(timelineEl, api) {
   }
 
   const keydownHandler = function(e) {
+    // If Enter/Space pressed while a nav button is focused, trigger its click
+    const active = document.activeElement;
+    if ((e.key === 'Enter' || e.key === ' ') && (active === prev || active === next)) {
+      e.preventDefault();
+      try { active.click(); } catch (_) { /* ignore */ }
+      return;
+    }
+
+    // Shift+Arrow hotkeys to focus nav buttons
     if (!e.shiftKey) return;
     if (e.key === 'ArrowLeft' && prev) {
       e.preventDefault();

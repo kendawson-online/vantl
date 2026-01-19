@@ -616,8 +616,16 @@ export function timeline(collection, options) {
       // Store heights for use in divider and arrow positioning  
       tl.evenIndexTallest = evenIndexTallest;
       tl.oddIndexTallest = oddIndexTallest;
-      // Set scroller height (no extra padding - use original calculation)
-      tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest}px`;
+      // Set scroller height
+      // When same-side mode is active, use only the tallest height (not summed)
+      // When alternating, use sum of top and bottom heights
+      // Add 10px buffer to prevent dot clipping (dots extend 10px beyond their center)
+      if (isSameSide) {
+        const tallestHeight = Math.max(evenIndexTallest, oddIndexTallest);
+        tl.scroller.style.height = `${tallestHeight + 10}px`;
+      } else {
+        tl.scroller.style.height = `${evenIndexTallest + oddIndexTallest}px`;
+      }
       // Compute how many items fit in the viewport for this timeline
       try {
         tl.computedVisibleCount = Math.floor(tl.wrap.offsetWidth / tl.itemWidth) || 1;
@@ -639,8 +647,25 @@ export function timeline(collection, options) {
     if (tl.items.length > itemsVisible) {
       const prevArrow = document.createElement('button');
       const nextArrow = document.createElement('button');
-      // Use the same calculation as the original: first item's offsetHeight
-      const topPosition = tl.items[0].offsetHeight;
+      
+      // Calculate button position based on same-side mode
+      const effectiveHSide = resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode) || tl.settings.horizontalStartPosition;
+      const isSameSide = !!resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode);
+      
+      let topPosition;
+      if (isSameSide) {
+        if (effectiveHSide === 'bottom') {
+          // Bottom mode: buttons centered in top padding (30px)
+          topPosition = 30;
+        } else {
+          // Top mode: buttons centered in bottom padding (item height - 30px)
+          topPosition = tl.items[0].offsetHeight - 30;
+        }
+      } else {
+        // Alternating mode: buttons centered on the divider
+        topPosition = tl.items[0].offsetHeight;
+      }
+      
       prevArrow.className = 'timeline-nav-button timeline-nav-button--prev';
       nextArrow.className = 'timeline-nav-button timeline-nav-button--next';
       prevArrow.textContent = 'Previous';
@@ -681,8 +706,26 @@ export function timeline(collection, options) {
     if (divider) {
       tl.timelineEl.removeChild(divider);
     }
-    // Use the same calculation as the original: first item's offsetHeight
-    const topPosition = tl.items[0].offsetHeight;
+    // Determine if same-side mode is active and which side
+    const effectiveHSide = resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode) || tl.settings.horizontalStartPosition;
+    const isSameSide = !!resolveSide(tl.settings, 'horizontal', tl.settings.rtlMode);
+    
+    let topPosition;
+    if (isSameSide) {
+      if (effectiveHSide === 'bottom') {
+        // Bottom mode: divider positioned in the 60px padding at the top of items
+        // Position it in the middle of the padding (30px)
+        topPosition = 30;
+      } else {
+        // Top mode: divider positioned in the 60px padding at the bottom of items
+        // First item height + middle of padding
+        topPosition = tl.items[0].offsetHeight - 30;
+      }
+    } else {
+      // Alternating mode: divider between top and bottom nodes
+      topPosition = tl.items[0].offsetHeight;
+    }
+    
     const horizontalDivider = document.createElement('span');
     horizontalDivider.className = 'timeline-divider';
     horizontalDivider.style.top = `${topPosition}px`;

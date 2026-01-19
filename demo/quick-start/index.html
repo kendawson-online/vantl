@@ -43,7 +43,7 @@
           id="cdnCopyCss" 
           class="btn secondary" 
           tabindex="2" 
-          style="font-size: 14px; padding: 6px;" 
+          style="font-size: 14px; padding: 8px 10px;" 
           onclick="copytoClipboard('cdnCss')"
         >
           Copy
@@ -63,18 +63,85 @@
           id="cdnCopyJs" 
           class="btn secondary" 
           tabindex="4" 
-          style="font-size: 14px; padding: 6px;" 
+          style="font-size: 14px; padding: 8px 10px;" 
           onclick="copytoClipboard('cdnJs')"
         >
           Copy
         </button>
       </section>
 
-      <!-- code snippets -->
-      <section class="demo-section">
-        <h2>1. Creating a basic HTML timeline</h2>
-        <p>Drop this HTML into your page. The timeline is a simple markup structure &mdash; initialize it with the line of Javascript below.</p>
+      <!-- main content -->
+      <section id="step1" class="demo-section">
+        <h2>1. Creating a bare bones minimalist HTML timeline</h2>
+        
+        <!-- preview image -->
+        <a href="../bare-bones-example.html" target="_blank" title="Open example in a new tab or window">
+          <img src="../assets/img/bare-bones-timeline-screenshot.png" width="800" alt="Bare Bones HTML Timeline" style="border: 2px solid blue; margin-bottom: 20px;"/>
+        </a>
+        
+        <p>This is the simplest timeline that you can create with Vanilla Timeline. The content is freeform HTML and you can add whatever you want without any type requirements. The look of the bare bones timeline is entirely up to you. The app will allow you to add code which breaks the layout. The bare bones HTML timeline is limited in features compared to other types of Vanilla Timelines. It will display dates and a small amount of text in a horizonal or vertical timeline. When a viewer clicks on the timeline node, it will open a modal window. Adding large-sized elements (e.g. images) or big blocks of text will break the layout and/or styling. For best results, try to keep your content simple and basic. Just copy/paste this HTML into your page:</p>
 
+<!-- bare bones nodes -->
+<div class="code-block">
+<pre><code class="language-html">
+&lt;div class="timeline" data-mode="horizontal"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+
+        &lt;!-- node 1 --&gt;
+        &lt;div class="timeline__item"&gt;
+            &lt;div class="timeline__content"&gt;
+                &lt;h5&gt;Jan. 1, 2000&lt;/h5&gt;
+                &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- node 2 --&gt;
+        &lt;div class="timeline__item"&gt;
+            &lt;div class="timeline__content"&gt;
+                &lt;h5&gt;Dec. 31, 2000&lt;/h5&gt;
+                &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- node 3 --&gt;
+        &lt;div class="timeline__item"&gt;
+            &lt;div class="timeline__content"&gt;
+                &lt;h5&gt;Jan. 1, 2001&lt;/h5&gt;
+                &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div>
+        
+        <p>This example page shows both Horizontal and Vertical bare bones HTML timelines. After you open it, view the source code to see how it was created.</p>
+
+        <p>
+          <ul>
+            <li><a href="../bare-bones-example.html" target="_blank" title="Opens in a new tab or window">demo/bare-bones-example.html</a></li>
+          </ul>
+        </p>
+
+        <p>After you copy/paste the HTML above into your document, skip ahead to <a href="#step3">Step 3</a> to learn how to initialize your timeline.</p> 
+        
+        <p><b>Note:</b> If you need to add big images, large amounts of text, or videos &mdash;and you want it all to be styled properly&mdash; read on to learn about other Vanilla Timeline methods.</p>
+
+      </section>  
+
+
+      <section id="step2" class="demo-section">
+        <h2>2. Creating a structured HTML timeline</h2>
+        <p>If you are using the bare bones HTML method above, you can skip this section and jump to <a href="#step3">Step 3</a>. But, if you want more advanced styling and layout, you should consider using the structured HTML method instead for adding nodes. The structured HTML timeline uses CSS classes to provide a structure for different types of data. You have to add data to the correct fields for it to function properly but, it's easy to understand. The advantage to using this method is that it helps Vanilla Timeline understand the type of content you're adding and the program can format the data correctly (based on type) when it renders your timeline.</p> 
+        
+        <p>Just copy/paste the HTML below into your page to create a structured HTML timeline. After you are finished copying/pasting the HTML, there's one more step: you have to initialize the timeline(s) on your page with Javascript. Jump down to <a href="#step3">Step 3</a> to learn how to do this.</p>
+        
+        <p><b>Note:</b> You'll notice that we skipped some of the fields from the structured HTML. Not all fields are required. The minimum fields you need are: <span class="mono bold">date</span> and <span class="mono bold">heading</span>.</p>
+
+<!--HTML nodes -->
 <div class="code-block">
 <pre><code class="language-html">
 &lt;div class="timeline" data-mode="horizontal"&gt;
@@ -82,7 +149,7 @@
     &lt;div class="timeline__items"&gt;
 
       &lt;!-- Node: 1 --&gt;
-      &lt;div class="timeline__item" data-aria-label=""&gt;
+      &lt;div class="timeline__item"&gt;
         &lt;div class="timeline__content"&gt;
           &lt;div class="timeline__date"&gt;
             Jan. 2, 1987
@@ -99,7 +166,7 @@
       &lt;/div&gt;
 
       &lt;!-- Node: 2 --&gt;
-      &lt;div class="timeline__item" data-aria-label=""&gt;
+      &lt;div class="timeline__item"&gt;
         &lt;div class="timeline__content"&gt;
           &lt;div class="timeline__date"&gt;
             Jan. 5, 1987
@@ -116,7 +183,7 @@
       &lt;/div&gt;
 
       &lt;!-- Node: 3 --&gt;
-      &lt;div class="timeline__item" data-aria-label=""&gt;
+      &lt;div class="timeline__item"&gt;
         &lt;div class="timeline__content"&gt;
           &lt;div class="timeline__date"&gt;
             Jan. 21, 1987
@@ -132,47 +199,195 @@
         &lt;/div&gt;
       &lt;/div&gt;
 
-      &lt;!-- Node: 4 --&gt;
-      &lt;div class="timeline__item" data-aria-label=""&gt;
-        &lt;div class="timeline__content"&gt;
-          &lt;div class="timeline__date"&gt;
-            Feb. 1, 1987
-          &lt;/div&gt;
-          &lt;img class="timeline__image" src="/path/to/your/image-4.jpg" alt=""&gt;
-          &lt;h3 class="timeline__heading"&gt;Node 4 Heading&lt;/h3&gt;
-          &lt;div class="timeline__summary"&gt;
-            &lt;!-- short, text-only summary goes here --&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class="timeline__modal-content"&gt;
-          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;!-- Node: 5 --&gt;
-      &lt;div class="timeline__item" data-aria-label=""&gt;
-        &lt;div class="timeline__content"&gt;
-          &lt;div class="timeline__date"&gt;
-            Feb. 12, 1987
-          &lt;/div&gt;
-          &lt;img class="timeline__image" src="/path/to/your/image-5.jpg" alt=""&gt;
-          &lt;h3 class="timeline__heading"&gt;Node 5 Heading&lt;/h3&gt;
-          &lt;div class="timeline__summary"&gt;
-            &lt;!-- short, text-only summary goes here --&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class="timeline__modal-content"&gt;
-          &lt;!-- full description of event goes here (HTML is OK here) --&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
 </div>
+      </section>
 
-        <h2>2. Initialize with plain Javascript</h2>
+      <!-- structure html timeline example -->
+      <section class="demo-section">
+        
+        <h2>Structured HTML Timeline Example:</h2>
+
+        <p>Here is what your structured HTML timeline will look like on the page.</p> 
+        
+        <p><b>Note:</b> the container with the black border and images were added for the demo. These will not appear in your timeline.</p>
+
+        <!-- timeline wrapper to control width -->
+        <div class=" demo-live-example">
+        
+          <!-- Begin Timeline Example -->
+          <div id="quick-start-tl" class="timeline" data-mode="horizontal" data-same-side-nodes="top" data-test="quick-start-tl">
+            <div class="timeline__wrap">
+              <div class="timeline__items">
+
+                  <!-- Node: 1 -->
+                  <div class="timeline__item" data-aria-label="Node 1: January second nineteen eighty seven. Title: node one heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Jan. 2, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample8.jpg" alt="">
+                      <h3 class="timeline__heading">Node 1 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 2 -->
+                  <div class="timeline__item" data-aria-label="Node 2: January fifth nineteen eighty seven. Title: node two heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Jan. 5, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample12.jpg" alt="">
+                      <h3 class="timeline__heading">Node 2 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 3 -->
+                  <div class="timeline__item" data-aria-label="Node 3: January twenty first nineteen eighty seven. Title: node three heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Jan. 21, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample10.jpg" alt="">
+                      <h3 class="timeline__heading">Node 3 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 4 -->
+                  <div class="timeline__item" data-aria-label="Node 4: February first nineteen eighty seven. Title: node four heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Feb. 1, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample4.jpg" alt="">
+                      <h3 class="timeline__heading">Node 4 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 5 -->
+                  <div class="timeline__item" data-aria-label="Node 5: February twelfth nineteen eighty seven. Title: node five heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Feb. 12, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample9.jpg" alt="">
+                      <h3 class="timeline__heading">Node 5 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 6 -->
+                  <div class="timeline__item" data-aria-label="Node 6: February fifteenth nineteen eighty seven. Title: node six heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Feb. 15, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample3.jpg" alt="">
+                      <h3 class="timeline__heading">Node 6 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 7 -->
+                  <div class="timeline__item" data-aria-label="Node 7: February twentieth nineteen eighty seven. Title: node seven heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Feb. 20, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample1.jpg" alt="">
+                      <h3 class="timeline__heading">Node 7 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 8 -->
+                  <div class="timeline__item" data-aria-label="Node 8: February twenty-eighth nineteen eighty seven. Title: node eight heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Feb. 28, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample11.jpg" alt="">
+                      <h3 class="timeline__heading">Node 8 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+                  <!-- Node: 9 -->
+                  <div class="timeline__item" data-aria-label="Node 9: March fourth nineteen eighty seven. Title: node nine heading.">
+                    <div class="timeline__content">
+                      <div class="timeline__date">
+                        Mar. 4, 1987
+                      </div>
+                      <img class="timeline__image" src="../assets/img/sample6.jpg" alt="">
+                      <h3 class="timeline__heading">Node 9 Heading</h3>
+                      <div class="timeline__summary">
+                        <!-- short, text-only summary goes here -->
+                      </div>
+                    </div>
+                    <div class="timeline__modal-content">
+                      <!-- full description of event goes here (HTML is OK here) -->
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- End Timeline Example -->
+        
+        </div>
+
+      </section>
+
+      <!-- intializing the app with javascript -->
+      <section id="step3" class="demo-section">
+        <h2>3. Initialize Vanilla Timeline with one line of Javascript</h2>
 
 <div class="code-block">
 <pre><code>
@@ -189,114 +404,9 @@
 </div>
       </section>
 
-      <br/><br/>
-
-      <section style="margin: 0 auto; padding: 20px; width: 65%; height: 400px; border: 2px solid black; border-radius: 36px; max-width: 1800px;">
-        
-        <h2>Live example</h2>
-
-        <br/>
-        
-        <!-- Begin Timeline Example -->
-        <div id="quick-start-tl" class="timeline" data-mode="horizontal" data-same-side-nodes="top" data-test="quick-start-tl">
-          <div class="timeline__wrap">
-            <div class="timeline__items">
-
-                <!-- Node: 1 -->
-                <div class="timeline__item" data-aria-label="">
-                  <div class="timeline__content">
-                    <div class="timeline__date">
-                      Jan. 2, 1987
-                    </div>
-                    <img class="timeline__image" src="../assets/img/sample8.jpg" alt="">
-                    <h3 class="timeline__heading">Node 1 Heading</h3>
-                    <div class="timeline__summary">
-                      <!-- short, text-only summary goes here -->
-                    </div>
-                  </div>
-                  <div class="timeline__modal-content">
-                    <!-- full description of event goes here (HTML is OK here) -->
-                  </div>
-                </div>
-
-                <!-- Node: 2 -->
-                <div class="timeline__item" data-aria-label="">
-                  <div class="timeline__content">
-                    <div class="timeline__date">
-                      Jan. 5, 1987
-                    </div>
-                    <img class="timeline__image" src="../assets/img/sample12.jpg" alt="">
-                    <h3 class="timeline__heading">Node 2 Heading</h3>
-                    <div class="timeline__summary">
-                      <!-- short, text-only summary goes here -->
-                    </div>
-                  </div>
-                  <div class="timeline__modal-content">
-                    <!-- full description of event goes here (HTML is OK here) -->
-                  </div>
-                </div>
-
-                <!-- Node: 3 -->
-                <div class="timeline__item" data-aria-label="">
-                  <div class="timeline__content">
-                    <div class="timeline__date">
-                      Jan. 21, 1987
-                    </div>
-                    <img class="timeline__image" src="../assets/img/sample10.jpg" alt="">
-                    <h3 class="timeline__heading">Node 3 Heading</h3>
-                    <div class="timeline__summary">
-                      <!-- short, text-only summary goes here -->
-                    </div>
-                  </div>
-                  <div class="timeline__modal-content">
-                    <!-- full description of event goes here (HTML is OK here) -->
-                  </div>
-                </div>
-
-                <!-- Node: 4 -->
-                <div class="timeline__item" data-aria-label="">
-                  <div class="timeline__content">
-                    <div class="timeline__date">
-                      Feb. 1, 1987
-                    </div>
-                    <img class="timeline__image" src="../assets/img/sample4.jpg" alt="">
-                    <h3 class="timeline__heading">Node 4 Heading</h3>
-                    <div class="timeline__summary">
-                      <!-- short, text-only summary goes here -->
-                    </div>
-                  </div>
-                  <div class="timeline__modal-content">
-                    <!-- full description of event goes here (HTML is OK here) -->
-                  </div>
-                </div>
-
-                <!-- Node: 5 -->
-                <div class="timeline__item" data-aria-label="">
-                  <div class="timeline__content">
-                    <div class="timeline__date">
-                      Feb. 12, 1987
-                    </div>
-                    <img class="timeline__image" src="../assets/img/sample9.jpg" alt="">
-                    <h3 class="timeline__heading">Node 5 Heading</h3>
-                    <div class="timeline__summary">
-                      <!-- short, text-only summary goes here -->
-                    </div>
-                  </div>
-                  <div class="timeline__modal-content">
-                    <!-- full description of event goes here (HTML is OK here) -->
-                  </div>
-                </div>
-
-            </div>
-          </div>
-        </div>
-        <!-- End Timeline Example -->
-
-      </section>
-
       <footer class="btn-footer">
         <a class="btn secondary" href="../index.html">❮ Back to Demos</a>
-        <a class="btn success space-left" href="../inline/horizontal/">Inline Data Attributes ❯</a>
+        <a class="btn success space-left" href="../inline/">Inline Data Attributes ❯</a>
       </footer>
 
     </div>
@@ -318,7 +428,7 @@
         // highlight blocks of code
         hljs.highlightAll();
         // initialize the timeline
-        timeline(document.querySelectorAll('.timeline'), { minWidth: 600 });
+        timeline(document.querySelectorAll('.timeline'));
       });
     </script>
 

@@ -3,14 +3,54 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Loading...</title>
-    <meta http-equiv="refresh" content="0; URL='../" /> 
+    <title>Inline Data Attributes</title>
+    <!-- Load CDN timeline styles — uncomment to use CDN instead of local files -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
+    
+    <!-- Load local timeline styles (recommended for development) -->
+    <link rel="stylesheet" href="../../dist/timeline.min.css">
+
+    <!-- Load demo specific styles -->
+    <link rel="stylesheet" href="../assets/css/demo.css">
+    <link rel="stylesheet" href="../assets/vendor/github.min.css">
   </head>
   <body>
 
-    <div style="text-align: center; margin-top: 25px;">
-      <a href="../">Loading Demo Index...</a>
+    <div class="wrapper">
+
+      <!-- header block -->
+      <header class="demo-page-head">
+        <h1>Inline Data Attributes</h1>
+        <p></p> 
+      </header>
+
+     <footer class="btn-footer">
+        <a class="btn secondary" href="../index.html">❮ Back to Demos</a>
+        <a class="btn success space-left" href="../jquery/">Using jQuery ❯</a>
+      </footer>
+
     </div>
+
+    <!-- Load CDN timeline functions — uncomment to use CDN instead of local files -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
+
+    <!-- Load local timeline functions (recommended for development) -->
+    <script src="../../dist/timeline.min.js"></script>
+
+    <!-- Load highligher.js -->
+    <script src="../assets/vendor/highlight.min.js"></script>
+
+    <!-- Load demo specific functions -->
+     <script src="../assets/js/demo.js"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // highlight blocks of code
+        hljs.highlightAll();
+        // initialize the timeline
+        timeline(document.querySelectorAll('.timeline'));
+      });
+    </script>
 
   </body>
 </html>
