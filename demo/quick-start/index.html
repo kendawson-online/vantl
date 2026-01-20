@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Getting Started with Vanilla Timeline</title>
+    <title>Vanilla Timeline Quick Start Guide</title>
     <!-- Load CDN timeline styles — uncomment to use CDN instead of local files -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
     
@@ -20,13 +20,13 @@
 
       <!-- header block -->
       <header class="demo-page-head">
-        <h1>Getting Started with Vanilla Timeline</h1>
+        <h1>Vanilla Timeline Quick Start Guide</h1>
         <p>Here is some code you can use to get started quickly.</p> 
         <p>Use the CDN links shown below to use Vanilla Timeline without installing code to your server.</p>
         <p class="graytext">(If you are a developer, or prefer not to use CDN links, you can link to files in the <a href="https://github.com/kendawson-online/vantl/tree/main/dist" class="graylink mono" target="_blank" title="Open in a new tab or window">dist</a> directory for offline or local access.)</p>
       </header>
 
-      <!-- CDN link block -->
+      <!-- CDN links block -->
       <section class="demo-cdn-link-wrapper">
         <h3>CDN Links:</h3>
         <!-- CDN style link -->
@@ -35,14 +35,12 @@
           type="text" 
           id="cdnCss" 
           class="demo-cdn-link-input" 
-          tabindex="1" 
           value='<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css" />'
         >
         <button 
           type="button" 
           id="cdnCopyCss" 
           class="btn secondary" 
-          tabindex="2" 
           style="font-size: 14px; padding: 8px 10px;" 
           onclick="copytoClipboard('cdnCss')"
         >
@@ -55,14 +53,12 @@
           type="text" 
           id="cdnJs" 
           class="demo-cdn-link-input" 
-          tabindex="3" 
           value='<script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>'
         >
         <button 
           type="button" 
           id="cdnCopyJs" 
           class="btn secondary" 
-          tabindex="4" 
           style="font-size: 14px; padding: 8px 10px;" 
           onclick="copytoClipboard('cdnJs')"
         >
@@ -70,13 +66,14 @@
         </button>
       </section>
 
-      <!-- main content -->
+      <!-- bare bones minimal code -->
       <section id="step1" class="demo-section">
         <h2>1. Creating a bare bones minimalist HTML timeline</h2>
         
         <!-- preview image -->
+        <span class="lighttext">Preview:</span><br/>
         <a href="../bare-bones-example.html" target="_blank" title="Open example in a new tab or window">
-          <img src="../assets/img/bare-bones-timeline-screenshot.png" width="800" alt="Bare Bones HTML Timeline" style="border: 2px solid blue; margin-bottom: 20px;"/>
+          <img src="../assets/img/bare-bones-timeline-screenshot.png" width="800" alt="Bare Bones HTML Timeline" style="border: 1px solid blue; margin-bottom: 20px;"/>
         </a>
         
         <p>This is the simplest timeline that you can create with Vanilla Timeline. The content is freeform HTML and you can add whatever you want without any type requirements. The look of the bare bones timeline is entirely up to you. The app will allow you to add code which breaks the layout. The bare bones HTML timeline is limited in features compared to other types of Vanilla Timelines. It will display dates and a small amount of text in a horizonal or vertical timeline. When a viewer clicks on the timeline node, it will open a modal window. Adding large-sized elements (e.g. images) or big blocks of text will break the layout and/or styling. For best results, try to keep your content simple and basic. Just copy/paste this HTML into your page:</p>
@@ -118,7 +115,7 @@
 </code></pre>
 </div>
         
-        <p>This example page shows both Horizontal and Vertical bare bones HTML timelines. After you open it, view the source code to see how it was created.</p>
+        <p>This example page shows both Horizontal and Vertical bare bones HTML timelines:</p>
 
         <p>
           <ul>
@@ -126,20 +123,18 @@
           </ul>
         </p>
 
-        <p>After you copy/paste the HTML above into your document, skip ahead to <a href="#step3">Step 3</a> to learn how to initialize your timeline.</p> 
+        <p>You can view the source code of the example page to see how it was created. After you add the bare bones HTML to your document, jump ahead to <a href="#step3">Step 3</a> to learn how to initialize the timeline.</p> 
         
-        <p><b>Note:</b> If you need to add big images, large amounts of text, or videos &mdash;and you want it all to be styled properly&mdash; read on to learn about other Vanilla Timeline methods.</p>
+        <p><b>Note:</b> If you need to add big images, large amounts of text, or video &mdash;and you want it to be styled properly&mdash; read on to learn about other Vanilla Timeline methods.</p>
 
       </section>  
 
-
+      <!-- structured HTML code -->
       <section id="step2" class="demo-section">
         <h2>2. Creating a structured HTML timeline</h2>
-        <p>If you are using the bare bones HTML method above, you can skip this section and jump to <a href="#step3">Step 3</a>. But, if you want more advanced styling and layout, you should consider using the structured HTML method instead for adding nodes. The structured HTML timeline uses CSS classes to provide a structure for different types of data. You have to add data to the correct fields for it to function properly but, it's easy to understand. The advantage to using this method is that it helps Vanilla Timeline understand the type of content you're adding and the program can format the data correctly (based on type) when it renders your timeline.</p> 
+        <p>If you're using the bare bones HTML method from above, you can skip ahead to <a href="#step3">Step 3</a>. But, if you want more advanced styling and layout, you should consider using the structured HTML method for adding nodes instead. The structured HTML timeline uses CSS classes to provide a structure for different types of data. You have to add your data to the correct fields for it to function properly but, it's easy to understand. The advantage to using this method is that it helps Vanilla Timeline understand the type of content you're adding and it can format the timeline correctly when rendering (based on type). Copy/paste the HTML below into your page to create a structured HTML timeline. After you're finished copying/pasting the HTML, there's one final step: you have to initialize the timeline(s). Jump down to <a href="#step3">Step 3</a> to learn how to do this.</p> 
         
-        <p>Just copy/paste the HTML below into your page to create a structured HTML timeline. After you are finished copying/pasting the HTML, there's one more step: you have to initialize the timeline(s) on your page with Javascript. Jump down to <a href="#step3">Step 3</a> to learn how to do this.</p>
-        
-        <p><b>Note:</b> You'll notice that we skipped some of the fields from the structured HTML. Not all fields are required. The minimum fields you need are: <span class="mono bold">date</span> and <span class="mono bold">heading</span>.</p>
+        <p><b>Note:</b> You'll notice that we skip some of the fields in the structured HTML. Not all fields are required. The minimum fields you need are: <span class="mono bold">date</span> and <span class="mono bold">heading</span>.</p>
 
 <!--HTML nodes -->
 <div class="code-block">
@@ -206,17 +201,15 @@
 </div>
       </section>
 
-      <!-- structure html timeline example -->
+      <!-- structured html timeline example -->
       <section class="demo-section">
         
         <h2>Structured HTML Timeline Example:</h2>
 
         <p>Here is what your structured HTML timeline will look like on the page.</p> 
         
-        <p><b>Note:</b> the container with the black border and images were added for the demo. These will not appear in your timeline.</p>
-
         <!-- timeline wrapper to control width -->
-        <div class=" demo-live-example">
+        <div class="demo-live-example">
         
           <!-- Begin Timeline Example -->
           <div id="quick-start-tl" class="timeline" data-mode="horizontal" data-same-side-nodes="top" data-test="quick-start-tl">
@@ -383,11 +376,14 @@
         
         </div>
 
+        <p style="text-align: center; font-size: small;"><b>Note:</b> the outer container with black border and sample images were added for the demo. These will not appear on your timeline.<br/>We are also passing <a href="../inline/">data attributes</a> to customize the layout. The default timeline does not look like this.</p>
+
       </section>
 
       <!-- intializing the app with javascript -->
       <section id="step3" class="demo-section">
         <h2>3. Initialize Vanilla Timeline with one line of Javascript</h2>
+        <p>After adding CDN links to styles and functions in your document and adding node data, you have to initialize the Vanilla Timeline(s) on the page. This is what actually triggers the Javascript library to render the timeline to the page. It searches for all elements on your page with the class name <span class="mono bold">timeline</span> and renders it using your node data.</p>
 
 <div class="code-block">
 <pre><code>
@@ -402,8 +398,13 @@
 &lt;/html&gt;
 </code></pre>
 </div>
+
+        <p>Save your changes and reload the page to see your new timeline!</p> 
+        
+        <p>Now that you know the basics of how to create Vanilla Timelines, continue to learn about all the options you can use to customize your timeline.</p>
       </section>
 
+      <!-- footer buttons -->
       <footer class="btn-footer">
         <a class="btn secondary" href="../index.html">❮ Back to Demos</a>
         <a class="btn success space-left" href="../inline/">Inline Data Attributes ❯</a>

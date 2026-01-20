@@ -20,7 +20,8 @@
     "serve": "npm run dev",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "e2e": "npx playwright test"
+    "e2e": "npx playwright test",
+    "test:playwright": "docker run --rm -v \"$PWD\":/work -w /work ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest npx playwright test --project=Chromium"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

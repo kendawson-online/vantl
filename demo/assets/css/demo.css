@@ -31,17 +31,6 @@ body {
   opacity: 0;
 }
 
-/* invisible */
-.invisible {
-  opacity: 0;
-}
-
-/* micro sized */
-.micro {
-  width: 1px;
-  height: 1px;
-}
-
 /* center content */
 .center {
   text-align: center;
@@ -75,6 +64,10 @@ body {
 }
 .space-right {
   margin-right: 10px;
+}
+
+.lighttext {
+  opacity: 0.5;
 }
 
 /* --------------------------------- Google Fonts --------------------------------- */
@@ -209,7 +202,7 @@ body {
 }
 
 .demo-live-example {
-  margin: 0 auto; 
+  margin: 0 auto 25px auto; 
   padding: 20px; 
   width: 80%;
   border: 2px solid black; 
@@ -226,6 +219,69 @@ body {
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
   line-height: 1.5;
+}
+
+/* --------------------------------- Table styling ------------------------------ */
+
+table {
+  width:100%; 
+  border-spacing: 0;
+  border: 2px solid black; 
+  padding: 10px; 
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+thead {
+  font-size: 18px;
+  background-color: #e1e1e1;
+}
+
+/* table cells: remove large global min-width and size columns explicitly */
+th, td {
+  padding: 5px 10px;
+  font-family: monospace;
+  border: 1px solid rgb(160 160 160);
+  vertical-align: top;
+}
+
+/* First column (Data Attribute) gets a comfortable minimum width */
+th:first-child {
+  min-width: 220px;
+  width: 20%;
+}
+
+/* Type column: keep compact and prevent wrapping */
+th:nth-child(2), td:nth-child(2) {
+  width: 120px;
+  max-width: 160px;
+  white-space: nowrap;
+}
+
+/* Default column: keep compact and prevent wrapping */
+th:nth-child(3), td:nth-child(3) {
+  width: 110px;
+  max-width: 140px;
+  white-space: nowrap;
+}
+
+/* Description column: allow to grow and wrap as needed */
+th:nth-child(4), td:nth-child(4) {
+  width: auto;
+  white-space: normal;
+}
+
+.greentext {
+  color: #114211;
+}
+
+.redtext {
+  color: #700a0a;
+}
+
+/* center em-dashes */
+.mdash {
+  text-align: center;
 }
 
 /* ------------------------------- Demo page footers  --------------------------- */

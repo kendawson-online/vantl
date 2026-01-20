@@ -151,4 +151,18 @@ function observeTimelineInsertions() {
 document.addEventListener('DOMContentLoaded', function() {
     applyNoImageFallback(document);
     observeTimelineInsertions();
+    // center table cells that only contain an em-dash (mdash)
+    applyMdashCentering(document);
 });
+
+// find table cells whose trimmed text is exactly an em-dash and add `.mdash`
+function applyMdashCentering(root = document) {
+    const EM_DASH = '\u2014';
+    const cells = (root || document).querySelectorAll('td, th');
+    cells.forEach(cell => {
+        const txt = (cell.textContent || '').trim();
+        if (txt === EM_DASH || txt === '—' || txt === '&mdash;') {
+            cell.classList.add('mdash');
+        }
+    });
+}

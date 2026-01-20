@@ -53,6 +53,22 @@ docker run --rm -v "$PWD":/work -w /work ghcr.io/kendawson-online/vantl/vantl-pl
   npx playwright test --project=Chromium
 ```
 
+NPM shortcut
+------------
+
+You can run the same containerized Playwright command via `npm` (convenience wrapper):
+
+```bash
+npm run test:playwright
+```
+
+To run a single test file with the same wrapper, pass the file path after `--`:
+
+```bash
+npm run test:playwright -- tests/playwright/quick-start.spec.js
+```
+
+
 Run a single test file:
 
 ```bash
