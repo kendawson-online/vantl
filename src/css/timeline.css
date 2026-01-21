@@ -197,6 +197,45 @@
     min-height: auto;
 }
 
+/* Mobile + no-summary: keep image/date/heading in one row and center-align them */
+.timeline--mobile .timeline__content.no-summary {
+    align-items: center;
+    column-gap: 12px;
+    display: grid;
+    grid-template-columns: 80px 110px 1fr;
+    grid-template-rows: auto;
+    row-gap: 0;
+}
+
+.timeline--mobile .timeline__content.no-image.no-summary {
+    grid-template-columns: 110px 1fr;
+}
+
+.timeline--mobile .timeline__content.no-summary .timeline__image {
+    grid-column: 1;
+    grid-row: 1;
+    width: 80px;
+    height: 80px;
+    margin: 0;
+    object-fit: cover;
+}
+
+.timeline--mobile .timeline__content.no-summary .timeline__date {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    white-space: nowrap;
+    align-self: center;
+}
+
+.timeline--mobile .timeline__content.no-summary .timeline__heading {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 0;
+    align-self: center;
+    line-height: 1.2;
+}
+
 /* Triangle pointers for mobile left-aligned layout */
 .timeline--mobile .timeline__content::before {
     content: '';
@@ -399,6 +438,48 @@
         position: relative;
     }
 
+    /* When there is no summary present, lay out image / date / heading in a single row
+       for vertical (desktop) timelines. Use :has() where available and provide a
+       JS-friendly fallback using the `.no-summary` class (can be added by script). */
+    /* Treat "no summary" as: no summary node or summary node is empty/whitespace (JS adds .no-summary fallback too) */
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))),
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary {
+        display: grid;
+        grid-template-columns: 100px 120px 1fr;
+        column-gap: 16px;
+        gap: 0;
+        align-items: center;
+        padding: 16px;
+    }
+
+    /* If image is absent and no summary, collapse to two columns: [date][heading] */
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__image)):not(:has(.timeline__summary:not(:empty))),
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-image.no-summary {
+        grid-template-columns: 120px 1fr;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content .timeline__image {
+        grid-column: 1;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content .timeline__date {
+        grid-column: 2;
+        margin: 0;
+        white-space: nowrap;
+        align-self: center;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content .timeline__heading {
+        grid-column: 3;
+        margin: 0;
+        align-self: center;
+        line-height: 1.2;
+    }
+
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content::before,
     .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content::after {
         content: '';
@@ -540,6 +621,50 @@
     padding: 20px;
     position: relative;
     z-index: 2;
+}
+
+/* Vertical (desktop) layout: when summary is absent or empty, lay out items in one row */
+@media (min-width: 768px) {
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))),
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary {
+        display: grid;
+        grid-template-columns: 100px 120px 1fr;
+        column-gap: 16px;
+        row-gap: 0;
+        align-items: center;
+        padding: 16px;
+    }
+
+    /* No image: collapse to two columns */
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__image)):not(:has(.timeline__summary:not(:empty))),
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-image.no-summary {
+        grid-template-columns: 120px 1fr;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__image,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__image {
+        grid-column: 1;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__date,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__date {
+        grid-column: 2;
+        margin: 0;
+        white-space: nowrap;
+        align-self: center;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__heading,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__heading {
+        grid-column: 3;
+        margin: 0;
+        align-self: center;
+        line-height: 1.2;
+    }
 }
 
 /* Image styling handled in responsive sections above */
@@ -1274,4 +1399,47 @@
 
 .timeline__error-details strong {
     color: #333;
+}
+
+/* Final override: ensure vertical no-summary cards stay in a single row (after base .timeline__content rules) */
+@media (min-width: 768px) {
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) {
+        display: grid !important;
+        grid-template-columns: 100px 120px 1fr;
+        column-gap: 16px;
+        row-gap: 0;
+        align-items: center;
+        padding: 16px;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-image.no-summary,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__image)):not(:has(.timeline__summary:not(:empty))) {
+        grid-template-columns: 120px 1fr;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__image,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__image {
+        grid-column: 1;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 0;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__date,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__date {
+        grid-column: 2;
+        margin: 0;
+        white-space: nowrap;
+        align-self: center;
+    }
+
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content.no-summary .timeline__heading,
+    .timeline:not(.timeline--horizontal):not(.timeline--mobile) .timeline__content:has(.timeline__heading):not(:has(.timeline__summary:not(:empty))) .timeline__heading {
+        grid-column: 3;
+        margin: 0;
+        align-self: center;
+        line-height: 1.2;
+    }
 }

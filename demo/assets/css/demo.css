@@ -119,6 +119,11 @@ body {
   margin: 25px 0 25px 0;
 }
 
+.demo-h1 {
+  text-align: center; 
+  margin: 25px 0 80px 0;
+}
+
 /* ------------------------------- Demo page elements --------------------------- */
 
 /* content wrapper */
@@ -249,6 +254,11 @@ th, td {
 th:first-child {
   min-width: 220px;
   width: 20%;
+  vertical-align: middle;
+}
+
+td:first-child {
+  vertical-align: middle;
 }
 
 /* Type column: keep compact and prevent wrapping */
@@ -256,6 +266,8 @@ th:nth-child(2), td:nth-child(2) {
   width: 120px;
   max-width: 160px;
   white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
 }
 
 /* Default column: keep compact and prevent wrapping */
@@ -263,6 +275,8 @@ th:nth-child(3), td:nth-child(3) {
   width: 110px;
   max-width: 140px;
   white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
 }
 
 /* Description column: allow to grow and wrap as needed */
@@ -280,9 +294,7 @@ th:nth-child(4), td:nth-child(4) {
 }
 
 /* center em-dashes */
-.mdash {
-  text-align: center;
-}
+/* removed .mdash in favor of column-wide centering */
 
 /* ------------------------------- Demo page footers  --------------------------- */
 
@@ -359,16 +371,26 @@ footer a:link {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: left;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 
 .steptext {
   font-size: 30px;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+}
+
+/* container that holds the step text and code vertically */
+.stepcontent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .scriptwrapper {
-  margin-top: 25px;
+  margin-top: 0;
   padding: 20px;
   border: 2px solid black;
   border-radius: 8px;

@@ -10,30 +10,9 @@ const alertElement = `
     </div>
 `;
 
-// open URLs in new tab or window
-function loadUrl(url) {
-    if (!url) { console.error('There is no URL to load'); }
-    window.open(url, '_blank');
-}
-
-// show instructions after a delay (gives timeline data a chance to load)
-let instructionsTimerId = null;
-function loadInstructions() {
-    const delay = 5000;  // 5 second delay
-    const inst = document.getElementById('instructions');
-    if (!inst) { console.error('The instructions element does not exist on the page'); return false; }
-    // Schedule showing instructions only if no timeline error is present
-    instructionsTimerId = setTimeout(() => {
-        // If the timeline is in error state, skip showing instructions
-        if (document.querySelector('.timeline.timeline--error')) { return; }
-        inst.classList.remove('hidethis');
-        inst.classList.add('fade-in');
-    }, delay);
-}
-
 // Don't display instructions when a timeline error occurs (e.g. missing JSON data)
+// Note: instructions.js now handles initialization; this listener ensures errors hide them
 window.addEventListener('timeline:error', () => {
-    if (instructionsTimerId) { clearTimeout(instructionsTimerId); instructionsTimerId = null; }
     const inst = document.getElementById('instructions');
     if (inst) { inst.classList.remove('fade-in'); inst.classList.add('hidethis'); }
 });
@@ -99,9 +78,9 @@ function showAlert(msg = null) {
 // copy text to clipboard
 // accepts 1 argument: id of text input to copy to clipboard
 function copytoClipboard(id) {
+  if (!id) { console.error('No id value was passed to the copytoClipboard() function'); return false; }
   // select text input element
   var copyText = document.getElementById(id);
-  if (!copyText) { console.error('No id was passed to function copytoClipboard()'); return false; }
   // select text in the input field
   copyText.select();
   // handle mobile devices
@@ -113,56 +92,4 @@ function copytoClipboard(id) {
     // alert user
     alert("Copied to clipboard!\n\n" + copyText.value);
   }, 200);
-}
-
-// -----------------------------
-// JS fallback for missing image
-// Adds `.no-image` to `.timeline__content` nodes when an image is absent
-// -----------------------------
-function applyNoImageFallback(root = document) {
-    const contents = (root || document).querySelectorAll('.timeline__content');
-    contents.forEach(c => {
-        const img = c.querySelector('.timeline__image');
-        if (!img) {
-            c.classList.add('no-image');
-            return;
-        }
-
-        // If image exists, check load state
-        if (img.complete) {
-            if (img.naturalWidth === 0) c.classList.add('no-image'); else c.classList.remove('no-image');
-        } else {
-            img.addEventListener('load', () => c.classList.remove('no-image'), { once: true });
-            img.addEventListener('error', () => c.classList.add('no-image'), { once: true });
-        }
-    });
-}
-
-// Observe timeline item containers for dynamic insertions
-function observeTimelineInsertions() {
-    const containers = document.querySelectorAll('.timeline__items');
-    containers.forEach(container => {
-        const mo = new MutationObserver(() => applyNoImageFallback(container));
-        mo.observe(container, { childList: true, subtree: true });
-    });
-}
-
-// Run fallback on DOMContentLoaded and start observing dynamic inserts
-document.addEventListener('DOMContentLoaded', function() {
-    applyNoImageFallback(document);
-    observeTimelineInsertions();
-    // center table cells that only contain an em-dash (mdash)
-    applyMdashCentering(document);
-});
-
-// find table cells whose trimmed text is exactly an em-dash and add `.mdash`
-function applyMdashCentering(root = document) {
-    const EM_DASH = '\u2014';
-    const cells = (root || document).querySelectorAll('td, th');
-    cells.forEach(cell => {
-        const txt = (cell.textContent || '').trim();
-        if (txt === EM_DASH || txt === '—' || txt === '&mdash;') {
-            cell.classList.add('mdash');
-        }
-    });
 }

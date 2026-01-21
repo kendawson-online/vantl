@@ -1,9 +1,12 @@
 /* Demo Instructions component
- * - Exposes `loadInstructions()` which populates the #instructions panel
+ * - Auto-initializes on DOMContentLoaded.
  * - Accepts inline JSON via <script id="instructions-data" type="application/json"> or
  *   via a data attribute `data-instructions='[...json...]'` on the timeline container.
  * - Listens for `timeline:initialized` to optionally delay rendering until timeline is ready.
  */
+
+// Delay (ms) used before showing instructions after timeline initialization
+const INSTRUCTIONS_DELAY = 4000;
 
 function buildStepHtml(step) {
   const wrapper = document.createElement('div');
@@ -24,10 +27,14 @@ function buildStepHtml(step) {
   imgWrap.innerHTML = iconPath ? `<img src="${iconPath}" width="50" alt="step ${step.id || step.number || ''}"/>` : '';
   wrapper.appendChild(imgWrap);
 
+  // Create a vertical content container so `text` sits above `code`
+  const content = document.createElement('div');
+  content.className = 'stepcontent';
+
   const text = document.createElement('div');
   text.className = 'steptext';
   text.innerHTML = step.text || '';
-  wrapper.appendChild(text);
+  content.appendChild(text);
 
   if (step.code) {
     const codeWrap = document.createElement('div');
@@ -37,18 +44,23 @@ function buildStepHtml(step) {
     code.textContent = step.code;
     codeWrap.appendChild(pre);
     pre.appendChild(code);
-    wrapper.appendChild(codeWrap);
+    content.appendChild(codeWrap);
     // if highlight.js is loaded, highlight
     if (window.hljs && typeof window.hljs.highlightBlock === 'function') {
       try { window.hljs.highlightBlock(code); } catch (e) { /* ignore */ }
     }
   }
 
+  wrapper.appendChild(content);
+
   return wrapper;
 }
 
 function renderInstructions(targetButton, panel, instructions) {
-  if (!panel || !instructions || !Array.isArray(instructions.steps)) return;
+  if (!panel || !instructions || !Array.isArray(instructions.steps)) {
+    return;
+  }
+  
   const textcontainer = panel.querySelector('.textcontainer') || document.createElement('div');
   textcontainer.className = 'textcontainer';
   textcontainer.innerHTML = '';
@@ -80,8 +92,8 @@ function renderInstructions(targetButton, panel, instructions) {
       if (window.hljs) return Promise.resolve(window.hljs);
       // try to load local vendor copy first
       return new Promise((resolve, reject) => {
-        const cssPath = '/demo/assets/vendor/github.min.css';
-        const jsPath = '/demo/assets/vendor/highlight.min.js';
+        const cssPath = '../../assets/vendor/github.min.css';
+        const jsPath = '../../assets/vendor/highlight.min.js';
 
         // helper to append a stylesheet if not already present
         const addCss = (href) => {
@@ -125,14 +137,22 @@ function renderInstructions(targetButton, panel, instructions) {
 function loadInstructions() {
   // Find instructions button and panel
   const btn = document.getElementById('instructions');
-  if (!btn) return;
+  if (!btn) {
+    return;
+  }
+  
   const panel = btn.nextElementSibling && btn.nextElementSibling.classList.contains('panel') ? btn.nextElementSibling : null;
 
   // Look for inline JSON first
   let instructions = null;
   const inline = document.getElementById('instructions-data');
+  
   if (inline && inline.type === 'application/json') {
-    try { instructions = JSON.parse(inline.textContent); } catch (e) { instructions = null; }
+    try { 
+      instructions = JSON.parse(inline.textContent);
+    } catch (e) { 
+      instructions = null; 
+    }
   }
 
   // Note: we intentionally do NOT read instructions from the timeline element's dataset.
@@ -152,20 +172,45 @@ function loadInstructions() {
     };
   }
 
-  // If timeline already initialized, render immediately. Otherwise wait for the initialized event.
+  // Check if timeline is already loaded (race condition guard)
   const tlEl = document.querySelector('.timeline');
   const alreadyLoaded = tlEl && tlEl.classList.contains('timeline--loaded');
-  if (alreadyLoaded) {
+  
+  // Helper function to render with fade-in
+  const renderWithFadeIn = () => {
     renderInstructions(btn, panel, instructions);
+    btn.classList.remove('hidethis');
+    btn.classList.add('fade-in');
+  };
+  
+  if (alreadyLoaded) {
+    // Timeline already initialized - delay rendering to give user time to see timeline first
+    setTimeout(() => {
+      renderWithFadeIn();
+    }, INSTRUCTIONS_DELAY);
   } else {
+    // Wait for timeline:initialized event (supports multiple timelines on one page)
+    // Track which timelines have initialized to avoid duplicate renders
+    let hasRendered = false;
     const handler = function(e) {
-      // only render once
-      renderInstructions(btn, panel, instructions);
+      
+      // Only render once, even if multiple timelines emit the event
+      if (hasRendered) {
+        return;
+      }
+      hasRendered = true;
+      
+      setTimeout(() => {
+        renderWithFadeIn();
+      }, INSTRUCTIONS_DELAY);
+      
+      // Clean up listener
       try { document.removeEventListener('timeline:initialized', handler); } catch (err) { /* ignore */ }
     };
     document.addEventListener('timeline:initialized', handler);
   }
 }
 
-// Expose globally for demo pages that call loadInstructions()
-window.loadInstructions = loadInstructions;
+document.addEventListener('DOMContentLoaded', loadInstructions);
+// Auto-initialize on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', loadInstructions);

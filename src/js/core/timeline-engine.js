@@ -4,6 +4,7 @@ import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 import SwiperAdapter from '../../adapters/swiper-adapter.js';
 import { formatAccessibleDate } from '../shared/utils.js';
+import { initLayoutFallbacks } from '../features/layout-fallbacks.js';
 
 /**
  * Calculate and apply responsive scaling for horizontal timeline based on viewport height
@@ -734,7 +735,24 @@ export function timeline(collection, options) {
 
   function timelinePosition(tl, index) {
     const safeIndex = clampInt(index, 0, Math.max(0, tl.items.length - 1));
-    const position = tl.items[safeIndex].offsetLeft;
+    const originalLeft = tl.items[safeIndex].offsetLeft;
+    
+    // Account for horizontal timeline padding (60px default on each side) to ensure items
+    // aren't clipped on either edge. Calculate the position that keeps the item fully visible.
+    const timelineStyle = window.getComputedStyle(tl.timelineEl);
+    const paddingLeft = parseInt(timelineStyle.paddingLeft, 10) || 0;
+    const paddingRight = parseInt(timelineStyle.paddingRight, 10) || 0;
+    const viewportWidth = tl.wrap.offsetWidth;
+    const itemWidth = tl.items[safeIndex].offsetWidth;
+    
+    // Two constraints:
+    // 1. Left edge: position <= originalLeft - paddingLeft (so item appears after left padding)
+    // 2. Right edge: position >= originalLeft + itemWidth - viewportWidth + paddingRight (so item ends before right padding)
+    let position = originalLeft - paddingLeft;
+    const minPositionForRight = Math.max(0, originalLeft + itemWidth - viewportWidth + paddingRight);
+    position = Math.max(position, minPositionForRight);
+    position = Math.max(0, position);
+    
     const str = `translate3d(-${position}px, 0, 0)`;
     addTransforms(tl.scroller, str);
   }
@@ -755,7 +773,8 @@ export function timeline(collection, options) {
 
     const viewportWidth = tl.wrap.offsetWidth;
     const itemsVisible = Math.floor(viewportWidth / tl.itemWidth);
-    const maxScrollIndex = Math.max(0, tl.items.length - itemsVisible);
+    // maxScrollIndex is intentionally not used for positioning because we want to scroll to the
+    // actual active item, even if that means translating beyond the last "full" viewport chunk.
 
     const moveItems = parseInt(tl.settings.moveItems, 10);
     
@@ -764,17 +783,43 @@ export function timeline(collection, options) {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      // If at bounds, show tooltip message and return (no-op)
-      if (this.classList.contains('timeline-nav-button--at-start') || this.classList.contains('timeline-nav-button--at-end')) {
+      const maxActiveIndex = Math.max(0, tl.items.length - 1);
+      const direction = this.classList.contains('timeline-nav-button--next') ? 1 : -1;
+      
+      // Calculate next active index, but when going backward and at a clamped boundary,
+      // ensure we follow the "ideal" path by finding the nearest step-aligned index below current
+      let nextActive = tl.activeIndex + (direction * moveItems);
+      
+      // If going backward from a potentially clamped position, find the previous aligned index
+      if (direction < 0 && tl.activeIndex > 0) {
+        // Calculate what the ideal indices would be starting from 0: 0, moveItems, 2*moveItems, ...
+        // We need the nearest aligned index *below* the current activeIndex. If the current
+        // index is itself aligned (e.g. 6 with moveItems=3), step back one. If it's not
+        // aligned (e.g. 8 with moveItems=3), the nearest aligned below it is floor(activeIndex/moveItems)*moveItems.
+        const stepsFromStart = Math.floor(tl.activeIndex / moveItems);
+        let prevAlignedIndex;
+        if (tl.activeIndex % moveItems === 0) {
+          prevAlignedIndex = (stepsFromStart - 1) * moveItems;
+        } else {
+          prevAlignedIndex = stepsFromStart * moveItems;
+        }
+        nextActive = Math.max(0, prevAlignedIndex);
+      } else if (direction > 0 && tl.activeIndex < maxActiveIndex) {
+        // Calculate next aligned step forward
+        const stepsFromStart = Math.floor(tl.activeIndex / moveItems);
+        const nextAlignedIndex = (stepsFromStart + 1) * moveItems;
+        nextActive = Math.min(maxActiveIndex, nextAlignedIndex);
+      }
+      
+      nextActive = clampInt(nextActive, 0, maxActiveIndex);
+
+      // Check if navigation would be a no-op
+      if (nextActive === tl.activeIndex) {
         return;
       }
 
-      const direction = this.classList.contains('timeline-nav-button--next') ? 1 : -1;
-      const maxActiveIndex = Math.max(0, tl.items.length - 1);
-      const nextActive = clampInt(tl.activeIndex + (direction * moveItems), 0, maxActiveIndex);
-
-      // Scroll position clamps to the last scrollable index, but active highlight can continue.
-      tl.currentIndex = clampInt(nextActive, 0, maxScrollIndex);
+      // Keep scroll position aligned with the active item so the active node is always centered/visible.
+      tl.currentIndex = nextActive;
       tl.activeIndex = nextActive;
 
       // Update arrows based on ACTIVE index (linear user expectation)
@@ -797,7 +842,8 @@ export function timeline(collection, options) {
         arrowNext.setAttribute('aria-disabled', 'false');
       }
 
-      timelinePosition(tl, tl.currentIndex);
+      // Position by active index so the highlighted item is fully in view (no clipping at edges).
+      timelinePosition(tl, tl.activeIndex);
       updateActiveItem(tl, tl.activeIndex);
 
       const activeItem = tl.items[tl.activeIndex];
@@ -1061,6 +1107,9 @@ export function timeline(collection, options) {
         setUpVerticalTimeline(tl);
       }
       tl.timelineEl.classList.add('timeline--loaded');
+
+      // Apply layout fallbacks for missing images and summaries
+      initLayoutFallbacks(tl.timelineEl);
 
       // Emit an initialization event for this timeline so other components can react
       try {
