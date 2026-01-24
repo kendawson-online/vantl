@@ -4,95 +4,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>ISO 8601 date strings</title>
-    <style>
-        body {
-            background-color: white;
-            color: black;
-        }
-        a:link {
-            text-decoration: none;
-        }
-        h3 {
-            margin: 30px 0;
-        }
-        p {
-            width: 600px;
-            margin: 0 auto 30px auto;
-            text-align: left;
-        }
-        ol {
-            text-align: left;
-            width: 600px;
-            margin: 0 auto;
-            font-size: 16px;
-        }
-        input {
-            background-color: azure;
-            margin-bottom: 25px;
-        }
-        li {
-            margin: 15px 0;
-        }
-        hr {
-            width: 700px;
-            margin: 20px auto;
-        }
-        .wrapper {
-            text-align: center;
-            padding-top: 80px;
-        }
-        .datestring {
-            text-align: center;
-            font-size: 18px;
-            padding: 12px 15px;
-            font-family: monospace;
-            width: 80%;
-            min-width: 400px;
-            max-width: 600px;
-        }
-        .mono {
-            font-family: monospace;
-            font-weight: bold;
-            color: #202020;
-            white-space: nowrap;
-        }
-    </style>
+    <!-- load demo specific styles -->
+    <link rel="stylesheet" href="assets/css/demo.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <h1>ISO 8601 date strings</h1>
-      <p>This app uses timestamp strings from the JSON data stored in a field named <span class="mono">lastupdated</span>. The timestamp is used to determine whether or not to update the user's cache. So, if you modify your timeline JSON data, you should update the <span class="mono">lastupdated</span> value so the cache gets refreshed properly. But, you can't just put the date string in any format you want. The date timestamp in the JSON file has to be in <a href="https://en.wikipedia.org/wiki/ISO_8601" target="_blank">ISO 8601</a> format which looks like this:</p>
-      <hr/>
-      <input id="datestring" class="datestring" type="text"/><br/>
-      (You can copy/paste this value into your .json file for a properly-formatted ISO 8601 date)
-      <hr/>
-      <h3>How to generate an ISO 8601 date string using the Developer Console:</h3>
-      <ol>
-         <li><a href="https://www.perplexity.ai/search/how-do-i-open-the-developer-co-q2Z.JHcqR3ipI6WykQfr5w#0" title="Learn how to do this from Perplexity.ai (opens a new tab or window)" target="_blank">Open the developer console in your browser</a></li>
-         <li>Go to the "Console" tab</li>
-         <li>Type: <span class="mono">new Date().toISOString();</span></li>
-         <li>Press <kbd>Enter</kbd> key</li>
-         <li>It will output a ISO 8601 date string like this: <span id="consdate1" class="mono">2026-01-01T00:00:00.000Z</span></li>
-         <li>Copy/paste the date string into your JSON file (without the single quote marks)</li>
-      </ol>
-      <hr/>
-      <br/><br/>
-      <p style="text-align: center;">In your JSON file, the date string should look like this:</p>
-      <p style="text-align: center;"><span id="consdate2" class="mono" style="color: red;">"lastupdated": "2026-01-01T00:00:00.000Z",</span></p>
+
+        <!-- header block -->
+        <header class="demo-page-head">
+            <h1>ISO 8601 date strings</h1>
+            <p>This app uses timestamp strings from the JSON data stored in a field named <span class="mono bold">lastupdated</span>. The timestamp is used to determine whether or not to update cached data stored on the end user's device. If you modify your timeline node data, you should update the <span class="mono bold">lastupdated</span> value. This will refresh the end user's cache and they will see the latest version (not an older cached copy of the data). But, you can't just add your date string in any format you want. The date timestamp in the JSON file for Vanilla Timeline has to be in <a href="https://en.wikipedia.org/wiki/ISO_8601" target="_blank">ISO 8601</a> format which looks like this:</p>      
+
+            <input id="datestring" class="time-datestring" type="text"/>
+            <button type="button" class="btn secondary time-btn" onclick="copytoClipboard('datestring')">Copy</button>
+            <br/>
+            (You can copy/paste this value into your .json file for a properly-formatted ISO 8601 date)
+        </header>
+
+        <!-- instructions -->
+        <section class="demo-section">
+            <hr/>
+            <h3>How to generate an ISO 8601 date string using the Developer Console:</h3>
+            <ol class="time-list">
+                <li><a href="https://www.perplexity.ai/search/how-do-i-open-the-developer-co-q2Z.JHcqR3ipI6WykQfr5w#0" title="Learn how to do this using Perplexity.ai (opens a new tab or window)" target="_blank">Open the developer console in your browser</a></li>
+                <li>Go to the "Console" tab</li>
+                <li>Type: <span class="mono bold">new Date().toISOString();</span></li>
+                <li>Press the <span class="mono">Enter</span> key</li>
+                <li>It will output a ISO 8601 date string like this: <span id="consdate1" class="mono bold">2026-01-01T00:00:00.000Z</span></li>
+                <li>Copy/paste the date string into your JSON file (without the single quote marks)</li>
+            </ol>
+            <hr/>
+            <p style="margin-top: 40px; color: black;">
+                In your JSON file, the date string should look like this: <span id="consdate2" class="mono redtext">"lastupdated": "2026-01-01T00:00:00.000Z",</span>
+            </p>
+        </section>
+
+        <footer class="btn-footer">
+            <a class="btn secondary" href="index.html">❮ Back to Demos</a>
+            <a class="btn success space-left" href="minimal-json-example.html">Minimal JSON Example ❯</a>
+        </footer>
+
     </div>
 
     <br/><br/>
-
+    
+    <!-- load demo specific JS functions -->
+    <script src="assets/js/demo.js"></script>
     <script>
-        const datestring = document.getElementById('datestring');
-        const consdate1 = document.getElementById('consdate1');
-        const consdate2 = document.getElementById('consdate2');
-        let d = new Date();
-        let str = d.toISOString();
-        datestring.value = str;
-        consdate1.textContent = `'${str}'`;
-        consdate2.textContent = `"lastupdated": "${str}",`;
+        // insert timestamp values
+        loadTimestamps();
     </script>
 
   </body>

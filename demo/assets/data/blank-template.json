@@ -1,71 +1,47 @@
 {
-  "lastupdated": "2026-01-07T13:07:20.755Z",  
-  "timelineName": "Your Timeline Title Goes Here",
-  "layoutMode": "horizontal",
-  "minWidth": 700,
-  "nodeColor": "#000080",
-  "lineColor": "#000080",
-  "navColor": "#003380",  
+  "lastupdated": "2026-01-22T15:53:04.030Z",  
+  "timelineName": "",
+  "layoutMode": "vertical",
+  "moveItems": 1,
+  "startIndex": 0,
+  "horizontalStartPosition": "top",
+  "verticalStartPosition": "left",
+  "verticalTrigger": "15%",
+  "sameSideNodes": false,
+  "minWidth": 600,
+  "maxWidth": 600,
+  "nodeColor": "",
+  "lineColor": "",
+  "navColor": "",  
+  "rtlMode": false,
+  "useSwiper": false,
   "nodes": [
     {
       "id": 1,
-      "title": "Oct. 2022",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample1.jpg"
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
     },
     {
       "id": 2,
-      "title": "Nov. 2022",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample2.jpg"
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
     },
     {
       "id": 3,
-      "title": "Dec. 2022",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample3.jpg"
-    },
-    {
-      "id": 4,
-      "title": "Jan. 2023",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample4.jpg"
-    },
-    {
-      "id": 5,
-      "title": "Mar. 2023",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "image": "../../assets/img/sample5.jpg"
-    },
-{
-      "id": 6,
-      "title": "Jun. 2023",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample6.jpg"
-    },
-    {
-      "id": 7,
-      "title": "Jul. 2023",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample7.jpg"
-    },
-    {
-      "id": 8,
-      "title": "Aug. 2024",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample8.jpg"
-    },
-    {
-      "id": 9,
-      "title": "Oct. 2024",
-      "content": "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      "image": "../../assets/img/sample9.jpg"
-    },
-    {
-      "id": 10,
-      "title": "Jan. 2025",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.",
-      "image": "../../assets/img/sample10.jpg"
-    }    
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
+    }
   ]
 }

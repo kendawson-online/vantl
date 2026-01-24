@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>JSON Config Files</title>
-    <!-- Load CDN timeline styles — uncomment to use CDN instead of local files -->
+    <!-- load timeline styles from CDN -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
-    
-    <!-- Load local timeline styles (recommended for development) -->
+
+    <!-- load timeline styles from LOCAL BUILD for testing -->
     <link rel="stylesheet" href="../../dist/timeline.min.css">
 
-    <!-- Load demo specific styles -->
+    <!-- load demo specific styles -->
     <link rel="stylesheet" href="../assets/css/demo.css">
     <link rel="stylesheet" href="../assets/vendor/github.min.css">
   </head>
@@ -21,20 +21,104 @@
       <!-- header block -->
       <header class="demo-page-head">
         <h1>JSON Config Files</h1>
-        <p>The easiest way to use Vanilla Timeline is to store and load your data from an external <a href="https://en.wikipedia.org/wiki/JSON" target="_blank">JSON</a> file.</p> 
+        <p>The easiest way to use Vanilla Timeline is to store and load your data from an external <a href="https://en.wikipedia.org/wiki/JSON" target="_blank">JSON</a> file. This allows you to create many different timelines with different styles that you can easily back up. Just point your timeline at a new JSON file and reload the page to quickly change styles or data. Using progammatic methods, you could generate JSON data dynamically (e.g. from a database) and display it in a timeline. Another advantage of using a JSON configuration file is that your timeline gets initialized automatically. If you use the JSON method, you don't have to add the extra line of Javascript to the bottom of your document to initialize the app. To use an external JSON config file, you just have to add a data attribute named <span class="mono bold">data-json-config</span> to your parent timeline element. Here is an example:</p> 
+        <p>
+<div class="code-block">
+<pre><code class="language-html">&lt;div class="timeline" data-json-config="/path/to/timeline.json"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+      ...
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<span class="redtext" style="font-size: small;">⚠️ <b>Important Note:</b> if you set a <span class="mono bold">data-json-config</span> value, Vanilla Timeline will prioritize JSON settings and ignore other data attribute values being passed. It's either: inline HTML data attributes or a JSON configuration file &mdash; but, not both.</span>
+</div>          
+        </p>
       </header>
 
       <!-- JSON code -->
       <section class="demo-section">
-        <h2>Title</h2>
-        <p>Test</p>
+        <h2>Creating a JSON Config File</h2>
+        <p>We've created a <a href="../assets/data/blank-template.json" target="_blank">sample JSON file</a> that you can download (or copy/paste), and customize, to create your own .json configuration file. Keep in mind that all fields are not required and you can remove fields you're not using. This sample file contains all the possible fields that are available to the Vanilla Timeline API. You can also compare the JSON options to the <a href="http://localhost/timeline/demo/inline/#attributes">inline HTML data attributes</a> and you'll see they're similar. One exception is the "layout mode" setting &mdash; data attributes use <span class="mono bold">data-mode</span> and Javascript/JSON use <span class="mono bold">layoutMode</span> instead. Generally, Javascript and JSON use camelCase formatting for option names while data attributes start with prefix "<span class="mono">data-</span>" and then use dashes between words.</p>
+
+        <p>The lastupdated field uses a specific date format (<a href="../time.html" target="_blank">ISO 8601</a>) and you should adhere to this if you want caching to work properly. Whenever you update node content, you should also update the lastupdated field. This way users with cached content will see the latest changes that you have made. If you type a value in the <span class="mono bold">timelineName</span> field it will appear as a heading above your timeline. The <span class="mono bold">useSwiper</span> option tells Vanilla Timeline that you are using a 3rd party library named <a href="../swiper/" target="_blank">SwiperJS</a> which you installed separately to enable touch screen support on horizontal timelines. The default value for this value is <span class="mono">false</span>. Certain JSON config options will only have an effect if used in conjunction with other options. For example, the option <span class="mono bold">maxWidth</span> only has an effect when <span class="mono bold">layoutMode</span> is vertical. In horizontal mode, this setting is ignored. Some settings, like <span class="mono bold">rtlMode</span> (right-to-left mode) will override other settings, like <span class="mono bold">startIndex</span>. Any options you don't explicitly set will use default values.</p>
+
+        <p><b>Note:</b> if you load your data via a JSON configuration file you do not have to initialize the app with a separate block of Javascript code! After the JSON data is loaded, Vanilla Timeline initializes the application automatically. You do need to initialize the app if you're using inline HTML data attributes or, if you're building your timeline programmatically (using Javascript/jQuery).</p>
 
 <div class="code-block">
-<pre><code class="language-html">
-  &lt;!-- Code here --&gt;
+<h4><a href="../assets/data/blank-template.json" target="_blank" title="Open sample .json file in a new tab or window">Sample JSON Configuration File</a>:</h4>
+<pre><code class="language-json">
+{
+  "lastupdated": "2026-01-22T15:53:04.030Z",  
+  "timelineName": "",
+  "layoutMode": "vertical",
+  "moveItems": 1,
+  "startIndex": 0,
+  "horizontalStartPosition": "top",
+  "verticalStartPosition": "left",
+  "verticalTrigger": "15%",
+  "sameSideNodes": false,
+  "minWidth": 600,
+  "maxWidth": 600,
+  "nodeColor": "",
+  "lineColor": "",
+  "navColor": "",  
+  "rtlMode": false,
+  "useSwiper": false,
+  "nodes": [
+    {
+      "id": 1,
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
+    },
+    {
+      "id": 2,
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
+    },
+    {
+      "id": 3,
+      "ariaLabel": "",
+      "date": "",
+      "heading": "",
+      "summary": "",
+      "content": "",
+      "image": ""
+    }
+  ]
+}
 </code></pre>
 </div>
       </section>
+
+      <!-- links to json examples -->
+      <section class="demo-section" style="margin-bottom: 150px;">
+        <h2>More Examples Using A JSON Config File</h2>
+        <p>Here are some more examples of timelines created using an external JSON configuration file.</p>
+        <ul>
+          <li>
+            <a href="horizontal/" target="_blank" title="Opens in a new tab or window">Horizontal Timeline With Images<img src="../assets/img/external-link.png" width="15" height="15" style="margin-left: 4px;"/></a>
+          </li>
+          <li style="margin-top: 10px;">
+            <a href="horizontal/index2.html" target="_blank" title="Opens in a new tab or window">Horizontal Timeline No Images<img src="../assets/img/external-link.png" width="15" height="15" style="margin-left: 4px;"/></a>
+          </li>
+          <li style="margin-top: 10px;">
+            <a href="vertical/" target="_blank" title="Opens in a new tab or window">Vertical Timeline With Images<img src="../assets/img/external-link.png" width="15" height="15" style="margin-left: 4px;"/></a>
+          </li>
+          <li style="margin-top: 10px;">
+            <a href="vertical/index2.html" target="_blank" title="Opens in a new tab or window">Vertical Timeline No Images<img src="../assets/img/external-link.png" width="15" height="15" style="margin-left: 4px;"/></a>
+        </ul>
+        <p style="margin-top: 35px;">The next section demonstrates how to generate ISO 8601 dates properly so you can update the <span class="mono bold">lastupdated</span> field of your JSON config file.</p>
+      </section>  
 
      <footer class="btn-footer">
         <a class="btn secondary" href="../index.html">❮ Back to Demos</a>

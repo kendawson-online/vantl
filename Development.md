@@ -600,6 +600,14 @@ open "demo/deeplink.html?timeline=timeline&id=3"
 - At runtime the built-in adapter will attempt an ESM CDN import, a dynamic `import('swiper')` (if installed locally), or `window.Swiper` (UMD CDN). To avoid Rollup "unresolved dependency" warnings for optional `swiper`, add `external: ['swiper']` to `rollup.config.js` or install `swiper` locally in your dev environment.
 - Demo pages may use the UMD CDN (script tag before `timeline.min.js`) or an ESM module script for modern usage.
 
+**Developer note — custom adapter hook**
+
+- The engine exposes a developer-only hook `swiperAdapter` (passed via the JS options object) and `swiperOptions` for configuring a carousel adapter. This is intended for advanced users who want to integrate a custom carousel adapter or provide a different Swiper resolution strategy.
+- `swiperAdapter` may be either an adapter object or a factory function that returns an adapter instance. The engine will call the factory synchronously and then await the adapter's `init(container, api, options)` method. The adapter's `init()` may perform async work (e.g., dynamic imports).
+- Adapter requirements (minimal): implement `init(container, api, options)`, `slideTo(index, opts)`, `slideBy(delta, opts)`, `update()`, and `destroy()` so the engine can control lifecycle and navigation.
+- This is a developer-facing hook only — the core project does not provide support for third-party carousel libraries. If users choose to use Swiper (or another library), direct Swiper-specific issues to that library's support channels.
+
+
 ### Manual Publish
 
 ```bash

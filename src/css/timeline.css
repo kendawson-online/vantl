@@ -189,7 +189,8 @@
     padding: 8px;
     position: relative;
     display: grid;
-    grid-template-columns: 60px 70px 1fr;
+    /* columns: image | date | spacer | content */
+    grid-template-columns: 60px 70px 5px 1fr;
     grid-template-rows: auto auto;
     column-gap: 8px;
     row-gap: 4px;
@@ -202,7 +203,8 @@
     align-items: center;
     column-gap: 12px;
     display: grid;
-    grid-template-columns: 80px 110px 1fr;
+    /* image | date | spacer | heading */
+    grid-template-columns: 80px 110px 5px 1fr;
     grid-template-rows: auto;
     row-gap: 0;
 }
@@ -229,7 +231,7 @@
 }
 
 .timeline--mobile .timeline__content.no-summary .timeline__heading {
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 1;
     margin: 0;
     align-self: center;
@@ -299,6 +301,7 @@
     white-space: nowrap;
     padding-top: 0;
     align-self: center;
+    padding-right: 8px;
 }
 
 .timeline--mobile .timeline__heading {
@@ -306,10 +309,14 @@
     font-weight: 700;
     margin: 0;
     color: #333;
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 1;
     min-width: 0;
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .timeline--mobile .timeline__summary {
@@ -320,46 +327,57 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 2;
     min-width: 0;
 }
 
-/* Collapse to two columns when no image is present */
+/* Ensure a small internal gap between the date column and the text column
+   so the separation remains visible on narrow screens. */
+.timeline--mobile .timeline__heading,
+.timeline--mobile .timeline__summary {
+    padding-left: 6px;
+}
+
+/* Collapse to two+spacer columns when no image is present */
 .timeline--mobile .timeline__content:not(:has(.timeline__image)) {
-    grid-template-columns: 70px 1fr;
+    /* date | spacer | content */
+    grid-template-columns: 70px 5px 1fr;
 }
 
 .timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__date {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
 }
 
 .timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__heading {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
 }
 
 .timeline--mobile .timeline__content:not(:has(.timeline__image)) .timeline__summary {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 2;
 }
 
 /* JS fallback: when image is absent, add .no-image to the content element
    Mirror the :has() rules so older browsers work when demo JS adds .no-image */
 .timeline--mobile .timeline__content.no-image {
-    grid-template-columns: 70px 1fr;
+    /* date | spacer | content */
+    grid-template-columns: 70px 5px 1fr;
 }
 .timeline--mobile .timeline__content.no-image .timeline__date {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
 }
 .timeline--mobile .timeline__content.no-image .timeline__heading {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
 }
 .timeline--mobile .timeline__content.no-image .timeline__summary {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 2;
 }
 
@@ -1335,6 +1353,11 @@
     }
     .timeline--mobile .timeline__content {
         grid-template-columns: 60px 70px 1fr;
+    }
+
+    /* On this breakpoint the flexible content column becomes column 3 */
+    .timeline--mobile .timeline__heading {
+        grid-column: 3;
     }
 }
 

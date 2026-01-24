@@ -10,13 +10,6 @@ const alertElement = `
     </div>
 `;
 
-// Don't display instructions when a timeline error occurs (e.g. missing JSON data)
-// Note: instructions.js now handles initialization; this listener ensures errors hide them
-window.addEventListener('timeline:error', () => {
-    const inst = document.getElementById('instructions');
-    if (inst) { inst.classList.remove('fade-in'); inst.classList.add('hidethis'); }
-});
-
 // test screen size (to see Horizontal timelines screen must be at least 600px wide)
 function testScreenSize(width = null) {
     if (!width) { width = 600; }
@@ -76,7 +69,7 @@ function showAlert(msg = null) {
 }
 
 // copy text to clipboard
-// accepts 1 argument: id of text input to copy to clipboard
+// accepts 1 argument: id of text input
 function copytoClipboard(id) {
   if (!id) { console.error('No id value was passed to the copytoClipboard() function'); return false; }
   // select text input element
@@ -92,4 +85,20 @@ function copytoClipboard(id) {
     // alert user
     alert("Copied to clipboard!\n\n" + copyText.value);
   }, 200);
+}
+
+// used by time.html
+// inserts ISO 8601 timestamps into document
+function loadTimestamps() {
+    const datestring = document.getElementById('datestring');
+    const consdate1 = document.getElementById('consdate1');
+    const consdate2 = document.getElementById('consdate2');
+    // make sure we have fields to write to
+    if (datestring && consdate1 && consdate2) {
+        let d = new Date();
+        let str = d.toISOString();
+        datestring.value = str;
+        consdate1.textContent = `'${str}'`;
+        consdate2.textContent = `"lastupdated": "${str}",`;            
+    }
 }

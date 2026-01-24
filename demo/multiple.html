@@ -3,38 +3,386 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Multiple Timelines Demo</title>
-    <!-- load timeline styles from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css">
+    <title>Multiple Timelines On the Same Page</title>
+    <!-- Load CDN timeline styles — uncomment to use CDN instead of local files -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
+
+    <!-- Load local timeline styles (recommended for development) -->
+    <link rel="stylesheet" href="../dist/timeline.min.css">
+        
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
+    <link rel="stylesheet" href="assets/vendor/github.min.css">
   </head>
-  <body class="darkmode">
+  <body>
 
     <div class="wrapper">
 
-      <h1 class="center multitext">Using Multiple Timelines On the Same Page</h1>
+      <h1>Multiple Timelines On the Same Page</h1>
 
-      <p class="center multitext"><a href="https://github.com/kendawson-online/vantl/blob/main/demo/multiple.html" class="lightlink" target="_blank">View the source code</a> of this page to see how the HTML is set up for multiple timelines</p>
+      <p>You can include multiple Vanilla Timelines on the same page. They can be created using inline HTML data or using an external JSON config file. In this example, we have created two timelines: the first uses inline HTML data and the second loads data from a JSON file. Just remember that you must add some Javascript code to your page to manually initialize the app if you are using inline HTML data attributes. If you are using an external JSON config file, the app will be initialized automatically. You can jump to the bottom of the page to <a href="#source">see the source code</a> which was used to create these two timelines.</p>
 
-      <br/><br/>
+      <h3 style="text-align: center; margin: 50px 0 20px 0; color: #5f0b41;">Horizontal Timeline Created Using Inline Data Attributes</h3>
+
+      <!-- timeline 1:  horizontal layout using inline HTML attributes -->
+      <div class="timeline-section" style="width:80%; margin: 0 auto;">
+
+        <!-- Begin Timeline Data -->
+        <div id="timeline1" class="timeline"
+             data-mode="horizontal" 
+             data-move-items="1" 
+             data-min-width="700"
+             data-horizontal-start-position="top"
+             data-same-side-nodes="true"
+             data-node-color="#5f0b41"
+             data-line-color="#5f0b41"
+             data-nav-color="#b4157b"
+             data-test="multiple-tl-1"
+        >
+          <div class="timeline__wrap">
+            <div class="timeline__items">
+
+              <!-- begin timeline node data -->
+
+              <!-- Node 1 -->
+              <div class="timeline__item" data-aria-label="Node 1: Date October 1st, 2023. Title: Colored Tiles">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/01/2023</div>
+                  <img class="timeline__image" src="assets/img/sample1.jpg" alt="Colored Tiles">
+                  <h3 class="timeline__heading">Colored Tiles</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                  <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                  <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 2 -->
+              <div class="timeline__item" data-aria-label="Node 2: Date October 5th, 2023. Title: Library Books">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/05/2023</div>
+                  <img class="timeline__image" src="assets/img/sample2.jpg" alt="Library Books"/>
+                  <h3 class="timeline__heading">Library Books</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                  <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                  <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 3 -->
+              <div class="timeline__item" data-aria-label="Node 3: Date October 7th, 2023. Title: Country Road">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/07/2023</div>
+                  <img class="timeline__image" src="assets/img/sample3.jpg" alt="Country Road"/>
+                  <h3 class="timeline__heading">Country Road</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                  <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                  <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 4 -->
+              <div class="timeline__item" data-aria-label="Node 4: Date October 12th, 2023. Title: Ocean Waves">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/12/2023</div>
+                  <img class="timeline__image" src="assets/img/sample4.jpg" alt="Ocean Waves"/>
+                  <h3 class="timeline__heading">Ocean Waves</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 5 -->
+              <div class="timeline__item" data-aria-label="Node 5: Date October 15th, 2023. Title: Pretty Flower">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/15/2023</div>
+                  <img class="timeline__image" src="assets/img/sample5.jpg" alt="Pretty Flower">
+                  <h3 class="timeline__heading">Pretty Flower</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 6 -->
+              <div class="timeline__item" data-aria-label="Node 6: Date October 18th, 2023. Title: Volcanic Rock">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/18/2023</div>
+                  <img class="timeline__image" src="assets/img/sample6.jpg" alt="Volcanic Rock"/>
+                  <h3 class="timeline__heading">Volcanic Rock</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 7 -->
+              <div class="timeline__item" data-aria-label="Node 7: Date October 23rd, 2023. Title: Rough Texture">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/23/2023</div>
+                  <img class="timeline__image" src="assets/img/sample7.jpg" alt="Rough Texture"/>
+                  <h3 class="timeline__heading">Rough Texture</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 8 -->
+              <div class="timeline__item" data-aria-label="Node 8: Date October 25th, 2023. Title: Majestic Eagle">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/25/2023</div>
+                  <img class="timeline__image" src="assets/img/sample8.jpg" alt="Majestic Eagle"/>
+                  <h3 class="timeline__heading">Majestic Eagle</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 9 -->
+              <div class="timeline__item" data-aria-label="Node 9: Date October 27th, 2023. Title: Yellow Daffodils">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/27/2023</div>
+                  <img class="timeline__image" src="assets/img/sample9.jpg" alt="Yellow Daffodils"/>
+                  <h3 class="timeline__heading">Yellow Daffodils</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 10 -->
+              <div class="timeline__item" data-aria-label="Node 10: Date October 29th, 2023. Title: Brick Wall">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/29/2023</div>
+                  <img class="timeline__image" src="assets/img/sample10.jpg" alt="Brick Wall"/>
+                  <h3 class="timeline__heading">Brick Wall</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 11 -->
+              <div class="timeline__item" data-aria-label="Node 11: Date October 30th, 2023. Title: Intricate Flower">
+                <div class="timeline__content">
+                  <div class="timeline__date">10/30/2023</div>
+                  <img class="timeline__image" src="assets/img/sample11.jpg" alt="Intricate Flower"/>
+                  <h3 class="timeline__heading">Intricate Flower</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- Node 12 -->
+              <div class="timeline__item" data-aria-label="Node 12: Date November 1st, 2023. Title: Pink Rose">
+                <div class="timeline__content">
+                  <div class="timeline__date">11/01/2023</div>
+                  <img class="timeline__image" src="assets/img/sample12.jpg" alt="Pink Rose"/>
+                  <h3 class="timeline__heading">Pink Rose</h3>
+                  <div class="timeline__summary">Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</div>
+                </div>
+                <div class="timeline__modal-content">
+                    <p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                    <p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+                </div>
+              </div>
+
+              <!-- end timeline node data -->
+
+            </div>
+          </div>
+        </div>
+        <!-- End Timeline Data -->
       
-      <div class="timeline-section">
-        <!-- timeline 1: horizontal layout -->
-        <div id="timeline1" class="timeline" data-json-config="assets/data/horizontal-no-images.json" data-test="multiple-tl-1"></div>
       </div>
 
-      <br/><br/>
+      <h3 style="text-align: center; margin: 50px 0 20px 0; color: #5f0b41;">Vertical Timeline Created From a JSON Config File</h3>
+      
+      <!-- timeline 2: vertical layout using external JSON config file -->
+      <div class="timeline-section" style="width: 500px; margin: 0 auto;">
 
-      <div class="timeline-section">
-        <!-- timeline 2: vertical layout -->
-        <div id="timeline2" class="timeline" data-json-config="assets/data/vertical-no-images.json" data-test="multiple-tl-2"></div>
+        <!-- Begin Timeline Data -->
+        <div id="timeline2" class="timeline" data-json-config="assets/data/vertical-no-images.json" data-test="multiple-tl-2">
+          <div class="timeline__wrap">
+            <div class="timeline__items"></div>
+          </div>
+        </div> 
+        <!-- End Timeline Data -->
+
       </div>
 
     </div>
 
+     <!-- HTML Source Code -->
+    <section id="source" class="demo-section">
+        <h2>Source Code for Vanilla Timeline Elements</h2>
+<div class="code-block">
+<pre><code class="language-html">
+&lt;!-- Timeline 1: Horizontal Layout Using Inline Data Attributes --&gt;
+&lt;div class="timeline"
+     data-mode="horizontal" 
+     data-move-items="1" 
+     data-min-width="700"
+     data-horizontal-start-position="top"
+     data-same-side-nodes="true"
+     data-node-color="#5f0b41"
+     data-line-color="#5f0b41"
+     data-nav-color="#b4157b"
+&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;
+      &lt;!-- node data goes here --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Timeline 2: Vertical Layout Using JSON Config File --&gt;
+&lt;div class="timeline" data-json-config="assets/data/vertical-no-images.json"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt; 
+</code></pre>
+</div>          
+    </section>    
+
+
+     <!-- Node Source Code -->
+    <section id="source" class="demo-section">
+        <h2>Source Code For Sample Node Data</h2>
+<div class="code-block">
+<pre><code class="language-html">
+&lt;!-- Node 1 --&gt;
+&lt;div class="timeline__item" data-aria-label="Node 1: Date October 1st, 2023. Title: Colored Tiles"&gt;
+  &lt;div class="timeline__content"&gt;
+    &lt;div class="timeline__date"&gt;10/01/2023&lt;/div&gt;
+    &lt;img class="timeline__image" src="assets/img/sample1.jpg" alt="Colored Tiles"&gt;
+    &lt;h3 class="timeline__heading"&gt;Colored Tiles&lt;/h3&gt;
+    &lt;div class="timeline__summary"&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="timeline__modal-content"&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Node 2 --&gt;
+&lt;div class="timeline__item" data-aria-label="Node 2: Date October 5th, 2023. Title: Library Books"&gt;
+  &lt;div class="timeline__content"&gt;
+    &lt;div class="timeline__date"&gt;10/05/2023&lt;/div&gt;
+    &lt;img class="timeline__image" src="assets/img/sample2.jpg" alt="Library Books"/&gt;
+    &lt;h3 class="timeline__heading"&gt;Library Books&lt;/h3&gt;
+    &lt;div class="timeline__summary"&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="timeline__modal-content"&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Node 3 --&gt;
+&lt;div class="timeline__item" data-aria-label="Node 3: Date October 7th, 2023. Title: Country Road"&gt;
+  &lt;div class="timeline__content"&gt;
+    &lt;div class="timeline__date"&gt;10/07/2023&lt;/div&gt;
+    &lt;img class="timeline__image" src="assets/img/sample3.jpg" alt="Country Road"/&gt;
+    &lt;h3 class="timeline__heading"&gt;Country Road&lt;/h3&gt;
+    &lt;div class="timeline__summary"&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="timeline__modal-content"&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.&lt;/p&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div>          
+    </section> 
+    
+    
+     <!-- JSON Source Code -->
+    <section id="source" class="demo-section">
+        <h2>Source Code For Sample JSON Config File</h2>
+<div class="code-block">
+<pre><code class="language-json">    
+{
+  "timelineName": "Vertical Timeline No Images",
+  "layoutMode": "vertical",
+  "maxWidth": 4000,
+  "lastupdated": "2026-01-23T13:04:48.039Z",  
+  "nodes": [
+    {
+      "id": 1,
+      "date": "Oct. 2014",
+      "heading": "Node 1",
+      "content": "&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;"
+    },
+    {
+      "id": 2,
+      "date": "Nov. 2014",
+      "heading": "Node 2",
+      "content": "&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;"
+    },
+    {
+      "id": 3,
+      "date": "Dec. 2014",
+      "heading": "Node 3",
+      "content": "&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;&lt;p&gt;Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.&lt;/p&gt;"
+    }  
+  ]
+}  
+</code></pre>
+</div>          
+    </section> 
+
+    <footer class="btn-footer">
+      <a class="btn secondary" href="index.html">❮ Back to Demos</a>
+      <a class="btn success space-left" href="deeplink.html">Deep Linking ❯</a>
+    </footer>
+
     <!-- load timeline JS functions from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
+    
+    <!-- load timeline JS functions from LOCAL BUILD for development testing -->
+    <script src="../dist/timeline.min.js"></script>
+
+    <!-- load demo specific JS functions -->
+    <script src="assets/js/demo.js"></script>
+
+    <!-- Load highligher.js -->
+    <script src="assets/vendor/highlight.min.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // highlight blocks of code
+        hljs.highlightAll();
+        // initialize the data attribute timeline manually
+        timeline(document.querySelectorAll('.timeline'));
+      });
+    </script>   
 
   </body>
 </html>

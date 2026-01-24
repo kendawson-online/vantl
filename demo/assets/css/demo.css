@@ -214,6 +214,13 @@ body {
   border-radius: 36px;
 }
 
+.demo-live-example-left {
+  padding: 20px; 
+  width: 80%;
+  border: 2px solid black; 
+  border-radius: 36px;
+}
+
 .code-block {
   background-color: #f4f4f4;
   border: 1px solid #ddd;
@@ -224,6 +231,33 @@ body {
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
   line-height: 1.5;
+}
+
+.time-datestring {
+  text-align: center;
+  background-color: azure;
+  margin: 25px auto 25px auto;
+  font-size: 18px;
+  padding: 12px 15px;
+  font-family: monospace;
+  width: 80%;
+  min-width: 400px;
+  max-width: 600px;
+}
+
+.time-btn {
+  margin-left: 2px; 
+  border-radius: 0 !important; 
+  padding: 12px 16px !important; 
+  font-size: 18px !important;
+}
+
+.time-list {
+  margin: 30px 0;
+}
+
+.time-list li {
+  margin-top: 10px;
 }
 
 /* --------------------------------- Table styling ------------------------------ */

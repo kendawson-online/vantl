@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vanilla Timeline - JSON - Vertical</title>
-
+    <title>Vertical Timeline No Images</title>
     <!-- load timeline styles from CDN -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.css"> -->
 
@@ -13,6 +12,7 @@
 
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
@@ -23,60 +23,95 @@
         <div class="timeline__wrap">
           <div class="timeline__items"></div>
         </div>
-      </div>
-
-      <!-- Instructions (accordion menu) -->
-      <button id="instructions" class="hidethis accordion" title="Click to toggle this menu">How to Create a Vertical Timeline: Step by Step Instructions</button>
-      <div class="panel">
-        <!-- Content -->
-        <div class="textcontainer">
-          <h1 class="mainhead">Creating the Vertical Timeline:</h1>
-          <!-- step 1 -->
-          <div class="step">
-            <div><img src="../../assets/img/1-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Include links to CSS/Javascript files in your HTML document from the CDN</div>
-          </div>   
-          <!-- step 1 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/945b52576405c65fc37b3b3f97089b6c.js"></script>
-          </div>
-          <!-- step 2 -->
-          <div class="step">
-            <div><img src="../../assets/img/2-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Add code for the timeline HTML elements</div>
-          </div>
-          <!-- step 2 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/9880fb24bec2af299a9b9f2de4f7ee8a.js"></script>
-          </div> 
-          <!-- step 3 -->
-          <div class="step">
-            <div><img src="../../assets/img/3-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Create a .json file which contains your timeline data</div>
-          </div>
-          <!-- step 3 code -->
-          <div class="scriptwrapper">
-            <script src="https://gist.github.com/kendawson-online/12d9efbd5bc5b02dd391f32d193b7966.js"></script>
-          </div>  
-          <!-- step 4 -->
-          <div class="step">
-            <div><img src="../../assets/img/4-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Add a data attribute to HTML element with <span class="tooltip"><span class="tooltiptext">Path to your JSON file should be relative to the HTML document containing the timeline or, an absolute path</span> path to your JSON file</span></div>
-          </div>
-          <!-- step 4 code -->
-          <div class="scriptwrapper">
-                <span style="color: #494949;">&lt;!-- This goes on the parent element which has class="timeline" --&gt;</span><br/><br/>
-                <span style="font-weight: bold;">&lt;div class="timeline" <span style="color: red;">data-json-config="/path/to/your/data/file.json"</span>&gt;<br/>&nbsp;···<br/>&lt;/div&gt;</span>
-          </div>
-          <!-- step 5 -->
-          <div class="step">
-            <div><img src="../../assets/img/5-circle.svg" width="50" alt="1"/></div>
-            <div class="steptext">Save the file and load your HTML page in a browser</div>
-          </div>      
-        </div>
-      </div>      
+      </div>  
 
     </div>
+
+    <!-- Source Code -->
+    <section class="demo-section">
+      <h2>HTML Code</h2>
+<div class="code-block">
+<pre><code class="language-html">&lt;div class="timeline" data-json-config="../../assets/data/vertical-no-images.json"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;   
+</code></pre>
+</div>
+      <h2>JSON Code</h2>
+      <p><a href="../../assets/data/vertical-no-images.json" target="_blank">View the actual JSON file</a></p>
+<div class="code-block">
+<pre><code class="language-json">
+{
+  "timelineName": "Vertical Timeline No Images",
+  "layoutMode": "vertical",
+  "maxWidth": 4000,
+  "lastupdated": "2026-01-23T13:04:48.039Z",  
+  "nodes": [
+    {
+      "id": 1,
+      "date": "Oct. 2014",
+      "heading": "Node 1",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 2,
+      "date": "Nov. 2014",
+      "heading": "Node 2",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 3,
+      "date": "Dec. 2014",
+      "heading": "Node 3",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 4,
+      "date": "Jan. 2015",
+      "heading": "Node 4",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 5,
+      "date": "Feb. 2015",
+      "heading": "Node 5",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 6,
+      "date": "Mar. 2015",
+      "heading": "Node 6",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 7,
+      "date": "Apr. 2015",
+      "heading": "Node 7",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 8,
+      "date": "May. 2015",
+      "heading": "Node 8",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 9,
+      "date": "Jun. 2015",
+      "heading": "Node 9",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    },
+    {
+      "id": 10,
+      "date": "Jul. 2015",
+      "heading": "Node 10",
+      "content": "<p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p><p>Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor.</p>"
+    }    
+  ]
+} 
+</code></pre>      
+    </section>    
 
     <!-- load timeline JS functions from CDN -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@kendawson-online/vantl@latest/dist/timeline.min.js"></script> -->
@@ -86,10 +121,14 @@
 
     <!-- load demo specific JS functions -->
     <script src="../../assets/js/demo.js"></script>
-    <script src="../../assets/js/accordion.js"></script>
+
+    <!-- Load highligher.js -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // loadInstructions();
+      document.addEventListener('DOMContentLoaded', function () {
+        // highlight blocks of code
+        hljs.highlightAll();
       });
     </script>
 

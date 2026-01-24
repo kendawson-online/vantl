@@ -381,6 +381,10 @@ export function timeline(collection, options) {
   }
 
   function createTimelines(timelineEl) {
+    // Prevent double-initialization (e.g. JSON auto-init vs manual init)
+    if (timelineEl && timelineEl.getAttribute && timelineEl.getAttribute('data-timeline-initialized') === '1') {
+      return;
+    }
     const timelineName = timelineEl.id ? `#${timelineEl.id}` : `.${timelineEl.className}`;
     const errorPart = 'could not be found as a direct descendant of';
     const data = timelineEl.dataset;
@@ -399,6 +403,10 @@ export function timeline(collection, options) {
           throw new Error(`${warningLabel} .timeline__items ${errorPart} .timeline__wrap`);
         } else {
           items = [].slice.call(scroller.children, 0);
+          // If there are no items yet (e.g. JSON timeline not rendered yet), skip initialization.
+          if (!items || items.length === 0) {
+            return;
+          }
         }
       }
     } catch (e) {
@@ -529,6 +537,13 @@ export function timeline(collection, options) {
 
     if (!timelineEl.id) {
       timelineEl.setAttribute('data-timeline-id', 'timeline-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
+    }
+
+    // Mark as initialized to avoid duplicate initialisation attempts
+    try {
+      timelineEl.setAttribute('data-timeline-initialized', '1');
+    } catch (e) {
+      /* ignore */
     }
 
     timelines.push({
