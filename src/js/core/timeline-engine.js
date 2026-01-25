@@ -4,6 +4,7 @@ import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 import SwiperAdapter from '../../adapters/swiper-adapter.js';
 import { formatAccessibleDate } from '../shared/utils.js';
+import { handleDeepLinking } from '../features/deep-linking.js';
 import { initLayoutFallbacks } from '../features/layout-fallbacks.js';
 
 /**
@@ -1146,7 +1147,9 @@ export function timeline(collection, options) {
   }
 
   try {
-    setUpTimelines();
+  setUpTimelines();
+  // After timelines are set up, run deep-link handler so manual (inline) inits respond to URL params
+  try { handleDeepLinking(); } catch (e) { /* ignore */ }
     // Attach resize handler (stored so it can be removed in tests)
     const resizeHandler = () => {
       clearTimeout(resizeTimer);

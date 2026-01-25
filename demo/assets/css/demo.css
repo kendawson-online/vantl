@@ -593,6 +593,20 @@ footer a:link {
   color: red;
 }
 
+code .hljs-id-attr {
+  font-weight: 700;
+  color: inherit;
+  background: transparent;
+}
+
+.dl-list {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-family: monospace;
+}
+
+
+
 /* --------------------------------- Tooltips --------------------------------- */
 
 .tooltip {

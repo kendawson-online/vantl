@@ -38,7 +38,18 @@ export function handleDeepLinking(containerSelector) {
 
   targetContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const targetNode = targetContainer.querySelector('[data-node-id="' + nodeId + '"]');
+  let targetNode = targetContainer.querySelector('[data-node-id="' + nodeId + '"]');
+  // Fallback: inline demos may use element id attributes (id="10") instead of data-node-id
+  if (!targetNode) {
+    // try by element id and ensure it's a descendant of the target container
+    try {
+      const byId = document.getElementById(nodeId);
+      if (byId && targetContainer.contains(byId)) targetNode = byId;
+    } catch (e) {
+      // ignore invalid id selectors
+    }
+  }
+
   if (targetNode) {
     setTimeout(function() {
       // Ensure only one active item is highlighted in this timeline
