@@ -5,6 +5,7 @@ import { timelineRegistry } from '../shared/state.js';
 import SwiperAdapter from '../../adapters/swiper-adapter.js';
 import { formatAccessibleDate } from '../shared/utils.js';
 import { handleDeepLinking } from '../features/deep-linking.js';
+import { destroyKeyboardForTimeline } from '../features/keyboard.js';
 import { initLayoutFallbacks } from '../features/layout-fallbacks.js';
 
 /**
@@ -1092,6 +1093,8 @@ export function timeline(collection, options) {
       item.removeAttribute('style');
       item.classList.remove('animated', 'fadeIn', 'timeline__item--left', 'timeline__item--right');
     });
+    // Clean up keyboard handlers attached to this timeline
+    try { destroyKeyboardForTimeline(tl.timelineEl); } catch (e) { /* ignore */ }
     const navArrows = tl.timelineEl.querySelectorAll('.timeline-nav-button');
     Array.from(navArrows).forEach((arrow) => {
       arrow.parentNode.removeChild(arrow);

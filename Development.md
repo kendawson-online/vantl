@@ -199,6 +199,7 @@ The codebase is organized into three layers:
 - All event listeners are tracked in a `Map`
 - Properly removed on timeline reset to prevent memory leaks
 - See `eventListeners` Map in `timeline-engine.js`
+ - Use the public `destroyTimelines()` API for SPA teardown or full re-init flows; it clears engine listeners, keyboard handlers, and modal DOM.
 
 **Color Theming:**
 - Uses CSS Custom Properties (`--timeline-node-color`, etc.)
@@ -210,6 +211,7 @@ The codebase is organized into three layers:
 - Reads data from `data-modal-*` attributes
 - Auto-extracts modal content from inline HTML if attributes missing
 - See `features/modals.js`
+ - `destroyTimelineModal()` removes the modal and overlay and detaches modal listeners
 
 **JSON Loading:**
 - Fetches JSON via `fetch()` API

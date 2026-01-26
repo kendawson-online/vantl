@@ -36,7 +36,11 @@ export function handleDeepLinking(containerSelector) {
     return;
   }
 
-  targetContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Avoid smooth container scrolling for vertical timelines to prevent overriding node scroll.
+  const isHorizontal = targetContainer.classList.contains('timeline--horizontal');
+  if (isHorizontal) {
+    targetContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   let targetNode = targetContainer.querySelector('[data-node-id="' + nodeId + '"]');
   // Fallback: inline demos may use element id attributes (id="10") instead of data-node-id
@@ -55,9 +59,40 @@ export function handleDeepLinking(containerSelector) {
       // Ensure only one active item is highlighted in this timeline
       targetContainer.querySelectorAll('.timeline__item--active').forEach((n) => n.classList.remove('timeline__item--active'));
       targetNode.classList.add('timeline__item--active');
-      const itemIndex = Array.from(targetNode.parentNode.children).indexOf(targetNode);
-      navigateToNodeIndex(targetContainer, itemIndex);
-    }, 500);
+      const items = Array.from(targetNode.parentNode.children || []);
+      const itemIndex = items.indexOf(targetNode);
+
+      // Horizontal timelines: delegate to the engine for precision scrolling
+      if (targetContainer.classList.contains('timeline--horizontal')) {
+        navigateToNodeIndex(targetContainer, itemIndex);
+        return;
+      }
+
+      // Vertical timelines: prefer native anchor scrolling
+      try {
+        if (!targetNode.id) {
+          targetNode.id = String(nodeId);
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
+      try {
+        // Use native anchor behavior to leverage browser scroll handling
+        if (window.location && window.location.hash !== '#' + String(nodeId)) {
+          window.location.hash = String(nodeId);
+        }
+      } catch (e) {
+        /* ignore */
+      }
+
+      // Extra guard: ensure it is visible even if hash doesn't scroll
+      try {
+        targetNode.scrollIntoView({ behavior: 'auto', block: 'start' });
+      } catch (e) {
+        /* ignore */
+      }
+    }, 0);
   }
 }
 

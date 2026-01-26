@@ -8,6 +8,7 @@
 import { modalState } from '../shared/state.js';
 
 let lastFocusedElement = null;
+let escKeyHandler = null;
 
 function getFocusableElements(container) {
   const focusable = container ? container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
@@ -84,11 +85,12 @@ export function createTimelineModal() {
   document.body.appendChild(modalState.overlay);
   document.body.appendChild(modalState.modal);
 
-  document.addEventListener('keydown', function(e) {
+  escKeyHandler = function(e) {
     if (e.key === 'Escape' && modalState.modal.classList.contains('timeline-modal-show')) {
       closeTimelineModal();
     }
-  });
+  };
+  document.addEventListener('keydown', escKeyHandler);
 }
 
 export function openTimelineModal(itemEl) {
@@ -184,4 +186,24 @@ export function closeTimelineModal() {
       lastFocusedElement.focus();
     }
   }
+}
+
+export function destroyTimelineModal() {
+  if (escKeyHandler) {
+    try { document.removeEventListener('keydown', escKeyHandler); } catch (_) {}
+    escKeyHandler = null;
+  }
+
+  if (modalState.modal) {
+    try { modalState.modal.removeEventListener('keydown', trapFocus); } catch (_) {}
+    try { modalState.modal.parentNode && modalState.modal.parentNode.removeChild(modalState.modal); } catch (_) {}
+  }
+  if (modalState.overlay) {
+    try { modalState.overlay.parentNode && modalState.overlay.parentNode.removeChild(modalState.overlay); } catch (_) {}
+  }
+
+  modalState.modal = null;
+  modalState.overlay = null;
+  document.body.style.overflow = '';
+  lastFocusedElement = null;
 }

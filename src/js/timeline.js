@@ -17,10 +17,11 @@
  * - jQuery plugin support (if jQuery available)
  */
 
-import { createTimelineModal, openTimelineModal, closeTimelineModal } from './features/modals.js';
+import { createTimelineModal, openTimelineModal, closeTimelineModal, destroyTimelineModal } from './features/modals.js';
 import { handleDeepLinking, navigateToNodeIndex } from './features/deep-linking.js';
 import { renderTimelineFromData, timelineFromData, loadDataFromJson, processTimelineData, clearTimelineCache } from './features/data-loader.js';
 import './features/keyboard.js';
+import { destroyKeyboardForTimeline } from './features/keyboard.js';
 import { timeline } from './core/timeline-engine.js';
 import '../css/timeline.css';
 
@@ -50,6 +51,7 @@ function autoInitJsonTimelines() {
 function exposeGlobals() {
   if (typeof window === 'undefined') return;
   window.timeline = timeline;
+  window.destroyTimelines = destroyTimelines;
   window.timelineFromData = timelineFromData;
   window.renderTimelineFromData = renderTimelineFromData;
   window.processTimelineData = processTimelineData;
@@ -72,6 +74,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
+ * Destroy timelines and clean up listeners and modals
+ * Useful for SPA teardown or reinitialization flows.
+ * @returns {void}
+ */
+function destroyTimelines() {
+  if (timeline && typeof timeline._test_destroyAll === 'function') {
+    try { timeline._test_destroyAll(); } catch (_) { /* ignore */ }
+  }
+  try {
+    const timelines = document.querySelectorAll('.timeline');
+    timelines.forEach((tl) => destroyKeyboardForTimeline(tl));
+  } catch (_) {
+    /* ignore */
+  }
+  try { destroyTimelineModal(); } catch (_) { /* ignore */ }
+}
+
+/**
  * Register jQuery plugin if jQuery is available
  * Allows usage: $('#timeline').timeline({ options });
  */
@@ -91,6 +111,7 @@ if (typeof window !== 'undefined' && window.jQuery) {
 
 export {
   timeline,
+  destroyTimelines,
   timelineFromData,
   renderTimelineFromData,
   loadDataFromJson,
@@ -99,6 +120,7 @@ export {
   createTimelineModal,
   openTimelineModal,
   closeTimelineModal,
+  destroyTimelineModal,
   handleDeepLinking,
   navigateToNodeIndex
 };

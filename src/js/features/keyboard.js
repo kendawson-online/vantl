@@ -111,6 +111,14 @@ function bindHotkeys(timelineEl, api) {
     }
   };
 
+  const navClickHandler = function() {
+    // Announce active node after navigation
+    setTimeout(() => {
+      const active = timelineEl.querySelector('.timeline__item--active');
+      if (active) announceActiveNode(timelineEl, active);
+    }, 0);
+  };
+
   timelineEl.addEventListener('keydown', keydownHandler);
   // Also listen at document level so global hotkeys (e.g., Shift+Arrow)
   // work even if focus is not inside the timeline element (useful for tests).
@@ -130,13 +138,18 @@ function bindHotkeys(timelineEl, api) {
   document.addEventListener('keydown', globalKeyHandler);
   if (prev) prev.addEventListener('keydown', prevKeyHandler);
   if (next) next.addEventListener('keydown', nextKeyHandler);
+  if (prev) prev.addEventListener('click', navClickHandler);
+  if (next) next.addEventListener('click', navClickHandler);
 
   timelineEl.__keyboardHandlers = {
     keydown: keydownHandler,
     prevKey: prevKeyHandler,
-    nextKey: nextKeyHandler
+    nextKey: nextKeyHandler,
+    globalKey: globalKeyHandler,
+    prev,
+    next,
+    navClick: navClickHandler
   };
-  timelineEl.__keyboardHandlers.globalKey = globalKeyHandler;
 
   // Arrow navigation while focused on a node (horizontal or vertical mode)
   const items = Array.from(timelineEl.querySelectorAll('.timeline__item'));
@@ -172,6 +185,7 @@ function bindHotkeys(timelineEl, api) {
     item.addEventListener('keydown', itemKeyHandler);
   });
   timelineEl.__keyboardHandlers.itemKey = itemKeyHandler;
+  timelineEl.__keyboardHandlers.items = items;
 }
 
 function initializeKeyboardForTimeline(timelineEl, api) {
@@ -192,4 +206,29 @@ document.addEventListener('timeline:initialized', function(ev) {
   } catch (_) { /* noop */ }
 });
 
-export { initializeKeyboardForTimeline, setSequentialTabOrder };
+function destroyKeyboardForTimeline(timelineEl) {
+  if (!timelineEl || !timelineEl.__keyboardHandlers) return;
+  const handlers = timelineEl.__keyboardHandlers;
+
+  try { timelineEl.removeEventListener('keydown', handlers.keydown); } catch (_) {}
+  if (handlers.prev) {
+    try { handlers.prev.removeEventListener('keydown', handlers.prevKey); } catch (_) {}
+    try { handlers.prev.removeEventListener('click', handlers.navClick); } catch (_) {}
+  }
+  if (handlers.next) {
+    try { handlers.next.removeEventListener('keydown', handlers.nextKey); } catch (_) {}
+    try { handlers.next.removeEventListener('click', handlers.navClick); } catch (_) {}
+  }
+  if (handlers.globalKey) {
+    try { document.removeEventListener('keydown', handlers.globalKey); } catch (_) {}
+  }
+  if (handlers.items && handlers.itemKey) {
+    handlers.items.forEach((item) => {
+      try { item.removeEventListener('keydown', handlers.itemKey); } catch (_) {}
+    });
+  }
+
+  delete timelineEl.__keyboardHandlers;
+}
+
+export { initializeKeyboardForTimeline, setSequentialTabOrder, destroyKeyboardForTimeline };

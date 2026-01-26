@@ -99,6 +99,13 @@ export function createItemNode(item) {
   
   if (normalized.id) {
     itemEl.setAttribute('data-node-id', normalized.id);
+    if (!itemEl.id) {
+      try {
+        itemEl.id = String(normalized.id);
+      } catch (e) {
+        /* ignore invalid id assignments */
+      }
+    }
   }
 
   // Timeline content (visible in node)

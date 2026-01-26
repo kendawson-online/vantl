@@ -516,7 +516,7 @@ Lifecycle and behavior:
 - When used with JSON loaders, settings may be written to `data-*` attributes prior to calling `timeline()` so that the DOM reflects authoritative configuration.
 
 Destroy / Cleanup:
-- The library tracks event listeners and internal state for each timeline instance. Use the test helper `timeline._test_destroyAll()` (testing only) or call page-specific cleanup functions the app exposes to remove listeners and DOM state when necessary.
+- The library tracks event listeners and internal state for each timeline instance. Use `destroyTimelines()` to clean up listeners, observers, and modal DOM for SPA teardown or re-init flows. The test helper `timeline._test_destroyAll()` remains available for tests only.
 
 Options (JS keys and corresponding `data-*` attributes)
 
@@ -575,6 +575,21 @@ Guidance:
 
 
 All functions are exposed on `window` object:
+
+### `destroyTimelines()`
+
+Destroy all initialized timelines and clean up global listeners and modal DOM. This is intended for SPA teardown or when you need to re-initialize timelines on the same page.
+
+```javascript
+destroyTimelines();
+```
+
+Behavior:
+- Removes timeline listeners and observers created by the engine
+- Cleans up keyboard handlers for each timeline element
+- Removes the global modal and overlay if present
+
+Returns: `void`
 
 ### `loadDataFromJson(url, containerSelector)`
 
@@ -700,6 +715,18 @@ const el = document.querySelector('.timeline__item[data-node-id="3"]');
 openTimelineModal(el);
 // later
 closeTimelineModal();
+```
+
+Returns: `void`.
+
+---
+
+### `destroyTimelineModal()`
+
+Remove the global modal and overlay elements and detach their listeners. Use this for SPA teardown or when you want to fully reset modal state.
+
+```javascript
+destroyTimelineModal();
 ```
 
 Returns: `void`.
