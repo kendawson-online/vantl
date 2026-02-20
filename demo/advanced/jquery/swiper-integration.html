@@ -16,7 +16,9 @@
       </header>
 
       <section>
-        <div id="jq-swiper-tl" class="timeline" data-test="jq-swiper-tl"></div>
+        <div id="jq-swiper-tl" class="timeline" data-test="jq-swiper-tl">
+          <div class="timeline__wrap"><div class="timeline__items"></div></div>
+        </div>
       </section>
 
       <footer style="margin-top: 40px;">
@@ -37,8 +39,6 @@
 
         var $el = jQuery('#jq-swiper-tl');
         var $items = $el.find('.timeline__items');
-        if ($items.length === 0) $el.find('.timeline__wrap').append('<div class="timeline__items"></div>');
-        $items = $el.find('.timeline__items');
 
         items.forEach(function (it) {
           $items.append('<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>');

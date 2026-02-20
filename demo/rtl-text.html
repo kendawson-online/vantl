@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RTL Horizontal Timeline (JSON)</title>
+    <!-- load timeline styles from LOCAL BUILD for testing -->
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+
+    <!-- load demo specific styles -->
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
+  </head>
+  <body>
+
+    <!-- Page top notification area -->
+    <div id="topnotice" class="topnotice"></div>
+
+    <div class="wrapper">
+
+      <header class="demo-page-head">
+        <h1>RTL Horizontal Timeline (JSON)</h1>
+        <p>Demonstrates right-to-left layout using JSON config with <span class="mono">rtlMode</span> and <span class="mono">sameSideNodes</span>.</p>
+        <p class="graytext">Uses <span class="mono">rtlMode: true</span>, <span class="mono">layoutMode: 'horizontal'</span>, and <span class="mono">sameSideNodes: 'top'</span> to keep all nodes on one row.</p>
+      </header>
+
+      <!-- RTL Timeline: JSON-configured -->
+      <div id="rtl-json" class="timeline" data-json-config="../../assets/data/rtl-demo.json" data-test="timeline-rtl-json">
+        <div class="timeline__wrap">
+          <div class="timeline__items"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Source Code -->
+    <section class="demo-section">
+      <h2>Key JSON fields</h2>
+<div class="code-block">
+<pre><code class="language-json">
+{
+  "layoutMode": "horizontal",
+  "rtlMode": true,
+  "sameSideNodes": "top",
+  "minWidth": 640,
+  "nodeColor": "#0f766e",
+  "lineColor": "#0f766e",
+  "navColor": "#14b8a6",
+  "nodes": [ ... ]
+}
+</code></pre>
+</div>
+      <p><a href="../../assets/data/rtl-demo.json" target="_blank">View the full JSON file</a></p>
+    </section>
+
+    <footer style="margin: 40px 0 60px; text-align: center;">
+      <a class="btn secondary" href="../index.html">❮ Back to JSON Demos</a>
+    </footer>
+
+    <!-- load timeline JS functions from LOCAL BUILD -->
+    <script src="../../../dist/timeline.min.js"></script>
+
+    <!-- load demo specific JS functions -->
+    <script src="../../assets/js/demo.js"></script>
+
+    <!-- Load highligher.js -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // display alert on small screen (respects minWidth from JSON)
+        fetchMinWidthAndTest();
+        // highlight blocks of code
+        hljs.highlightAll();
+      });
+    </script>
+
+  </body>
+</html>

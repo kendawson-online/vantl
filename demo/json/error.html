@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>JSON Error Handling Demo</title>
+    <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <header class="demo-page-head">
+        <h1>JSON Error Handling</h1>
+        <p>This demo intentionally points to a missing JSON file to show the built-in error UI. The timeline stays visible with a friendly message instead of breaking.</p>
+      </header>
+
+      <div id="broken-json" class="timeline" data-json-config="../../assets/data/does-not-exist.json" data-test="timeline-json-error">
+        <div class="timeline__wrap">
+          <div class="timeline__items"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="demo-section">
+      <h2>What to expect</h2>
+      <ul>
+        <li>A red inline error appears because the JSON endpoint is missing.</li>
+        <li>The page does not crash; you can fix the URL and reload.</li>
+        <li>Caching: if you change JSON content, update <span class="mono">lastupdated</span> to invalidate cached data.</li>
+      </ul>
+    </section>
+
+    <section class="demo-section">
+      <h2>Config snippet</h2>
+<div class="code-block"><pre><code class="language-html">
+&lt;div class="timeline"
+     data-json-config="../../assets/data/does-not-exist.json"&gt;
+  &lt;div class="timeline__wrap"&gt;
+    &lt;div class="timeline__items"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre></div>
+    </section>
+
+    <footer style="margin: 40px 0 60px; text-align: center;">
+      <a class="btn secondary" href="../index.html">❮ Back to JSON Demos</a>
+    </footer>
+
+    <script src="../../../dist/timeline.min.js"></script>
+    <script src="../../assets/js/demo.js"></script>
+    <script src="../../assets/vendor/highlight.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        hljs.highlightAll();
+        // This intentionally fails; no manual init required because data-json-config auto-inits
+      });
+    </script>
+
+  </body>
+</html>

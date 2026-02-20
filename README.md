@@ -4,38 +4,24 @@ Vantl is a lightweight, responsive timeline library created with vanilla Javascr
 
 <table align="center">
   <tr>
-```
-(!) Unresolved dependencies
-swiper (imported by "src/adapters/swiper-adapter.js")
-```
-<br/>
+### Optional SwiperJS add-on (not bundled or supported)
 
-More about using Swiper with Vantl:
+- Swiper is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
+- Resolution order when `useSwiper` is enabled: `options.swiperCdn` (ESM URL) → installed `swiper` package (dynamic import) → `window.Swiper` from a UMD CDN. If none are found, Vantl falls back to its built-in carousel controls.
+- Enable with `data-use-swiper="true"` in HTML or `useSwiper: 'true' | 'auto'` in JS. Pass Swiper options via `swiperOptions`.
+- Build warning about unresolved `swiper` is expected when you have not installed it; either ignore, mark it external (e.g., `external: ['swiper']`), or install Swiper to silence the warning.
 
-- **Optional only:** Swiper is not a hard dependency — the built-in adapter will try the following at runtime: an ESM CDN import (when provided), a dynamic `import('swiper')` (if installed locally), or `window.Swiper` (UMD CDN). If none are available the timeline falls back to the default carousel behavior.
-- **How to enable:** set `data-use-swiper="true"` (HTML) or `useSwiper: 'true'` / `useSwiper: 'auto'` (JS). You can also provide an adapter instance or factory via `swiperAdapter` and pass Swiper options with `swiperOptions`.
-
-Examples:
-
-UMD CDN (load before `timeline.min.js` for `window.Swiper` fallback):
+UMD CDN example (provides `window.Swiper`):
 
 ```html
 <link rel="stylesheet" href="https://unpkg.com/swiper@latest/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
 <script src="dist/timeline.min.js"></script>
-```
-
-ESM CDN (module script — adapter will attempt ESM import when `useSwiper` is enabled):
-
-```html
-<script type="module">
-  import 'https://cdn.jsdelivr.net/npm/swiper@latest/swiper-bundle.esm.browser.min.js';
-  import './dist/timeline.min.js';
+<script>
   timeline(document.querySelectorAll('.timeline'), { useSwiper: 'auto' });
+  // Swiper-specific options: { swiperOptions: { loop: true } }
 </script>
 ```
-
-If you prefer bundling Swiper into your build, install it locally and update `rollup.config.js` as needed (or remove `external: ['swiper']`).
 
 ## Features
 

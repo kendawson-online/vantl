@@ -16,7 +16,9 @@
       </header>
 
       <section>
-        <div id="jq-theme-tl" class="timeline" data-test="jq-theme-tl"></div>
+        <div id="jq-theme-tl" class="timeline" data-test="jq-theme-tl">
+          <div class="timeline__wrap"><div class="timeline__items"></div></div>
+        </div>
       </section>
 
       <footer style="margin-top: 40px;">
@@ -37,10 +39,6 @@
         var $items = jQuery('#jq-theme-tl');
         // render items
         var $container = $items.find('.timeline__items');
-        if ($container.length === 0) {
-          $items.find('.timeline__wrap').append('<div class="timeline__items"></div>');
-          $container = $items.find('.timeline__items');
-        }
 
         items.forEach(function (it) {
           $container.append('<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>');

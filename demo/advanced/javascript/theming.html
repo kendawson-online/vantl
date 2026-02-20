@@ -3,49 +3,136 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Advanced — Theming</title>
+    <title>Advanced Javascript — Theming</title>
+    <!-- Timeline styles -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <!-- Demo page styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>Theming — Dynamic Colors</h1>
         <p>Apply colors at runtime based on data or rules.</p>
+        <p style="padding-top: 15px; padding-bottom: 15px;">
+          <a href="?newNodeColor=d91891&newLineColor=d9186a" class="btn secondary">Change Timeline Colors Based on URL Parameters</a>
+          <a href="theming.html" class="btn secondary">Reset URL</a>
+        </p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>        
       </header>
 
       <section>
         <div id="theme-tl" class="timeline" data-test="theme-tl"></div>
       </section>
 
-      <section class="code-block"><pre><code>// Map status -> color and render
-    timelineFromData('#theme-tl', items, {
-      nodeColor: '#4CAF50',
-      lineColor: '#81C784'
-    });</code></pre>
+      <section class="code-block"><h4>Javascript code:</h4>
+        <pre>
+<code class="language-javascript">
+// capture URL parameters
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  // load some data
+  var items = [
+    { id: 1, date: '01/01/24', heading: 'Init', summary: 'Project start' },
+    { id: 2, date: '02/01/24', heading: 'Build', summary: 'Development work' },
+    { id: 3, date: '05/01/24', heading: 'Ship', summary: 'Release' },
+    { id: 4, date: '06/01/24', heading: 'Support', summary: 'Product Support' },
+    { id: 5, date: '06/01/24', heading: 'Sales', summary: 'Ongoing Sales' }
+  ];
+
+  // set default colors
+  var nodeColor = '#2196F3';
+  var lineColor = '#64B5F6';
+
+  // variables for new colors
+  var newNodeColor = normalizeHexColor(params.newNodeColor);
+  var newLineColor = normalizeHexColor(params.newLineColor);
+
+  // if we have new values
+  if (newNodeColor && newLineColor) {
+    // use the new colors
+    timelineFromData('#theme-tl', items, { mode: 'horizontal', nodeColor: newNodeColor, lineColor: newLineColor });
+  } else {
+    // otherwise, use default colors
+    timelineFromData('#theme-tl', items, { mode: 'horizontal', nodeColor: nodeColor, lineColor: lineColor });
+  }
+
+  // validate color values being passed
+  // if they aren't valid, use default values
+  function normalizeHexColor(val) {
+    if (!val) return null;
+    var cleaned = val.trim().replace(/^#/, '');
+    if (!/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(cleaned)) return null;
+    return '#' + cleaned;
+  }
+
+});
+</code></pre>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced Javascript Examples</a>
       </footer>
 
     </div>
 
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
+     <!-- Load timeline library -->
     <script src="../../../dist/timeline.min.js"></script>
     <script>
+
+      // capture URL parameters
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+
       document.addEventListener('DOMContentLoaded', function () {
+
+        // load some data
         var items = [
-          { id: 1, title: 'Complete', content: 'Done', status: 'completed' },
-          { id: 2, title: 'In Progress', content: 'Work ongoing', status: 'in-progress' },
-          { id: 3, title: 'Pending', content: 'Planned work', status: 'pending' }
+          { id: 1, date: '01/01/24', heading: 'Init', summary: 'Project start' },
+          { id: 2, date: '02/01/24', heading: 'Build', summary: 'Development work' },
+          { id: 3, date: '05/01/24', heading: 'Ship', summary: 'Release' },
+          { id: 4, date: '06/01/24', heading: 'Support', summary: 'Product Support' },
+          { id: 5, date: '06/01/24', heading: 'Sales', summary: 'Ongoing Sales' }
         ];
 
-        // choose colors based on status for demo
+        // set default colors
         var nodeColor = '#2196F3';
         var lineColor = '#64B5F6';
 
-        timelineFromData('#theme-tl', items, { mode: 'vertical', nodeColor: nodeColor, lineColor: lineColor });
+        // variables for new colors
+        var newNodeColor = normalizeHexColor(params.newNodeColor);
+        var newLineColor = normalizeHexColor(params.newLineColor);
+
+        // if we have new values
+        if (newNodeColor && newLineColor) {
+          // use the new colors
+          timelineFromData('#theme-tl', items, { mode: 'horizontal', nodeColor: newNodeColor, lineColor: newLineColor });
+
+        } else {
+          // otherwise, use default colors
+          timelineFromData('#theme-tl', items, { mode: 'horizontal', nodeColor: nodeColor, lineColor: lineColor });
+        }
+
+        // validate color values being passed
+        // if they aren't valid, use default values
+        function normalizeHexColor(val) {
+          if (!val) return null;
+          var cleaned = val.trim().replace(/^#/, '');
+          if (!/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(cleaned)) return null;
+          return '#' + cleaned;
+        }
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 

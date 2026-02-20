@@ -236,6 +236,12 @@ function applyDataAttributes(container, config) {
   if (config.navColor !== undefined) {
     container.setAttribute('data-nav-color', config.navColor);
   }
+  if (config.sameSideNodes !== undefined) {
+    container.setAttribute('data-same-side-nodes', config.sameSideNodes);
+  }
+  if (config.useSwiper !== undefined) {
+    container.setAttribute('data-use-swiper', config.useSwiper);
+  }
 }
 
 /**

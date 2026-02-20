@@ -3,23 +3,30 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Advanced — Swiper Integration</title>
+    <title>Advanced Javascript — Swiper Integration</title>
+    <!-- Timeline styles -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <!-- Demo page styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>Swiper Integration</h1>
         <p>Demonstrates `useSwiper` option. Include Swiper CDN to enable full features.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>  
       </header>
 
       <section>
         <div id="swiper-tl" class="timeline" data-test="swiper-tl"></div>
       </section>
 
-      <section class="code-block"><pre><code>// When Swiper is available (CDN or installed), use `useSwiper: 'auto'` or `true`
+      <section class="code-block">
+        <pre><code class="language-javascript">
+    // When Swiper is available (CDN or installed), use `useSwiper: 'auto'` or `true`
     // Example CDN (include BEFORE timeline.min.js for UMD global):
     // <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
     // Example usage:
@@ -30,23 +37,32 @@
     </code></pre>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced Javascript Examples</a>
       </footer>
 
     </div>
 
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
+    <!-- Load Swiper JS -->
+    <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
+    
+    <!-- Load timeline library -->
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         var items = [
-          { id: 1, title: 'Slide 1', content: 'Content 1' },
-          { id: 2, title: 'Slide 2', content: 'Content 2' },
-          { id: 3, title: 'Slide 3', content: 'Content 3' }
+          { id: 1, date: '01/01/24', heading: 'Init', summary: 'Project start' },
+          { id: 2, date: '02/01/24', heading: 'Build', summary: 'Development work' },
+          { id: 3, date: '05/01/24', heading: 'Ship', summary: 'Release' },
+          { id: 4, date: '06/01/24', heading: 'Support', summary: 'Product Support' },
+          { id: 5, date: '06/01/24', heading: 'Sales', summary: 'Ongoing Sales' }
         ];
 
-        // useSwiper:'auto' will attempt adapter import/fallback. If Swiper missing,
-        // the engine falls back to default behavior.
+        // useSwiper:'auto' will attempt adapter import/fallback
+        // If Swiper is missing, the engine falls back to default behavior
         timelineFromData('#swiper-tl', items, { mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: false } });
       });
     </script>

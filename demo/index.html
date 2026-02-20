@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="assets/img/letter-v.svg" sizes="any" type="image/svg+xml">
     <title>Vanilla Timeline Demos</title>
     <!-- load demo specific styles -->
     <link rel="stylesheet" href="assets/css/demo.css">
@@ -130,20 +131,8 @@
 
             </div>
           </div>  
-
-          <!-- Using jQuery -->
-          <div class="card">
-            <div class="card-body">
-
-              <h3>Using jQuery</h3>
-              <img src="assets/img/idx_card_jquery.png" width="275"/>
-              <p>Learn how to use Jquery to initialize your timeline. This example assumes you have the <a href="https://jquery.com" target="_blank">jQuery</a> library loaded. <span class="txtwarning">Requires knowledge of Javascript!</span></p>
-              <p class="btn-wrapper">
-                <a class="btn danger" href="jquery/">Using jQuery</a>
-              </p>
-              
-            </div>
-          </div>          
+          
+          <!-- UNFINISHED ITEMS: -->
           
           <!-- Advanced Usage -->
           <div class="card">
@@ -153,7 +142,7 @@
               <img src="assets/img/advanced.jpg" height="110"/>
               <p>Use Javascript to generate and control timelines programmatically from other data sources (e.g. databases). <span class="txtwarning">Requires knowledge of Javascript!</span></p>
               <p class="btn-wrapper">
-                <a class="btn danger" href="advanced.html" data-test="open-advanced">Advanced Usage</a>
+                <a class="btn danger" href="advanced/" data-test="open-advanced">Advanced Usage</a>
               </p>
 
             </div>
@@ -174,6 +163,17 @@
           </div> 
 
         </main>
+
+        <section class="demo-section center" style="margin-top: 100px;">
+          <h3>Notes About Keyboard Control & Accessibility:</h3>
+          <ul style="list-style-type: none;">
+            <li>Enter/Space opens a node; Esc closes the modal.</li>
+            <li>Arrow keys navigate: Left/Right in horizontal, Up/Down in vertical layouts.</li>
+            <li>Tab/Shift+Tab stay inside the modal while it is open.</li>
+            <li>Screen readers get auto-generated labels (date + heading) when none are provided.</li>
+          </ul>
+          <p class="graytext">Tip: you can override labels with <span class="mono">aria-label</span> or <span class="mono">data-aria-label</span> on items.</p>
+        </section>
 
         <br/><br/>
 

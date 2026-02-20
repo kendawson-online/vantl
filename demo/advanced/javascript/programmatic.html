@@ -3,38 +3,53 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Advanced — Programmatic Rendering</title>
+    <title>Advanced Javascript — Programmatic Rendering</title>
+    <!-- Timeline styles -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <!-- Demo page styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>Programmatic Rendering</h1>
         <p>Use `timelineFromData()` to render timelines from arrays or API responses.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
       <section>
         <div id="prog-tl" class="timeline" data-test="prog-tl"></div>
       </section>
 
-      <section class="code-block"><pre><code>// Render timeline from JS data
+      <section class="code-block"><h4>Javascript code:</h4>
+        <pre><code class="language-javascript">
+// Render timeline from JS data
 var items = [
-  {
-    id: 1,
-    title: 'Init',
-    content: 'Project start'
+  { 
+    id: 1, 
+    date: '01/01/24', 
+    heading: 'Init', 
+    summary: 'Project start' 
   },
-  {
-    id: 2,
-    title: 'Build',
-    content: 'Development work'
+  { 
+    id: 2, 
+    date: '02/01/24', 
+    heading: 'Build', 
+    summary: 'Development work' 
   },
-  {
-    id: 3,
-    title: 'Ship',
-    content: 'Release'
+  { 
+    id: 3, 
+    date: '05/01/24', 
+    heading: 'Ship', 
+    summary: 'Release' 
+  },
+  { 
+    id: 4, 
+    date: '06/01/24', 
+    heading: 'Support', 
+    summary: 'Product Support' 
   }
 ];
 
@@ -45,22 +60,30 @@ timelineFromData('#prog-tl', items, {
 });</code></pre>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced Javascript Examples</a>
       </footer>
 
     </div>
 
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
+     <!-- Load timeline library -->
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         var items = [
-          { id: 1, title: 'Init', content: 'Project start' },
-          { id: 2, title: 'Build', content: 'Development work' },
-          { id: 3, title: 'Ship', content: 'Release' }
+          { id: 1, date: '01/01/24', heading: 'Init', summary: 'Project start' },
+          { id: 2, date: '02/01/24', heading: 'Build', summary: 'Development work' },
+          { id: 3, date: '05/01/24', heading: 'Ship', summary: 'Release' },
+          { id: 4, date: '06/01/24', heading: 'Support', summary: 'Product Support' }
         ];
 
         timelineFromData('#prog-tl', items, { mode: 'horizontal', minWidth: 600 });
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 

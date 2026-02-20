@@ -65,6 +65,12 @@ body {
 .space-right {
   margin-right: 10px;
 }
+.space-top {
+  margin-top: 10px;
+}
+.space-bottom {
+  margin-bottom: 10px;
+}
 
 .lighttext {
   opacity: 0.5;

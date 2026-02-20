@@ -1,0 +1,53 @@
+{ 
+    "nodes": [
+        { 
+            "id": 1, 
+            "date": "1960s", 
+            "heading": "Birth of the internet", 
+            "summary": "The ARPANET project", 
+            "content": "<p>Invention of packet switching.</p>" 
+        },
+        { 
+            "id": 2, 
+            "date": "1970s", 
+            "heading": "Early internet", 
+            "summary": "Networking of large mainframe computers", 
+            "content": "<p>Creation of DNS, TCP/IP.</p>" 
+        },
+        { 
+            "id": 3, 
+            "date": "1980s", 
+            "heading": "NSFNET", 
+            "summary": "Networking for research and academic orgs.", 
+            "content": "<p>Private, academic, scientific research.</p>" 
+        },
+        { 
+            "id": 4, 
+            "date": "1990s", 
+            "heading": "Early web", 
+            "summary": "Dial-up, static pages, CGI scripts.", 
+            "content": "<p>Dial-up, static pages, CGI scripts.</p>" 
+        },
+        { 
+            "id": 5, 
+            "date": "2000s", 
+            "heading": "Broadband era", 
+            "summary": "AJAX, blogs, video, social.", 
+            "content": "<p>AJAX, blogs, video, social.</p>" 
+        },
+        { 
+            "id": 6, 
+            "date": "2010s", 
+            "heading": "Mobile-first", 
+            "summary": "Responsive design, apps, CDNs.", 
+            "content": "<p>Responsive design, apps, CDNs.</p>" 
+        },
+        { 
+            "id": 7, 
+            "date": "2020s", 
+            "heading": "The AI era", 
+            "summary": "LLMs, multimodal, agents.", 
+            "content": "<p>LLMs, multimodal, agents.</p>" 
+        }
+    ]
+}
