@@ -92,7 +92,7 @@ Add one line of code at the bottom to initialize your timeline. It goes after th
 
 <br/>
 
-### <a href="https://kendawson.online/vantl/demo/bare-bones-example.html" target="_blank">View A Basic HTML Example (With Source Code)</a> 👀
+### <a href="https://kendawson.online/vantl/demo/bare-bones-example.html" target="_blank">View A Basic HTML Example</a> 👀
 
 <br/><br/>
 
@@ -169,7 +169,7 @@ See the [API Documentation](API-Documentation.md) for a more detailed descriptio
 
 <br/>
 
-A great way to use vanilla timeline is to store and load your data from an external [JSON](https://www.json.org) file. JSON stands for: "JavaScript Object Notation". 
+A great way to use Vanilla Timeline is to store and load your data from an external [JSON](https://www.json.org) file. JSON stands for: "JavaScript Object Notation". 
 
 It's a lightweight text format stored in a file with a `.json` extension. It's easy for humans to read and write and for machines to parse and use in apps. JSON is based on a web standard so you have to follow the rules to produce "well-formed JSON" that is formatted a specific way. A simple JSON file might look something like this:
 
@@ -195,7 +195,7 @@ To use JSON, you add a data attribute called `data-json-config` to your HTML to 
 
 <br/>
 
-⚠️ **Important:** if you set a `data-json-config` value, the app will prioritize JSON file settings and ignore any other data attribute values being passed inlne via HTML.
+⚠️ **Important:** if you set a `data-json-config` value, the app will prioritize JSON file settings and ignore any other data attribute values being passed inline via HTML.
 
 If you load your timeline data using the JSON method, you don't have to add the extra line of code at the bottom of the page (used to initialize the timeline). When a JSON file is loaded, the app is initialized automatically. 
 
