@@ -92,7 +92,7 @@ Add one line of code at the bottom to initialize your timeline. It goes after th
 
 <br/>
 
-### <a href="demo/bare-bones-example.html" target="_blank">View A Basic HTML Example (With Source Code)</a> 👀
+### <a href="https://kendawson.online/vantl/demo/bare-bones-example.html" target="_blank">View A Basic HTML Example (With Source Code)</a> 👀
 
 <br/><br/>
 
