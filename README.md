@@ -254,14 +254,14 @@ https://[domain name]/[page name]?timeline=[timeline ID]&id=[node id]
 ````html
     <div class="timeline__items">
         <!-- node 1 -->
-        <div class="timeline__item">
+        <div class="timeline__item" data-node-id="1">
             <div class="timeline__content">
                 <h5>Jan. 1, 2015</h5>
                 <p>Lorem ipsum dolor sit amet, qui minim labore.</p>
             </div>
         </div>
         <!-- node 2 -->
-        <div class="timeline__item">
+        <div class="timeline__item" data-node-id="2">
             <div class="timeline__content">
                 <h5>Dec. 31, 2016</h5>
                 <p>Lorem ipsum dolor sit amet, qui minim labore.</p>
