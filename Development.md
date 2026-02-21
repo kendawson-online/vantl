@@ -97,7 +97,7 @@ npm run watch
 
 The build process:
 1. Reads all modules from `src/js/` starting at `timeline.js`
-2. Extracts and minimises CSS (written to `dist/timeline.min.css` via `rollup-plugin-postcss`)
+2. Extracts and minimizes CSS (written to `dist/timeline.min.css` via `rollup-plugin-postcss`)
 3. Copies images from `src/images/` to `dist/images/`
 4. Bundles, tree-shakes, and minifies JS via `@rollup/plugin-terser`
 5. Outputs to `dist/timeline.min.js` with a `.map` sourcemap
@@ -324,10 +324,10 @@ tests/
 ├── unit/
 │   ├── colors.test.js                # Theming system
 │   ├── config.test.js                # Path resolution
-│   ├── config.reimport.test.js       # Config re-import behaviour
+│   ├── config.reimport.test.js       # Config re-import behavior
 │   ├── data-loader.test.js           # Data normalization & rendering
 │   ├── data-loader.edge.test.js      # Data-loader edge cases
-│   ├── deep-linking.test.js          # Deep-linking behaviour
+│   ├── deep-linking.test.js          # Deep-linking behavior
 │   ├── engine.test.js                # Engine helpers (resolveSide)
 │   ├── engine.cleanup.test.js        # Engine event-listener cleanup
 │   ├── keyboard.test.js              # Keyboard & ARIA navigation
@@ -335,7 +335,7 @@ tests/
 │   ├── modals.test.js                # Modal lifecycle & interactions
 │   ├── modals.extra.test.js          # Additional modal edge cases
 │   ├── timeline-engine.extra.test.js # Extra timeline-engine tests
-│   ├── timeline.init.test.js         # Timeline initialisation
+│   ├── timeline.init.test.js         # Timeline initialization
 │   └── utils.test.js                 # Utility helper functions
 └── playwright/                       # E2E browser tests (see tests/playwright/README.md)
 ```
@@ -627,7 +627,7 @@ open "demo/deeplink.html?timeline=timeline&id=3"
 
 ## Playwright E2E Tests
 
-The Playwright tests run against the full demo pages in a real (headless Chromium) browser and cover initialisation, navigation, keyboard control, deep linking, JSON loading, Swiper integration, and teardown scenarios.
+The Playwright tests run against the full demo pages in a real (headless Chromium) browser and cover initialization, navigation, keyboard control, deep linking, JSON loading, Swiper integration, and teardown scenarios.
 
 ### Quick-start with Docker (recommended)
 
@@ -688,7 +688,7 @@ npm run e2e
 npx playwright test --project=Chromium
 ```
 
-### How the tests are organised
+### How the tests are organized
 
 ```
 tests/playwright/
