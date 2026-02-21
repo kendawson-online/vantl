@@ -899,9 +899,3 @@ These can be overridden per-timeline via inline styles if needed.
 ## Questions?
 
 Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)
-
-## Demo code highlighting
-
-Demo pages can highlight code blocks using Highlight.js. For reproducible, offline demos we prefer a pinned local copy placed in `demo/assets/vendor/` (see `demo/assets/vendor/README.md`). The demo loader will attempt to use `/demo/assets/vendor/highlight.min.js` and `/demo/assets/vendor/github.min.css` when present. If those files are absent the demo will render code blocks without highlighting.
-
-If you prefer CDN-hosted assets instead, you can add the CDN links to demo pages or update `demo/assets/js/instructions.js` to fetch remote copies.
