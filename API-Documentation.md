@@ -375,8 +375,8 @@ timeline(el, { navColor: '#f2f2f2' });
   "navColor": "#f2f2f2",
   "minWidth": 600,
   "maxWidth": 600,
-  "lastupdated": "2026-01-08",
-  "data": [
+  "lastupdated": "2026-01-08T00:00:00.000Z",
+  "nodes": [
     // Array of timeline items...
   ]
 }
@@ -387,10 +387,12 @@ timeline(el, { navColor: '#f2f2f2' });
 ```json
 {
   "id": 1,
-  "title": "Event Title",
-  "content": "Event description text (truncated at 105 chars in timeline)",
+  "date": "10/01/2023",
+  "heading": "Event Title",
+  "summary": "Short text shown inside the timeline node.",
+  "content": "<p>Full HTML shown in the modal popup.</p>",
   "image": "/path/to/image.jpg",
-  "html": "<p>Optional extra HTML content</p>"
+  "ariaLabel": "Optional explicit screen-reader label"
 }
 ```
 
@@ -398,11 +400,13 @@ timeline(el, { navColor: '#f2f2f2' });
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | number/string | No | Unique identifier for deep linking |
-| `title` | string | No | Event title (shown in item and modal) |
-| `content` | string | No | Event description (truncated in item, full in modal) |
-| `image` | string | No | Image URL (handles 404 gracefully) |
-| `html` | string | No | Additional HTML content |
+| `id` | number/string | No | Unique identifier for deep linking and `data-node-id` attribute |
+| `date` | string | No | Date label displayed in the node (any format; defaults to `DD/MM/YYYY`) |
+| `heading` | string | No | Node title displayed in the item and as the modal heading |
+| `summary` | string | No | Short body text visible inside the node (truncated by CSS; Lorem Ipsum fallback) |
+| `content` | string | No | Full HTML for the modal popup (`<script>`, `<form>`, `<h1>`, `<h2>` are sanitized out) |
+| `image` | string | No | Image URL shown in the node (falls back to `missing-image.svg` on error) |
+| `ariaLabel` / `aria-label` | string | No | Explicit screen-reader label; auto-generated from `date` + `heading` when omitted |
 
 **Automatic Behavior:**
 - Items automatically get click handlers to open modals
@@ -653,22 +657,20 @@ Notes:
 
 ---
 
-### `processTimelineData(json, containerSelector)`
+### `processTimelineData(containerSelector, data, config)`
 
-Internal helper that normalizes JSON payloads into the internal item format used by rendering functions and writes configuration values to the container.
+Alias for `renderTimelineFromData()`. Renders timeline DOM nodes from a data array and applies config as data attributes. Provided for API symmetry.
 
 ```javascript
-processTimelineData(jsonObject, '#mytimeline');
+processTimelineData('#mytimeline', dataArray, { nodeColor: '#2d6cdf' });
 ```
 
 Parameters:
-- `json` (Object): The parsed JSON file contents. May include metadata (timelineName, layoutMode) and an `items` array.
-- `containerSelector` (string): Selector for the target container.
+- `containerSelector` (string): CSS selector for the target container.
+- `data` (Array): Array of timeline item objects.
+- `config` (Object, optional): Configuration applied as data attributes on the container.
 
-Returns: `Object` — normalized data object containing `items` and resolved `config`.
-
-Use cases:
-- Useful when you need to validate or transform incoming JSON before rendering (e.g., date parsing, defaulting fields).
+Returns: `HTMLElement` or `null` — same as `renderTimelineFromData()`.
 
 ---
 
@@ -942,17 +944,9 @@ Override auto-detected image path:
 
 **Default Detection:**
 - Looks for `timeline.min.js` or `timeline.js` in script tags
-- Maps `dist/` → `src/images/`
-- Maps `src/js/` → `src/images/`
-- Fallback: `../src/images` (relative to demos)
-
-### Loader Display Time
-
-```javascript
-import { setTimelineLoaderMinMs } from '@kendawson-online/vantl';
-
-setTimelineLoaderMinMs(2000); // Show loader for min 2 seconds
-```
+- `dist/timeline.min.js` → `dist/images/`
+- `src/js/timeline.js` → `src/images/`
+- Fallback: `../dist/images` (relative to demo pages)
 
 ---
 

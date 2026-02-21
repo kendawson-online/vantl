@@ -96,8 +96,11 @@ npm run watch
 - **Minifier:** `@rollup/plugin-terser`
 
 The build process:
-1. Reads all modules from `src/js/`
-5. Outputs to `dist/timeline.min.js`
+1. Reads all modules from `src/js/` starting at `timeline.js`
+2. Extracts and minimises CSS (written to `dist/timeline.min.css` via `rollup-plugin-postcss`)
+3. Copies images from `src/images/` to `dist/images/`
+4. Bundles, tree-shakes, and minifies JS via `@rollup/plugin-terser`
+5. Outputs to `dist/timeline.min.js` with a `.map` sourcemap
 
 ## Development Workflow
 
@@ -110,33 +113,34 @@ npm run watch
 ```
 
 ### 2. Test Locally
-Open demo pages in your browser:
+
+Start the local dev server (recommended):
 
 ```bash
-# Serve the project locally (simple HTTP server)
+npm run dev
+# alias: npm run serve
+```
+
+This starts `http-server` on port 8080 and opens the browser automatically. Alternatively:
+
+```bash
+# Plain Node.js http-server
 npx http-server . -p 8080
 
-# Or use Python
+# Or Python
 python3 -m http.server 8080
-
-# Then visit:
-# http://localhost:8080/demo/index.html
-# http://localhost:8080/demo/json/vertical/index.html
-
-Alternatively, use the npm script (recommended) once `http-server` is installed as a dev dependency:
-
-```bash
-# start the local dev server on port 8080
-npm run dev
-
-# (alias)
-# npm run serve
 ```
 
-Accessibility notes:
+Demo pages to check:
+- http://localhost:8080/demo/index.html
+- http://localhost:8080/demo/json/vertical/index.html
+- http://localhost:8080/demo/inline/horizontal/index.html
+- http://localhost:8080/demo/advanced/javascript/index.html
+
+**Accessibility notes:**
 - When using JSON data, each node may include an optional `ariaLabel` field (or `aria-label`) to provide a screen-reader friendly label for the node. Example:
 
-```
+```json
 {
   "id": 1,
   "date": "10/01/2023",
@@ -145,8 +149,7 @@ Accessibility notes:
 }
 ```
 
-The library will also auto-generate an accessible label from the node date and heading when an explicit `ariaLabel` is not provided. For inline HTML, use `data-aria-label` on the `.timeline__item` element to provide the same explicit label.
-```
+The library auto-generates an accessible label from the node `date` and `heading` when `ariaLabel` is not provided. For inline HTML, use `data-aria-label` on the `.timeline__item` element.
 
 Demo pages are located in `demo/` and organized by initialization method:
 - `demo/inline/` - HTML data attributes
@@ -580,8 +583,6 @@ jobs:
 4. **Avoid test interdependence** - Each test should run in isolation
 5. **Test behavior, not implementation** - Focus on "what" not "how"
 
-### Resources
-
 ### Manual Testing
 
 **Before manual testing, run unit tests:**
@@ -623,6 +624,106 @@ open "demo/deeplink.html?timeline=timeline&id=3"
 - ✅ JSON data loads and caches
 - ✅ No console errors
 - ✅ Event listeners cleaned up (check DevTools Performance)
+
+## Playwright E2E Tests
+
+The Playwright tests run against the full demo pages in a real (headless Chromium) browser and cover initialisation, navigation, keyboard control, deep linking, JSON loading, Swiper integration, and teardown scenarios.
+
+### Quick-start with Docker (recommended)
+
+No local Playwright or browser install is required. Use the published image from GHCR or build one locally.
+
+**Option 1 — Pull the published image (fastest):**
+
+```bash
+docker pull ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest
+```
+
+The image is public; no login needed. See the [packages page](https://github.com/kendawson-online/vantl/pkgs/container/vantl%2Fvantl-playwright-e2e) for available tags.
+
+**Option 2 — Build locally:**
+
+```bash
+docker build -t vantl-playwright-e2e:latest .
+```
+
+### Running the test suite
+
+```bash
+# Convenience npm script (uses the GHCR image)
+npm run test:playwright
+
+# Or run manually (mount the repo into the container)
+docker run --rm -v "$PWD":/work -w /work \
+  ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest \
+  npx playwright test --project=Chromium
+```
+
+The container starts a temporary `http-server` for the repo root and runs all tests against `http://127.0.0.1:8080/demo/`.
+
+### Running a single test file
+
+```bash
+# npm shortcut — pass the path after --
+npm run test:playwright -- tests/playwright/quick-start.spec.js
+
+# Or with docker directly
+docker run --rm -v "$PWD":/work -w /work \
+  ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest \
+  npx playwright test tests/playwright/quick-start.spec.js
+```
+
+### Running without Docker (host install)
+
+If you have Playwright and Chromium installed locally:
+
+```bash
+# Install browsers once
+npx playwright install --with-deps chromium
+
+# Run all E2E tests
+npm run e2e
+
+# Or directly
+npx playwright test --project=Chromium
+```
+
+### How the tests are organised
+
+```
+tests/playwright/
+├── quick-start.spec.js        # Basic init from HTML demo
+├── navigation.spec.js         # Prev/next button navigation
+├── keyboard.spec.js           # Keyboard & ARIA navigation
+├── json-horizontal.spec.js    # JSON auto-init (horizontal)
+├── deeplink.spec.js           # URL deep-link parameters
+├── deeplink-e2e.spec.js       # Deep-link end-to-end flow
+├── json-error.spec.js         # Error UI (bad JSON URL)
+├── multiple.spec.js           # Multiple timelines on one page
+├── programmatic.spec.js       # JS / jQuery programmatic API
+├── advanced-js.spec.js        # Advanced JavaScript demos
+├── advanced-jquery.spec.js    # Advanced jQuery demos
+├── swiper.spec.js             # Swiper carousel integration
+├── teardown.spec.js           # destroy / re-init lifecycle
+└── instructions.spec.js       # Demo page code instructions
+```
+
+### Writing new E2E tests
+
+Use `@playwright/test`:
+
+```javascript
+import { test, expect } from '@playwright/test';
+
+test('my feature works', async ({ page }) => {
+  await page.goto('/demo/json/vertical/index.html');
+  await expect(page.locator('.timeline__item')).toHaveCount(8);
+});
+```
+
+See the [Playwright docs](https://playwright.dev/docs/intro) and existing test files for patterns. The `baseURL` is pre-configured in `playwright.config.js` to `http://127.0.0.1:8080`.
+
+> **Note:** Always run `npm run build` before running E2E tests so `dist/timeline.min.js` reflects current source changes.
 
 ## Publishing
 
@@ -796,10 +897,6 @@ These can be overridden per-timeline via inline styles if needed.
 - **Testing Best Practices:** https://kentcdodds.com/blog/common-mistakes-with-react-testing-library (applies to all testing)
 
 ## Questions?
-
-Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)
-
-## Manual Testing
 
 Open an issue on GitHub: [github.com/kendawson-online/vantl/issues](https://github.com/kendawson-online/vantl/issues)
 
