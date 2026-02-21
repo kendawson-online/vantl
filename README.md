@@ -270,6 +270,27 @@ https://[domain name]/[page name]?timeline=[timeline ID]&id=[node id]
     </div>    
 ````
 
+Note: you can also add an `id` attribute directly like so:
+````html
+    <div class="timeline__items">
+        <!-- node 1 -->
+        <div class="timeline__item" id="1">
+            <div class="timeline__content">
+                <h5>Jan. 1, 2015</h5>
+                <p>Lorem ipsum dolor sit amet, qui minim labore.</p>
+            </div>
+        </div>
+        <!-- node 2 -->
+        <div class="timeline__item" id="2">
+            <div class="timeline__content">
+                <h5>Dec. 31, 2016</h5>
+                <p>Lorem ipsum dolor sit amet, qui minim labore.</p>
+            </div>
+        </div>
+    </div> 
+````
+
+
 Deep linking works automatically with JSON-loaded timelines
 
 <br/>
