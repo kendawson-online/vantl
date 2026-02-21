@@ -4,6 +4,7 @@ Vantl is a lightweight, responsive timeline library created with vanilla Javascr
 
 <table align="center">
   <tr>
+  
 ### Optional SwiperJS add-on (not bundled or supported)
 
 - Swiper is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
