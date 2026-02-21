@@ -203,9 +203,9 @@ Here are some examples of JSON files you can use as templates to build your own 
 
  - [The most basic and simplified JSON file format possible](demo/assets/data/simple-data-array.json)
 
- - [A Basic Horizontal Timeline Without Images](demo/assets/data/horiz-no-images.json)
+ - [A Basic Horizontal Timeline Without Images](demo/assets/data/horizontal-no-images.json)
 
- - [A Basic Vertical Timeline Without Images](demo/assets/data/vert-no-images.json)
+ - [A Basic Vertical Timeline Without Images](demo/assets/data/vertical-no-images.json)
 
  - [Advanced JSON template with Images and Colors](demo/assets/data/blank-template.json)
 
