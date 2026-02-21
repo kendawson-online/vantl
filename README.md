@@ -15,8 +15,14 @@ Vanilla Timeline (Vantl) is a lightweight, responsive timeline library created w
 - 📏 **Small footprint** - Minified and tree-shakeable
 
 ## Online Demo: 
-- [Horizontal Timeline](https://kendawson.online/vantl/demo/json/horizontal/)
-- [Vertical Timeline](https://kendawson.online/vantl/demo/json/vertical/)
+- [Quick Start](https://kendawson.online/vantl/demo/quick-start/)
+- [Example Horizontal Timeline](https://kendawson.online/vantl/demo/json/horizontal/)
+- [Example Vertical Timeline](https://kendawson.online/vantl/demo/json/vertical/)
+---
+
+### Screenshot
+
+<img src="demo/assets/img/timeline-screenshot.png"/>
 
 <br/>
 
