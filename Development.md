@@ -23,31 +23,54 @@ npm install
 
 ## Project Structure
 
-│   │   │   └── timeline-engine.js
-│   │   ├── features/          # Optional/modular features
-│   │   │   ├── colors.js      # Color theming
-│   │   │   ├── data-loader.js # JSON loading & rendering
-│   │   │   ├── deep-linking.js# URL-based navigation
-│   │   │   ├── error-ui.js    # Error display
-│   │   │   ├── loader-ui.js   # Loading spinner
-│   │   │   └── modals.js      # Modal popups
-│   │   ├── shared/            # Shared utilities
-│   │   │   ├── config.js      # Configuration & paths
-│   │   │   ├── state.js       # Global state management
-│   │   │   └── utils.js       # Helper functions
-│   │   └── timeline.js        # Entry point (exports all)
+```
+vantl/
+├── src/
+│   ├── js/
+│   │   ├── core/
+│   │   │   └── timeline-engine.js  # Main timeline init & DOM manipulation
+│   │   ├── features/               # Optional/modular features
+│   │   │   ├── colors.js           # Color theming
+│   │   │   ├── data-loader.js      # JSON loading & rendering
+│   │   │   ├── deep-linking.js     # URL-based navigation
+│   │   │   ├── error-ui.js         # Error display
+│   │   │   ├── keyboard.js         # Keyboard & ARIA navigation
+│   │   │   ├── layout-fallbacks.js # CSS fallbacks for missing images/summaries
+│   │   │   └── modals.js           # Modal popups
+│   │   ├── shared/                 # Shared utilities
+│   │   │   ├── config.js           # Configuration & paths
+│   │   │   ├── lipsum.js           # Lorem Ipsum placeholder text
+│   │   │   ├── state.js            # Global state management
+│   │   │   └── utils.js            # Helper functions
+│   │   └── timeline.js             # Entry point (exports all)
+│   ├── adapters/
+│   │   └── swiper-adapter.js       # Optional Swiper carousel adapter
 │   ├── css/
-│   │   └── timeline.css       # All styles
-│   └── images/                # Icons & assets
-│       ├── spinner.svg
-│       ├── missing-image.svg
-│       └── alert.svg
-├── demo/                      # Example pages & test data
-├── dist/                      # Build output (published to npm)
+│   │   └── timeline.css            # All styles
+│   └── images/                     # Icons & assets
+│       ├── alert.svg
+│       ├── arrow-left.svg
+│       ├── arrow-right.svg
+│       └── missing-image.svg
+├── demo/                           # Example pages & test data
+│   ├── inline/                     # HTML data-attribute init examples
+│   ├── json/                       # JSON auto-init examples
+│   ├── advanced/
+│   │   ├── javascript/             # JavaScript API examples
+│   │   └── jquery/                 # jQuery plugin examples
+│   ├── swiper/                     # Swiper integration examples
+│   └── assets/                     # Shared demo CSS, JS, data & vendor files
+├── tests/
+│   ├── setup.js
+│   ├── unit/                       # Vitest unit tests
+│   └── playwright/                 # Playwright E2E tests
+├── dist/                           # Build output (published to npm)
 │   ├── timeline.min.js
 │   └── timeline.min.js.map
-├── rollup.config.js           # Build configuration
-└── package.json               # Package metadata
+├── rollup.config.js                # Build configuration
+├── vitest.config.js                # Unit test configuration
+├── playwright.config.js            # E2E test configuration
+└── package.json                    # Package metadata
 ```
 
 ## Build System
@@ -127,8 +150,8 @@ The library will also auto-generate an accessible label from the node date and h
 
 Demo pages are located in `demo/` and organized by initialization method:
 - `demo/inline/` - HTML data attributes
-- `demo/javascript/` - JavaScript API
-- `demo/jquery/` - jQuery plugin
+- `demo/advanced/javascript/` - JavaScript API
+- `demo/advanced/jquery/` - jQuery plugin
 - `demo/json/` - JSON auto-init
 
 ### What to do after making code changes
@@ -171,7 +194,13 @@ The codebase is organized into three layers:
 **2. Features** (`src/js/features/`)
 - Each file is a self-contained feature
 - Can be imported independently
-- Examples: `modals.js`, `deep-linking.js`, `data-loader.js`
+- `colors.js` — color theming via CSS custom properties
+- `data-loader.js` — JSON loading & rendering
+- `deep-linking.js` — URL-based navigation to specific nodes
+- `error-ui.js` — error display overlay
+- `keyboard.js` — keyboard navigation & ARIA live-region announcements
+- `layout-fallbacks.js` — CSS class fallbacks for missing images/summaries
+- `modals.js` — modal popup lifecycle
 
 **3. Shared** (`src/js/shared/`)
 - Common utilities used across modules
@@ -288,15 +317,24 @@ afterEach(() => {
 
 ```
 tests/
-├── setup.js                  # Global test configuration
-└── unit/
-  ├── data-loader.test.js   # Data normalization & rendering
-  ├── utils.test.js         # Color utilities
-  ├── colors.test.js        # Theming system
-  ├── modals.test.js        # Modal lifecycle & interactions
-  ├── deep-linking.test.js  # Deep-linking behavior
-  ├── engine.test.js        # Engine helpers (resolveSide)
-  └── config.test.js        # Path resolution
+├── setup.js                          # Global test configuration
+├── unit/
+│   ├── colors.test.js                # Theming system
+│   ├── config.test.js                # Path resolution
+│   ├── config.reimport.test.js       # Config re-import behaviour
+│   ├── data-loader.test.js           # Data normalization & rendering
+│   ├── data-loader.edge.test.js      # Data-loader edge cases
+│   ├── deep-linking.test.js          # Deep-linking behaviour
+│   ├── engine.test.js                # Engine helpers (resolveSide)
+│   ├── engine.cleanup.test.js        # Engine event-listener cleanup
+│   ├── keyboard.test.js              # Keyboard & ARIA navigation
+│   ├── layout-fallbacks.test.js      # Layout fallback CSS classes
+│   ├── modals.test.js                # Modal lifecycle & interactions
+│   ├── modals.extra.test.js          # Additional modal edge cases
+│   ├── timeline-engine.extra.test.js # Extra timeline-engine tests
+│   ├── timeline.init.test.js         # Timeline initialisation
+│   └── utils.test.js                 # Utility helper functions
+└── playwright/                       # E2E browser tests (see tests/playwright/README.md)
 ```
 
 ### Writing Tests
@@ -564,10 +602,10 @@ open demo/json/vertical/index.html
 open demo/inline/vertical/index.html
 
 # 3. Test JavaScript API
-open demo/javascript/vertical/index.html
+open demo/advanced/javascript/index.html
 
 # 4. Test jQuery plugin
-open demo/jquery/vertical/index.html
+open demo/advanced/jquery/index.html
 
 # 5. Test deep linking
 open "demo/deeplink.html?timeline=timeline&id=3"
