@@ -401,6 +401,7 @@ You can report issues and open pull requests on GitHub:
 
 - https://github.com/kendawson-online/vantl/pulls
 
+
 ## Links
 
 **NPM Package:** [@kendawson-online/vantl](https://www.npmjs.com/package/@kendawson-online/vantl)  
@@ -413,20 +414,6 @@ You can report issues and open pull requests on GitHub:
 ## License
 
 [MIT License](LICENSE)
-
----
-
-**Note (optional Swiper integration):**
-
-You may see a Rollup warning during `npm run build` similar to:
-
-```
-(!) Unresolved dependencies
-swiper (imported by "src/adapters/swiper-adapter.js")
-```
-
-This is expected when Swiper is optional (not installed) because the adapter attempts to load Swiper at runtime via an ESM CDN, dynamic import, or `window.Swiper` (UMD). The build still completes; if you want Rollup to stop warning, add `external: ['swiper']` to `rollup.config.js`, or install `swiper` locally to include it in the bundle.
-
 
 ## Credits
 
