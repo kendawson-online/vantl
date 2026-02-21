@@ -4,15 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>jQuery — Swiper Integration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css" />
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>jQuery Swiper Integration</h1>
-        <p>Initialize timeline via jQuery with Swiper options. Include Swiper CDN before timeline for UMD global fallback.</p>
+        <p>Initialize timeline via jQuery with Swiper options. Include Swiper CDN before timeline for UMD global fallback. If Swiper fails to load, Vantl falls back to the built-in carousel UI.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
       <section>
@@ -21,13 +24,42 @@
         </div>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <section class="code-block"><h4>jQuery code:</h4>
+        <pre><code class="language-javascript">
+// In &lt;head&gt; add Swiper CSS
+// &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css" /&gt;
+
+// Include Swiper before timeline (UMD global fallback)
+// &lt;script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"&gt;&lt;/script&gt;
+
+var items = [
+  { id: 1, title: 'S1', content: 'One' },
+  { id: 2, title: 'S2', content: 'Two' },
+  { id: 3, title: 'S3', content: 'Three' }
+];
+
+var $el = jQuery('#jq-swiper-tl');
+var $items = $el.find('.timeline__items');
+
+items.forEach(function (it) {
+  $items.append('<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>');
+});
+
+$el.timeline({ mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: true } });
+        </code></pre>
+      </section>
+
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced jQuery Examples</a>
       </footer>
 
     </div>
 
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"></script>
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       jQuery(function () {
@@ -45,6 +77,9 @@
         });
 
         $el.timeline({ mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: true } });
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 

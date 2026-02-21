@@ -261,7 +261,7 @@ timeline(el, { rtlMode: true });
 **Type:** `string | boolean`  
 **Default:** `'false'`  
 **Accepted Values:** `'false'`, `'true'`, `'auto'` or boolean `true`/`false`  
-**Description:** Opt-in SwiperJS integration. When enabled the timeline will attempt to initialize a Swiper-based carousel using the built-in adapter or a custom adapter provided via `swiperAdapter`. Use `'auto'` to prefer an ESM/UMD CDN or dynamic import when available.
+**Description:** Opt-in SwiperJS integration. When enabled the timeline will attempt to initialize a Swiper-based carousel using the built-in adapter or a custom adapter provided via `swiperAdapter`. Use `'auto'` to prefer an ESM/UMD CDN or dynamic import when available. Resolution order: `options.swiperCdn` (ESM URL) → dynamic import of the installed `swiper` package → `window.Swiper` from a UMD CDN. If none are found, Vantl falls back to its built-in carousel controls. For UMD, include Swiper CSS/JS (e.g., `https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css` and `.min.js`) before loading `timeline.min.js`.
 
 ```javascript
 timeline(el, { useSwiper: 'auto', swiperOptions: { loop: true } });

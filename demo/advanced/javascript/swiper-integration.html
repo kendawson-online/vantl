@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Advanced Javascript — Swiper Integration</title>
+    <title>Advanced Javascript — SwiperJS Integration</title>
+    <!-- Load SwiperJS styles from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css" />
     <!-- Timeline styles -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <!-- Demo page styles -->
@@ -15,29 +17,39 @@
     <div class="wrapper">
 
       <header class="demo-page-head" style="margin-bottom: 60px;">
-        <h1>Swiper Integration</h1>
-        <p>Demonstrates `useSwiper` option. Include Swiper CDN to enable full features.</p>
-        <p>View the page source and read the Javascript code to see how it was done.</p>  
+        <h1>SwiperJS Integration</h1>
+        <p>Demonstrates `useSwiper` option. Include <a href="https://swiperjs.com" target="_blank">SwiperJS</a> via CDN to enable touchscreen control for your timelines. If Swiper fails to load, Vantl falls back to the built-in carousel UI.</p>
+        <p class="redtext">To use this demo, you have to load it on a touchscreen-enabled device and swipe to navigate!</p>
       </header>
 
       <section>
         <div id="swiper-tl" class="timeline" data-test="swiper-tl"></div>
+        <p class="graytext center" style="padding-top: 25px;">Note: while SwiperJS works with Vanilla Timeline, we don't officially support it. Please visit <a href="https://swiperjs.com/swiper-api" target="_blank">SwiperJS</a> for help with features or issues.</p>
       </section>
 
-      <section class="code-block">
+      <section class="code-block"><h4>Javascript code:</h4>
         <pre><code class="language-javascript">
-    // When Swiper is available (CDN or installed), use `useSwiper: 'auto'` or `true`
-    // Example CDN (include BEFORE timeline.min.js for UMD global):
-    // <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
-    // Example usage:
-    // timelineFromData('#swiper-tl', items, {
-    //   useSwiper: 'auto',
-    //   swiperOptions: { loop: true }
-    // });
+     // First, make sure you have the CSS file loaded in the document &lt;head&gt;:
+     &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css" /&gt;
+
+     // When SwiperJS is available (either via CDN or installed), use `useSwiper: 'auto'` or `true` in Vanilla Timeline
+     // Example CDN (include BEFORE timeline.min.js for UMD global):
+
+     &lt;script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"&gt;&lt;/script&gt;
+    
+     // Example usage:
+     timelineFromData('#swiper-tl', items, {
+       useSwiper: 'auto',
+       swiperOptions: { loop: true, keyboard: { enabled: true } }
+     });
     </code></pre>
       </section>
 
-      <footer style="margin: 40px 0 100px 0;">
+      <section>
+        <p class="center">View the Source Code of this page to see how SwiperJS was integrated to work with Vanilla Timeline</p>
+      </section>
+
+      <footer style="margin: 80px 0 100px 0;">
         <a class="btn" href="index.html">❮ Back to Advanced Javascript Examples</a>
       </footer>
 
@@ -46,24 +58,30 @@
     <!-- Load highligher.js (used on Demo page) -->
     <script src="../../assets/vendor/highlight.min.js"></script>
 
-    <!-- Load Swiper JS -->
-    <script src="https://unpkg.com/swiper@latest/swiper-bundle.min.js"></script>
-    
+    <!-- Load SwiperJS JS functions from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"></script>
+
     <!-- Load timeline library -->
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+
         var items = [
           { id: 1, date: '01/01/24', heading: 'Init', summary: 'Project start' },
           { id: 2, date: '02/01/24', heading: 'Build', summary: 'Development work' },
           { id: 3, date: '05/01/24', heading: 'Ship', summary: 'Release' },
           { id: 4, date: '06/01/24', heading: 'Support', summary: 'Product Support' },
-          { id: 5, date: '06/01/24', heading: 'Sales', summary: 'Ongoing Sales' }
+          { id: 5, date: '06/01/24', heading: 'Sales', summary: 'Ongoing Sales' },
+          { id: 6, date: '07/01/24', heading: 'Planning', summary: 'Start work on version 2.0' },
+          { id: 7, date: '08/01/24', heading: 'Build', summary: 'Version 2 development work' }
         ];
 
         // useSwiper:'auto' will attempt adapter import/fallback
         // If Swiper is missing, the engine falls back to default behavior
         timelineFromData('#swiper-tl', items, { mode: 'horizontal', useSwiper: 'auto', swiperOptions: { loop: false } });
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 

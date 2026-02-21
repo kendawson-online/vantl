@@ -16,7 +16,7 @@
 
       <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>API Fetch + Error Handling</h1>
-        <p>Simulate remote data loading and show fallback behavior.</p>
+        <p>Fetch remote data with a local fallback and surface errors cleanly.</p>
         <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
@@ -26,15 +26,37 @@
 
       <section class="code-block"><h4>Javascript code:</h4>
         <pre><code class="language-javascript">
-// Simulate fetch and render
-fetch('/api/timeline')
-  .then(function (res) { return res.json(); })
-  .then(function (data) {
-    return timelineFromData('#api-tl', data.nodes || data, { mode: 'horizontal' });
-  })
-  .catch(function (err) {
-    console.error('Failed to load data', err);
-  });
+// Fetch with remote-first fallback to local file
+(function loadTimeline() {
+  var sources = [
+    'https://raw.githubusercontent.com/kendawson-online/vantl/refs/heads/main/demo/assets/data/api-fetch-demo-data.json',
+    '../../../assets/data/api-fetch-demo-data.json'
+  ];
+
+  function renderError(message) {
+    var el = document.querySelector('#api-tl');
+    el.innerHTML = '<p style="padding:16px;color:#900">' + message + '</p>';
+  }
+
+  function tryFetch(url) {
+    return fetch(url, { cache: 'no-cache' })
+      .then(function (res) {
+        if (!res.ok) { throw new Error('HTTP ' + res.status); }
+        return res.json();
+      });
+  }
+
+  sources.reduce(function (attempt, url) {
+    return attempt.catch(function () { return tryFetch(url); });
+  }, Promise.reject())
+    .then(function (data) {
+      timelineFromData('#api-tl', data.nodes || data, { mode: 'horizontal', minWidth: 700 });
+    })
+    .catch(function (err) {
+      renderError('Failed to load timeline data from all sources.');
+      console.error(err);
+    });
+})();
       </code></pre>
       </section>
 
@@ -54,29 +76,37 @@ fetch('/api/timeline')
     <script>
       document.addEventListener('DOMContentLoaded', function () {
 
-        // Simulate API delay
-        function simulateApi() {
-          return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-              resolve({ nodes: [
-                { id: 1, date: '1960s', heading: 'Birth of the internet', summary: 'The ARPANET project', content: '<p>Invention of packet switching.</p>' },
-                { id: 2, date: '1970s', heading: 'Early internet', summary: 'Networking of large mainframe computers', content: '<p>Creation of DNS, TCP/IP.</p>' },
-                { id: 3, date: '1980s', heading: 'NSFNET', summary: 'Networking for research and academic orgs.', content: '<p>Private, academic, scientific research.</p>' },
-                { id: 4, date: '1990s', heading: 'Early web', summary: 'Dial-up, static pages, CGI scripts.', content: '<p>Dial-up, static pages, CGI scripts.</p>' },
-                { id: 5, date: '2000s', heading: 'Broadband era', summary: 'AJAX, blogs, video, social.', content: '<p>AJAX, blogs, video, social.</p>' },
-                { id: 6, date: '2010s', heading: 'Mobile-first', summary: 'Responsive design, apps, CDNs.', content: '<p>Responsive design, apps, CDNs.</p>' },
-                { id: 7, date: '2020s', heading: 'The AI era', summary: 'LLMs, multimodal, agents.', content: '<p>LLMs, multimodal, agents.</p>' }
-              ]});
-            }, 500);
+        function renderError(message) {
+          var el = document.querySelector('#api-tl');
+          el.innerHTML = '<p style="padding:16px;color:#900">' + message + '</p>';
+        }
+
+        function tryFetch(url) {
+          return fetch(url, { cache: 'no-cache' }).then(function (res) {
+            if (!res.ok) { throw new Error('HTTP ' + res.status); }
+            return res.json();
           });
         }
-        simulateApi().then(function (data) {
-          timelineFromData('#api-tl', data.nodes, { mode: 'horizontal', minWidth: 700 });
-        }).catch(function (err) {
-          var el = document.querySelector('#api-tl');
-          el.innerHTML = '<p style="padding:16px;color:#900">Failed to load timeline data</p>';
-          console.error(err);
-        });
+
+        function loadTimeline() {
+          var sources = [
+            'https://raw.githubusercontent.com/kendawson-online/vantl/refs/heads/main/demo/assets/data/api-fetch-demo-data.json',
+            '../../../assets/data/api-fetch-demo-data.json'
+          ];
+
+          sources.reduce(function (attempt, url) {
+            return attempt.catch(function () { return tryFetch(url); });
+          }, Promise.reject())
+            .then(function (data) {
+              timelineFromData('#api-tl', data.nodes || data, { mode: 'horizontal', minWidth: 700 });
+            })
+            .catch(function (err) {
+              renderError('Failed to load timeline data from all sources.');
+              console.error(err);
+            });
+        }
+
+        loadTimeline();
 
         // highlight blocks of code on the demo page (unrelated to example code)
         hljs.highlightAll();

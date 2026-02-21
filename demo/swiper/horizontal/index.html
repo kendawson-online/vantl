@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Vanilla Timeline - SwiperJS Add-On</title>
     <!-- Load SwiperJS styles from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css" />
     <!-- load timeline styles from dist -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <!-- load demo specific styles -->
@@ -25,7 +25,7 @@
         <h2>How to enable Swiper</h2>
         <ul>
           <li>Include Swiper CSS + JS on the page (via CDN or your bundle).</li>
-          <li>Add <span class="mono">data-use-swiper="true"</span> (or <span class="mono">useSwiper</span> in JS options) to the timeline.</li>
+          <li>Add <span class="mono">data-use-swiper="true"</span> (or <span class="mono">useSwiper</span> in JS options). <span class="mono">data-use-swiper="auto"</span> will also try Swiper when present.</li>
           <li>Call <span class="mono">timeline(...)</span> as usual; Swiper powers navigation when it is present.</li>
         </ul>
 
@@ -274,14 +274,17 @@
         <p>Swiper is a third-party library. Vantl ships an adapter that plugs into Swiper when you opt in, but Swiper itself is not bundled or officially supported. For installation, configuration, and feature questions, please refer to the <a href="https://swiperjs.com" target="_blank" rel="noreferrer">Swiper documentation</a>. If Swiper is absent, Vantl will automatically fall back to the built-in carousel controls.</p>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="../../index.html">Back to Demos</a>
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="../../index.html">❮ Back to Demos</a>
       </footer>
 
     </div>
 
     <!-- Load SwiperJS JS functions from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"></script>
+
+    <!-- Load highlighter.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
 
     <!-- load timeline.js functions -->
     <script src="../../../dist/timeline.min.js"></script>
@@ -289,6 +292,9 @@
       document.addEventListener('DOMContentLoaded', function () {
         // initialize app after document loads (uses Swiper when available)
         timeline(document.querySelectorAll('.timeline'));
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        if (window.hljs && hljs.highlightAll) hljs.highlightAll();
       });
     </script>
 

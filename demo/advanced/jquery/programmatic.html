@@ -6,13 +6,15 @@
     <title>jQuery — Programmatic</title>
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>jQuery Programmatic</h1>
         <p>Initialize timelines with the jQuery plugin.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
       <section>
@@ -21,11 +23,33 @@
         </div>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <section class="code-block"><h4>jQuery code:</h4>
+        <pre><code class="language-javascript">
+// Render items then initialize with the jQuery plugin
+var items = [
+  { id: 1, title: 'Plan', content: 'Planning' },
+  { id: 2, title: 'Do', content: 'Development' },
+  { id: 3, title: 'Check', content: 'QA' }
+];
+
+var $items = jQuery('#jq-prog-tl .timeline__items');
+items.forEach(function (it) {
+  var html = '<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>';
+  $items.append(html);
+});
+
+jQuery('#jq-prog-tl').timeline({ mode: 'horizontal', minWidth: 600 });
+        </code></pre>
+      </section>
+
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced jQuery Examples</a>
       </footer>
 
     </div>
+
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="../../../dist/timeline.min.js"></script>
@@ -45,6 +69,9 @@
         });
 
         jQuery('#jq-prog-tl').timeline({ mode: 'horizontal', minWidth: 600 });
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 

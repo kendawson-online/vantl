@@ -4,36 +4,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>jQuery — Teardown</title>
+    <!-- Timeline styles -->
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
+    <!-- Demo page styles -->
     <link rel="stylesheet" href="../../assets/css/demo.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+      <header class="demo-page-head" style="margin-bottom: 40px;">
         <h1>jQuery Teardown</h1>
         <p>Destroy and re-init pattern using jQuery-created markup.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
       <section>
         <div id="jq-teardown-tl" class="timeline" data-test="jq-teardown-tl"></div>
-        <p>
+        <p class="center">
           <button id="jq-destroy" class="btn danger" data-test="jq-teardown-destroy">Destroy</button>
           <button id="jq-reinit" class="btn success" data-test="jq-teardown-reinit">Re-init</button>
         </p>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced jQuery Examples</a>
       </footer>
 
     </div>
 
+    <!-- Load jQuery from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- Load timeline library -->
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       jQuery(function () {
+        
+        var REINIT_FLAG = 'jq-teardown-reinit-requested';
+        var pendingReinit = localStorage.getItem(REINIT_FLAG) === '1';
+        var REINIT_FLAG = 'jq-teardown-reinit-requested';
+        var pendingReinit = localStorage.getItem(REINIT_FLAG) === '1';
         var $el = jQuery('#jq-teardown-tl');
+
         function render() {
           $el.html('<div class="timeline__wrap"><div class="timeline__items">' +
             '<div class="timeline__item"><div class="timeline__content"><h5>A</h5><p>Alpha</p></div></div>' +
@@ -48,10 +59,26 @@
           console.log('jQuery teardown: DOM cleared');
         }
 
-        jQuery('#jq-destroy').on('click', destroy);
-        jQuery('#jq-reinit').on('click', function () { destroy(); render(); });
+        jQuery('#jq-destroy').on('click', function () {
+          destroy();
+          alert('Timeline has been destroyed.\nWhen you click OK, it will disappear from the DOM.\nClick "Re-init" to bring it back.');
+        });
 
-        render();
+        jQuery('#jq-reinit').on('click', function () {
+          destroy();
+          alert('Re-initializing the timeline...');
+          localStorage.setItem(REINIT_FLAG, '1');
+          location.reload();
+        });
+
+        if (pendingReinit) {
+          localStorage.removeItem(REINIT_FLAG);
+          alert('Page reload needed: after you click OK, the page will reload and the timeline will appear in the DOM with the correct CSS styling applied.');
+          render();
+        } else {
+          render();
+        }
+
       });
     </script>
 

@@ -6,13 +6,15 @@
     <title>jQuery — Theming</title>
     <link rel="stylesheet" href="../../../dist/timeline.min.css">
     <link rel="stylesheet" href="../../assets/css/demo.css">
+    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
   </head>
   <body>
 
     <div class="wrapper">
-      <header class="demo-page-head">
+      <header class="demo-page-head" style="margin-bottom: 60px;">
         <h1>jQuery Theming</h1>
         <p>Apply colors through the plugin options.</p>
+        <p>View the page source and read the Javascript code to see how it was done.</p>
       </header>
 
       <section>
@@ -21,11 +23,35 @@
         </div>
       </section>
 
-      <footer style="margin-top: 40px;">
-        <a class="btn" href="index.html">Back</a>
+      <section class="code-block"><h4>jQuery code:</h4>
+        <pre><code class="language-javascript">
+// Build items and set colors with plugin options
+var items = [
+  { id: 1, title: 'Done', content: 'Complete' },
+  { id: 2, title: 'Working', content: 'In progress' }
+];
+
+var $container = jQuery('#jq-theme-tl .timeline__items');
+items.forEach(function (it) {
+  $container.append('<div class="timeline__item"><div class="timeline__content"><h5>' + it.title + '</h5><p>' + it.content + '</p></div></div>');
+});
+
+jQuery('#jq-theme-tl').timeline({
+  mode: 'vertical',
+  nodeColor: '#FF9800',
+  lineColor: '#FFB74D'
+});
+        </code></pre>
+      </section>
+
+      <footer style="margin: 40px 0 100px 0;">
+        <a class="btn" href="index.html">❮ Back to Advanced jQuery Examples</a>
       </footer>
 
     </div>
+
+    <!-- Load highligher.js (used on Demo page) -->
+    <script src="../../assets/vendor/highlight.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="../../../dist/timeline.min.js"></script>
@@ -45,6 +71,9 @@
         });
 
         $items.timeline({ mode: 'vertical', nodeColor: '#FF9800', lineColor: '#FFB74D' });
+
+        // highlight blocks of code on the demo page (unrelated to example code)
+        hljs.highlightAll();
       });
     </script>
 
