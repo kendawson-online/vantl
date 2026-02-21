@@ -2,28 +2,6 @@
 
 Vantl is a lightweight, responsive timeline library created with vanilla Javascript for creating beautiful horizontal and vertical timelines with zero dependencies. Inspired by [timeline](https://github.com/squarechip/timeline) originally created by [squarechip](https://github.com/squarechip) in 2018. You can load your timeline data via a variety of methods and, you can include multiple timelines on a single page.
 
-<table align="center">
-  <tr>
-  
-### Optional SwiperJS add-on (not bundled or supported)
-
-- Swiper is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
-- Resolution order when `useSwiper` is enabled: `options.swiperCdn` (ESM URL) → installed `swiper` package (dynamic import) → `window.Swiper` from a UMD CDN. If none are found, Vanilla Timeline falls back to its built-in carousel controls.
-- Enable with `data-use-swiper="true"` (or boolean `true`) in HTML or `useSwiper: 'true' | 'auto' | true` in JS. Pass Swiper options via `swiperOptions`.
-- Build warning about unresolved `swiper` is expected when you have not installed it; either ignore, mark it external (e.g., `external: ['swiper']`), or install Swiper to silence the warning.
-
-UMD CDN example (provides `window.Swiper`):
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css">
-<script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"></script>
-<script src="dist/timeline.min.js"></script>
-<script>
-  timeline(document.querySelectorAll('.timeline'), { useSwiper: 'auto' });
-  // Swiper-specific options: { swiperOptions: { loop: true } }
-</script>
-```
-
 ## Features
 
 - ✨ **Zero dependencies** - Pure vanilla JavaScript (jQuery optional)
@@ -382,6 +360,25 @@ closeTimelineModal();
 
  - [API Documentation](API-Documentation.md)
  - [Development Documentation](Development.md)
+
+### Optional SwiperJS add-on (not bundled or supported)
+
+- Swiper is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
+- Resolution order when `useSwiper` is enabled: `options.swiperCdn` (ESM URL) → installed `swiper` package (dynamic import) → `window.Swiper` from a UMD CDN. If none are found, Vanilla Timeline falls back to its built-in carousel controls.
+- Enable with `data-use-swiper="true"` (or boolean `true`) in HTML or `useSwiper: 'true' | 'auto' | true` in JS. Pass Swiper options via `swiperOptions`.
+- Build warning about unresolved `swiper` is expected when you have not installed it; either ignore, mark it external (e.g., `external: ['swiper']`), or install Swiper to silence the warning.
+
+UMD CDN example (provides `window.Swiper`):
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.4.7/swiper-bundle.min.js"></script>
+<script src="dist/timeline.min.js"></script>
+<script>
+  timeline(document.querySelectorAll('.timeline'), { useSwiper: 'auto' });
+  // Swiper-specific options: { swiperOptions: { loop: true } }
+</script>
+```
 
 ## Browser Support
 
