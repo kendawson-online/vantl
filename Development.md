@@ -733,7 +733,7 @@ See the [Playwright docs](https://playwright.dev/docs/intro) and existing test f
 2. **Build production files**: `npm run build`
 3. **Verify `dist/` contains latest code**
 4. **Commit all changes** including `dist/` directory
-5. **Tag release**: `git tag v2.0.1`
+5. **Tag release**: `git tag v2.1.x`
 
 ### Notes on Optional Swiper Integration
 
