@@ -365,7 +365,7 @@ closeTimelineModal();
 
 ### Optional SwiperJS add-on (not bundled or supported)
 
-- Swiper is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
+- [SwiperJS](https://swiperjs.com) is a third-party library; Vantl only ships an adapter. You must bring Swiper yourself and consult the Swiper docs for setup and features.
 - Resolution order when `useSwiper` is enabled: `options.swiperCdn` (ESM URL) → installed `swiper` package (dynamic import) → `window.Swiper` from a UMD CDN. If none are found, Vanilla Timeline falls back to its built-in carousel controls.
 - Enable with `data-use-swiper="true"` (or boolean `true`) in HTML or `useSwiper: 'true' | 'auto' | true` in JS. Pass Swiper options via `swiperOptions`.
 - Build warning about unresolved `swiper` is expected when you have not installed it; either ignore, mark it external (e.g., `external: ['swiper']`), or install Swiper to silence the warning.
