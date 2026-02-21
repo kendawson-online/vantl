@@ -6,7 +6,7 @@
  * Resolve the base path for loading timeline assets (images, sprites, etc.)
  *
  * Auto-detects script location and maps to the correct asset directory:
- * - dist/timeline.min.js  → src/images
+ * - dist/timeline.min.js  → dist/images
  * - src/js/timeline.js    → src/images
  * - Custom override via window.TimelineConfig.basePath
  *
@@ -28,8 +28,8 @@ export const timelineBasePath = (function() {
     if (!src) continue;
     const dir = src.substring(0, src.lastIndexOf('/'));
     if (src.indexOf('timeline.min.js') !== -1) {
-      // When loading from dist, map to src/images
-      return dir.replace('/dist', '/src/images');
+      // When loading from dist, map to dist/images
+      return dir + '/images';
     }
     if (src.indexOf('timeline.js') !== -1) {
       // When loading from src/js, map to src/images
@@ -37,7 +37,7 @@ export const timelineBasePath = (function() {
     }
   }
   // Fallback relative to demo pages; most demos live under demo/**
-  return '../src/images';
+  return '../dist/images';
 })();
 
 /**

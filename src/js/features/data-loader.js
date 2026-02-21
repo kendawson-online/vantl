@@ -365,8 +365,19 @@ export function loadDataFromJson(url, containerSelector) {
     return;
   }
 
+  // Resolve URL against current page to avoid accidentally using a stale base/origin
+  const resolvedUrl = (function() {
+    try {
+      return new URL(url, window.location.href).href;
+    } catch (e) {
+      return url;
+    }
+  })();
+
+  console.info('Timeline: loading JSON from', resolvedUrl, '(from attribute', url + ')');
+
   // Check cache first
-  const cacheKey = 'timeline_cache_' + url;
+  const cacheKey = 'timeline_cache_' + resolvedUrl;
   let cachedData = null;
   let cachedTime = null;
 
@@ -384,7 +395,7 @@ export function loadDataFromJson(url, containerSelector) {
   }
 
   // Fetch JSON
-  fetch(url)
+  fetch(resolvedUrl)
     .then(response => {
       if (!response.ok) throw new Error('Failed to load: ' + response.statusText);
       return response.json();
@@ -430,7 +441,7 @@ export function loadDataFromJson(url, containerSelector) {
           showTimelineTitle(container);
         });
       } else {
-        showTimelineError(container, 'load-failed', 'Failed to load timeline data: ' + error.message);
+        showTimelineError(container, 'load-failed', 'Failed to load timeline data');
       }
     });
 }

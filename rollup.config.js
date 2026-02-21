@@ -1,6 +1,7 @@
 const path = require('path');
 const terser = require('@rollup/plugin-terser');
 const postcss = require('rollup-plugin-postcss');
+const copy = require('rollup-plugin-copy');
 
 module.exports = {
   input: 'src/js/timeline.js',
@@ -12,6 +13,11 @@ module.exports = {
       extract: path.resolve(__dirname, 'dist', 'timeline.min.css'),
       minimize: true,
       sourceMap: true
+    }),
+    copy({
+      targets: [
+        { src: 'src/images/**/*', dest: 'dist/images' }
+      ]
     }),
     terser()
   ]

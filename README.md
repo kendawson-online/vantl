@@ -215,7 +215,7 @@ Here are some examples of JSON files you can use as templates to build your own 
 
 Dates stored in JSON data files (e.g. the `lastupdated` field) are stored in a special format called ISO 8601. The vanilla timeline app expects dates to be in this specific format. 
 
-There is a [demo page](demo/time.html) which displays dates in this format for you. The page also teaches you how to generate ISO 8601 timestamps in the developer console of your own web browser. Open the [demo/time.html](demo/time.html) file in a browser to see a current ISO 8601 timestamp. You can copy/paste this date string directly to your JSON timelines.
+There is a [demo page](https://kendawson.online/vantl/demo/time.html) which displays dates in this format for you. The page also teaches you how to generate ISO 8601 timestamps in the developer console of your own web browser. Open the [demo/time.html](https://kendawson.online/vantl/demo/time.html) file in a browser to see a current ISO 8601 timestamp. You can copy/paste this date string directly to your JSON timelines.
 
 ----
 

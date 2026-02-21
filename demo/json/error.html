@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>JSON Error Handling Demo</title>
+    <!-- load timeline.css styles -->
     <link rel="stylesheet" href="../../dist/timeline.min.css">
-    <link rel="stylesheet" href="../../assets/css/demo.css">
-    <link rel="stylesheet" href="../../assets/vendor/github.min.css">
+    <!-- load demo specific styles -->
+    <link rel="stylesheet" href="../assets/css/demo.css">
+    <link rel="stylesheet" href="../assets/vendor/github.min.css">
   </head>
   <body>
 
@@ -17,7 +19,8 @@
         <p>This demo intentionally points to a missing JSON file to show the built-in error UI. The timeline stays visible with a friendly message instead of breaking.</p>
       </header>
 
-      <div id="broken-json" class="timeline" data-json-config="../../assets/data/does-not-exist.json" data-test="timeline-json-error">
+      <!-- This JSON file doesn't exist and intentionally fails to produce an error -->
+      <div id="broken-json" class="timeline" data-json-config="../assets/data/does-not-exist.json" data-test="timeline-json-error">
         <div class="timeline__wrap">
           <div class="timeline__items"></div>
         </div>
@@ -38,7 +41,7 @@
       <h2>Config snippet</h2>
 <div class="code-block"><pre><code class="language-html">
 &lt;div class="timeline"
-     data-json-config="../../assets/data/does-not-exist.json"&gt;
+    data-json-config="../assets/data/does-not-exist.json"&gt;
   &lt;div class="timeline__wrap"&gt;
     &lt;div class="timeline__items"&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -50,13 +53,16 @@
       <a class="btn secondary" href="../index.html">❮ Back to JSON Demos</a>
     </footer>
 
+    <!-- load timeline JS functions -->
     <script src="../../dist/timeline.min.js"></script>
-    <script src="../../assets/js/demo.js"></script>
-    <script src="../../assets/vendor/highlight.min.js"></script>
+    <!-- load demo specific functions -->
+    <script src="../assets/js/demo.js"></script>
+
+    <!-- load highlighter.js -->
+    <script src="../assets/vendor/highlight.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         hljs.highlightAll();
-        // This intentionally fails; no manual init required because data-json-config auto-inits
       });
     </script>
 
