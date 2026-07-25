@@ -9,6 +9,7 @@ import { modalState } from '../shared/state.js';
 
 let lastFocusedElement = null;
 let escKeyHandler = null;
+let openTimer = null;
 
 function getFocusableElements(container) {
   const focusable = container ? container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
@@ -154,8 +155,15 @@ export function openTimelineModal(itemEl) {
     }
   }
 
-  setTimeout(function() {
+  if (openTimer) {
+    clearTimeout(openTimer);
+    openTimer = null;
+  }
+
+  openTimer = setTimeout(function() {
+    openTimer = null;
     // Check if modal still exists (defensive against cleanup race conditions)
+    if (typeof document === 'undefined' || !document.body) return;
     if (modalState.modal && modalState.overlay) {
       modalState.modal.classList.add('timeline-modal-show');
       modalState.overlay.classList.add('timeline-modal-show');
@@ -178,10 +186,16 @@ export function closeTimelineModal() {
    *
    * @returns {void}
    */
+  if (openTimer) {
+    clearTimeout(openTimer);
+    openTimer = null;
+  }
   if (modalState.modal) {
     modalState.modal.classList.remove('timeline-modal-show');
     modalState.overlay.classList.remove('timeline-modal-show');
-    document.body.style.overflow = '';
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflow = '';
+    }
     if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
       lastFocusedElement.focus();
     }
@@ -194,6 +208,11 @@ export function destroyTimelineModal() {
     escKeyHandler = null;
   }
 
+  if (openTimer) {
+    clearTimeout(openTimer);
+    openTimer = null;
+  }
+
   if (modalState.modal) {
     try { modalState.modal.removeEventListener('keydown', trapFocus); } catch (_) {}
     try { modalState.modal.parentNode && modalState.modal.parentNode.removeChild(modalState.modal); } catch (_) {}
@@ -204,6 +223,8 @@ export function destroyTimelineModal() {
 
   modalState.modal = null;
   modalState.overlay = null;
-  document.body.style.overflow = '';
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = '';
+  }
   lastFocusedElement = null;
 }
