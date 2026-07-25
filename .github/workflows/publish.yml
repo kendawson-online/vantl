@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to npm (Trusted Publishing DRY RUN)
+      - name: Publish to npm (Trusted Publishing)
         env:
           NPM_CONFIG_PROVENANCE: 'true'
-        run: npm publish --access public --provenance --dry-run
+        run: npm publish --access public --provenance
