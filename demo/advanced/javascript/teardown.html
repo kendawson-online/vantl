@@ -36,11 +36,7 @@
     <script src="../../../dist/timeline.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-
-        var REINIT_FLAG = 'teardown-reinit-requested';
-        var pendingReinit = localStorage.getItem(REINIT_FLAG) === '1';
-
-        var items = [
+        const items = [
           { id: 1, title: 'A', content: 'Alpha' },
           { id: 2, title: 'B', content: 'Beta' },
           { id: 3, title: 'C', content: 'Gamma' }
@@ -51,32 +47,24 @@
           console.log('timeline initialized');
         }
 
-        function destroy(showAlert) {
-          var el = document.querySelector('#teardown-tl');
-          // Basic teardown: remove inner HTML and any global state if needed
-          el.innerHTML = '';
-          console.log('timeline destroyed (DOM cleared)');
-          if (showAlert) {
-            alert('Timeline has been destroyed.\nWhen you click OK, it will disappear from the DOM\nClick "Re-initialize Timeline" to bring it back.');
+        function destroy() {
+          // Use the library's destroy API to clean up listeners, observers, and DOM
+          if (typeof destroyTimelines === 'function') {
+            destroyTimelines();
           }
+          const el = document.querySelector('#teardown-tl');
+          el.innerHTML = '';
+          console.log('timeline destroyed');
         }
 
         document.getElementById('btn-destroy').addEventListener('click', function () {
-          destroy(true);
+          destroy();
         });
 
         document.getElementById('btn-reinit').addEventListener('click', function () {
-          destroy(false);
-          alert('Re-initializing the timeline...');
-          // We want a one-time re-init to avoid reload loops
-          localStorage.setItem(REINIT_FLAG, '1');
-          location.reload();
+          destroy();
+          init();
         });
-
-        if (pendingReinit) {
-          localStorage.removeItem(REINIT_FLAG);
-          alert('Page reload needed: after you click OK, the page will reload and the timeline will appear in the DOM with the correct CSS styling applied.');
-        }
 
         init();
       });

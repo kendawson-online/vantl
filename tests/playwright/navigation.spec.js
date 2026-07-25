@@ -1,6 +1,7 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-test('main demo navigation opens Getting Started demo', async ({ page, baseURL }) => {
+
+test('main demo navigation opens Getting Started demo', async ({ page }) => {
   await page.goto('/demo/index.html');
 
   // Navigate directly to Getting Started demo (more robust than clicking hidden links)

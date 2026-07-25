@@ -1,6 +1,4 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
-import { pathToFileURL } from 'url';
 
 test.describe('Instructions demo smoke', () => {
   test('loads demo/json/horizontal and renders instructions after timeline init', async ({ page }) => {

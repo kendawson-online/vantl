@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { timelineBasePath } from '../../src/js/shared/config.js';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('shared/config', () => {
   let originalConfig;
@@ -7,6 +6,7 @@ describe('shared/config', () => {
   beforeEach(() => {
     // Save original TimelineConfig
     originalConfig = globalThis.TimelineConfig;
+    vi.resetModules();
   });
 
   afterEach(() => {
@@ -15,16 +15,17 @@ describe('shared/config', () => {
   });
 
   describe('timelineBasePath', () => {
-    it('returns a valid path string', () => {
-      expect(typeof timelineBasePath).toBe('string');
-      expect(timelineBasePath.length).toBeGreaterThan(0);
+    it('returns a valid path string', async () => {
+      const mod = await import('../../src/js/shared/config.js');
+      expect(typeof mod.timelineBasePath).toBe('string');
+      expect(mod.timelineBasePath.length).toBeGreaterThan(0);
     });
 
-    it('respects user-provided TimelineConfig.basePath', () => {
+    it('respects user-provided TimelineConfig.basePath', async () => {
       globalThis.TimelineConfig = { basePath: '/custom/path' };
-      // Note: The module is already imported, so this test verifies the concept
-      // In real usage, users set TimelineConfig before loading the script
-      expect(globalThis.TimelineConfig.basePath).toBe('/custom/path');
+      const mod = await import('../../src/js/shared/config.js');
+      expect(mod.timelineBasePath).toBe('/custom/path');
+      globalThis.TimelineConfig = originalConfig;
     });
   });
 });

@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('teardown and re-init lifecycle works', async ({ page }) => {
   await page.goto('/demo/advanced/javascript/teardown.html');

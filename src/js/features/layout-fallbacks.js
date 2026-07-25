@@ -11,6 +11,9 @@
  * automatically applies fallbacks to new content.
  */
 
+/** @type {MutationObserver[]} Active insertion observers */
+const insertionObservers = [];
+
 /**
  * Apply .no-image class to timeline content nodes when images are absent or fail to load
  * @param {Document|HTMLElement} root - Root element to search within (defaults to document)
@@ -52,10 +55,12 @@ function applyNoSummaryFallback(root = document) {
 }
 
 /**
- * Observe timeline item containers for dynamic insertions and apply fallbacks to new content
+ * Observe timeline item containers for dynamic insertions and apply fallbacks to new content.
+ * Disconnects any existing observers first to prevent leaks when timelines are re-initialized.
  * Uses MutationObserver to watch for DOM changes in .timeline__items containers
  */
 function observeTimelineInsertions() {
+    disconnectInsertionObservers();
     const containers = document.querySelectorAll('.timeline__items');
     containers.forEach(container => {
         const mo = new MutationObserver(() => { 
@@ -63,7 +68,16 @@ function observeTimelineInsertions() {
             applyNoSummaryFallback(container); 
         });
         mo.observe(container, { childList: true, subtree: true });
+        insertionObservers.push(mo);
     });
+}
+
+/**
+ * Disconnect all active insertion observers and clear the list.
+ */
+export function disconnectInsertionObservers() {
+    insertionObservers.forEach(observer => observer.disconnect());
+    insertionObservers.length = 0;
 }
 
 /**

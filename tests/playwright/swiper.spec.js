@@ -1,11 +1,8 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
-import { pathToFileURL } from 'url';
 
 test.describe('Swiper demo smoke', () => {
   test('loads demo and finds timeline items', async ({ page }) => {
-    const fileUrl = pathToFileURL(path.join(process.cwd(), 'demo', 'swiper', 'horizontal', 'index.html')).href;
-    await page.goto(fileUrl);
+    await page.goto('/demo/swiper/horizontal/index.html');
 
     // Wait for timeline items to appear
     await page.waitForSelector('.timeline__item', { timeout: 5000 });

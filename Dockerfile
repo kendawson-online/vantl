@@ -1,7 +1,7 @@
 # Dockerfile for running Playwright E2E tests
 # Uses Playwright's official image with browsers preinstalled
 FROM mcr.microsoft.com/playwright:v1.57.0-jammy
-ARG NPM_VERSION=11.8.0
+ARG NPM_VERSION=11.16.0
 RUN npm install -g npm@$NPM_VERSION
 
 # Metadata labels for clarity
@@ -11,6 +11,12 @@ LABEL org.opencontainers.image.title="vantl-playwright-e2e" \
 	org.opencontainers.image.source="https://github.com/kendawson-online/vantl"
 
 WORKDIR /work
+# Download missing vendor files (gitignored but required by demos)
+RUN mkdir -p demo/assets/vendor && \
+    cd demo/assets/vendor && \
+    curl -s -o github.min.css https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css && \
+    curl -s -o highlight.min.js https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
+
 
 # Copy package files and install deps first for better caching
 COPY package*.json ./

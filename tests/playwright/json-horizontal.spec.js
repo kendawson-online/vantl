@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('json horizontal loads and renders items', async ({ page }) => {
   await page.goto('/demo/json/horizontal/index.html');

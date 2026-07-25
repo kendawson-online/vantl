@@ -106,12 +106,18 @@ export function showTimelineError(container, errorType, details) {
 
   const errorSolution = document.createElement('p');
   errorSolution.className = 'timeline__error-solution';
-  errorSolution.innerHTML = '<strong>Solution:</strong> ' + errorInfo.solution;
+  const solutionLabel = document.createElement('strong');
+  solutionLabel.textContent = 'Solution: ';
+  errorSolution.appendChild(solutionLabel);
+  errorSolution.appendChild(document.createTextNode(errorInfo.solution));
 
   if (details) {
     const errorDetails = document.createElement('p');
     errorDetails.className = 'timeline__error-details';
-    errorDetails.innerHTML = '<strong>Details:</strong> ' + details;
+    const detailsLabel = document.createElement('strong');
+    detailsLabel.textContent = 'Details: ';
+    errorDetails.appendChild(detailsLabel);
+    errorDetails.appendChild(document.createTextNode(details));
     errorDiv.appendChild(errorDetails);
   }
 

@@ -15,9 +15,9 @@ module.exports = {
       sourceMap: true
     }),
     copy({
-      targets: [
-        { src: 'src/images/**/*', dest: 'dist/images' }
-      ]
+      targets: {
+        'src/images/**/*': 'dist/images'
+      }
     }),
     terser()
   ]

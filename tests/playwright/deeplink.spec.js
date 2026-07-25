@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('deep link parameter loads specific timeline view', async ({ page }) => {
   // Navigate directly with a deep-link query param
