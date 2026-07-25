@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('deep link scrolls vertical timeline item into view and marks active', async ({ page }) => {
   // Navigate directly to a vertical timeline with deep-link params

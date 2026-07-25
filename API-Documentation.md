@@ -839,10 +839,7 @@ item.addEventListener('click', function(e) {
 All event listeners are tracked and cleaned up on timeline reset to prevent memory leaks.
 
 **Internal tracking:**
-```javascript
-const eventListeners = new Map();
-// Stores references for removal
-```
+Event listeners are tracked per-timeline instance in `tl.listeners` arrays and are properly removed on destroy. Resize listeners and MutationObservers are also tracked for cleanup. Use `destroyTimelines()` for full teardown.
 
 ---
 

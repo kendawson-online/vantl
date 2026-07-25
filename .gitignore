@@ -11,3 +11,16 @@ node_modules/
 docs/
 coverage/
 test-results/
+Code-Review-Notes-*.md
+
+# Environment / secrets
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor configs
+.vscode/
+.idea/

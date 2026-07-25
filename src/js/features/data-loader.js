@@ -11,7 +11,7 @@ import { applyTimelineColors } from './colors.js';
 import { handleDeepLinking } from './deep-linking.js';
 import { timeline } from '../core/timeline-engine.js';
 import { LOREM_PARAGRAPH, LOREM_FULL } from '../shared/lipsum.js';
-import { formatAccessibleDate } from '../shared/utils.js';
+import { formatAccessibleDate, generateUniqueId } from '../shared/utils.js';
 
 /**
  * Normalize raw item data to standard timeline schema
@@ -159,7 +159,7 @@ export function createItemNode(item) {
     if (normalized.id) labelText = `Node ${normalized.id}: ` + labelText;
   }
   if (labelText) {
-    const labelId = 'tl-label-' + Math.random().toString(36).slice(2, 9);
+    const labelId = generateUniqueId('tl-label');
     const sr = document.createElement('span');
     sr.className = 'sr-only';
     sr.id = labelId;

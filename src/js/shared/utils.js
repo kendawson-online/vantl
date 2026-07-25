@@ -2,6 +2,19 @@
  * Shared utility functions for color and styling calculations
  */
 
+let uniqueIdCounter = 0;
+
+/**
+ * Generate a unique, deterministic identifier string.
+ * Uses an incrementing counter instead of Math.random() to avoid collisions.
+ * @param {string} [prefix='id'] - Prefix for the generated ID
+ * @returns {string}
+ */
+export function generateUniqueId(prefix = 'id') {
+  uniqueIdCounter += 1;
+  return `${prefix}-${uniqueIdCounter}`;
+}
+
 /**
  * Get a contrasting overlay color for the given background color
  *

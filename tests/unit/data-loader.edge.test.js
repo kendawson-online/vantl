@@ -1,7 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // Mock timeline to avoid heavy initialization during tests
-vi.mock('../../src/js/core/timeline-engine.js', () => ({ timeline: vi.fn() }));
+vi.mock('../../src/js/core/timeline-engine.js', () => ({
+  timeline: vi.fn(),
+  resolveSide: vi.fn((side) => side)
+}));
 
 import { loadDataFromJson, clearTimelineCache } from '../../src/js/features/data-loader.js';
 

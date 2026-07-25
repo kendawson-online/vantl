@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('multiple timelines render on the multiple demo page', async ({ page }) => {
   await page.goto('/demo/multiple.html');

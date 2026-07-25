@@ -228,9 +228,10 @@ The codebase is organized into three layers:
 - See `timeline-engine.js` line ~470
 
 **Event Cleanup:**
-- All event listeners are tracked in a `Map`
+- Event listeners are tracked per-timeline instance (stored in `tl.listeners` arrays)
+- Resize listeners and MutationObservers are tracked and disconnected on destroy
 - Properly removed on timeline reset to prevent memory leaks
-- See `eventListeners` Map in `timeline-engine.js`
+- See `destroyTimelines()` in `timeline-engine.js`
  - Use the public `destroyTimelines()` API for SPA teardown or full re-init flows; it clears engine listeners, keyboard handlers, and modal DOM.
 
 **Color Theming:**

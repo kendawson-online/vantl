@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('quick-start timeline renders', async ({ page }) => {
   await page.goto('/demo/quick-start/index.html');

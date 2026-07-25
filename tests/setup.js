@@ -1,6 +1,8 @@
 // Global test setup for Vitest/jsdom
 // Provide minimal globals or mocks used by source modules
 
+import { vi } from 'vitest';
+
 // Ensure a global TimelineConfig placeholder exists
 globalThis.TimelineConfig = globalThis.TimelineConfig || {};
 
@@ -10,30 +12,26 @@ globalThis.TimelineConfig = globalThis.TimelineConfig || {};
 
 // Stub optional third-party packages that the app may import at runtime
 // This avoids transform errors for optional dependencies (like swiper) during unit tests
-import { vi } from 'vitest';
-try {
-	vi.mock('swiper', () => {
-		const SwiperMock = function() {
-			this.activeIndex = 0;
-		};
-		SwiperMock.prototype.slideTo = function() {};
-		SwiperMock.prototype.update = function() {};
-		SwiperMock.prototype.destroy = function() {};
-		return { default: SwiperMock, Swiper: SwiperMock };
-	});
+vi.mock('swiper', () => {
+	const SwiperMock = function() {
+		this.activeIndex = 0;
+	};
+	SwiperMock.prototype.slideTo = function() {};
+	SwiperMock.prototype.update = function() {};
+	SwiperMock.prototype.destroy = function() {};
+	return { default: SwiperMock, Swiper: SwiperMock };
+});
 
-	// Also expose a global UMD-style Swiper constructor on the window object
-	if (typeof globalThis.window !== 'undefined') {
-		globalThis.window.Swiper = (globalThis.window.Swiper || function() {
-			this.activeIndex = 0;
-		});
-		globalThis.window.Swiper.prototype.slideTo = function() {};
-		globalThis.window.Swiper.prototype.update = function() {};
-		globalThis.window.Swiper.prototype.destroy = function() {};
-	}
-} catch (e) {
-	// If mocking isn't available in this environment, ignore — tests that require swiper should guard.
+// Also expose a global UMD-style Swiper constructor on the window object
+if (typeof globalThis.window !== 'undefined') {
+	globalThis.window.Swiper = (globalThis.window.Swiper || function() {
+		this.activeIndex = 0;
+	});
+	globalThis.window.Swiper.prototype.slideTo = function() {};
+	globalThis.window.Swiper.prototype.update = function() {};
+	globalThis.window.Swiper.prototype.destroy = function() {};
 }
+
 
 // Filter SwiperAdapter warnings during unit tests to keep output focused
 (() => {

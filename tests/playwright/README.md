@@ -86,13 +86,13 @@ Push / pull the image (optional)
 GitHub Container Registry (GHCR)
 
 ```bash
-# tag for GHCR (replace <OWNER>/<REPO> with your GitHub owner/repo)
-docker tag vantl-playwright-e2e:latest ghcr.io/<OWNER>/<REPO>/vantl-playwright-e2e:latest
+# tag for GHCR
+docker tag vantl-playwright-e2e:latest ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest
 # login (use a personal access token with `packages:write` scope stored in $CR_PAT)
 echo $CR_PAT | docker login ghcr.io -u <USERNAME> --password-stdin
-docker push ghcr.io/<OWNER>/<REPO>/vantl-playwright-e2e:latest
+docker push ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest
 # pull on another machine
-docker pull ghcr.io/<OWNER>/<REPO>/vantl-playwright-e2e:latest
+docker pull ghcr.io/kendawson-online/vantl/vantl-playwright-e2e:latest
 ```
 
 Docker Hub

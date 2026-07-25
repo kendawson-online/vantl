@@ -22,12 +22,12 @@ describe('shared/config (re-import scenarios)', () => {
     expect(mod.timelineBasePath).toBe('/custom/base');
   });
 
-  it('maps timeline.min.js script location to /src/images', async () => {
+  it('maps timeline.min.js script location to /dist/images', async () => {
     const s = document.createElement('script');
     s.src = 'https://cdn.example.com/dist/timeline.min.js';
     document.head.appendChild(s);
     const mod = await import('../../src/js/shared/config.js');
-    expect(mod.timelineBasePath).toBe('https://cdn.example.com/src/images');
+    expect(mod.timelineBasePath).toBe('https://cdn.example.com/dist/images');
   });
 
   it('maps timeline.js script location to /images', async () => {
@@ -38,8 +38,8 @@ describe('shared/config (re-import scenarios)', () => {
     expect(mod.timelineBasePath).toBe('https://site.example.com/images');
   });
 
-  it('falls back to ../src/images when unable to detect script', async () => {
+  it('falls back to ../dist/images when unable to detect script', async () => {
     const mod = await import('../../src/js/shared/config.js');
-    expect(mod.timelineBasePath).toBe('../src/images');
+    expect(mod.timelineBasePath).toBe('../dist/images');
   });
 });

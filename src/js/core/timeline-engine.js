@@ -3,7 +3,7 @@ import { applyTimelineColors } from '../features/colors.js';
 import { openTimelineModal } from '../features/modals.js';
 import { timelineRegistry } from '../shared/state.js';
 import SwiperAdapter from '../../adapters/swiper-adapter.js';
-import { formatAccessibleDate } from '../shared/utils.js';
+import { formatAccessibleDate, generateUniqueId } from '../shared/utils.js';
 import { handleDeepLinking } from '../features/deep-linking.js';
 import { destroyKeyboardForTimeline } from '../features/keyboard.js';
 import { initLayoutFallbacks } from '../features/layout-fallbacks.js';
@@ -111,7 +111,7 @@ function ensureAccessibleLabelForInlineItem(itemEl) {
   }
 
   if (labelText && labelText !== '') {
-    const labelId = 'tl-label-' + Math.random().toString(36).slice(2, 9);
+    const labelId = generateUniqueId('tl-label');
     const sr = document.createElement('span');
     sr.className = 'sr-only';
     sr.id = labelId;
@@ -140,9 +140,9 @@ function enhanceInlineItems(timelineEl, items) {
 
 function createArrowSVG(direction, color) {
   if (direction === 'left') {
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="7.8" height="14" style="display:block;margin:auto;"><path fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6.8 1L1 7l5.8 6"/></svg>';
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="7.8" height="14" style="display:block;margin:auto;"><path fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6.8 1L1 7l5.8 6"/></svg>`;
   }
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="7.8" height="14" style="display:block;margin:auto;"><path fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 1l5.8 6L1 13"/></svg>';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="7.8" height="14" style="display:block;margin:auto;"><path fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 1l5.8 6L1 13"/></svg>`;
 }
 
 function clampInt(value, min, max) {
@@ -262,7 +262,7 @@ export function timeline(collection, options) {
   const warningLabel = 'Timeline:';
   let winWidth = window.innerWidth;
   let resizeTimer;
-  const eventListeners = new Map(); // Track event listeners for cleanup on destroy/reset
+
 
   const defaultSettings = {
     minWidth: { type: 'integer', defaultValue: 600 },
@@ -292,7 +292,7 @@ export function timeline(collection, options) {
    * @returns {string|null} - 'top'|'bottom'|'left'|'right' or null if sameSideNodes disabled
    * @private
    */
-  function resolveSide(settings, mode, rtl) {
+  function resolveSide__duplicate__(settings, mode, rtl) {
     // mode: 'horizontal' or 'vertical'
     const hDefault = 'top';
     const vDefault = 'left';
@@ -331,12 +331,37 @@ export function timeline(collection, options) {
     return vDefault;
   }
 
-  function testValues(value, settingName) {
-    if (typeof value !== 'number' && value % 1 !== 0) {
+  function validateInteger(value, settingName) {
+    const num = Number(value);
+    if (Number.isNaN(num) || !Number.isInteger(num)) {
       console.warn(`${warningLabel} The value "${value}" entered for the setting "${settingName}" is not an integer.`);
       return false;
     }
     return true;
+  }
+
+  /**
+   * Apply color parity from data attributes or options to a timeline element.
+   * Falls back to lowercase data attribute names for backward compatibility.
+   * @param {HTMLElement} timelineEl - Timeline container element
+   * @param {Object} [options] - Optional configuration overrides
+   */
+  function applyColorParity(timelineEl, options) {
+    const data = timelineEl.dataset;
+    const getData = function(k) {
+      return data[k] !== undefined ? data[k] : (data[k && k.toLowerCase()] !== undefined ? data[k.toLowerCase()] : undefined);
+    };
+    let nodeColor = getData('nodeColor');
+    let lineColor = getData('lineColor');
+    let navColor = getData('navColor');
+    if (options) {
+      if (options.nodeColor !== undefined) nodeColor = options.nodeColor;
+      if (options.lineColor !== undefined) lineColor = options.lineColor;
+      if (options.navColor !== undefined) navColor = options.navColor;
+    }
+    if (nodeColor || lineColor || navColor) {
+      applyTimelineColors(timelineEl, { nodeColor, lineColor, navColor });
+    }
   }
 
   function itemWrap(el, wrapper, classes) {
@@ -377,8 +402,6 @@ export function timeline(collection, options) {
   }
 
   function addTransforms(el, transform) {
-    el.style.webkitTransform = transform;
-    el.style.msTransform = transform;
     el.style.transform = transform;
   }
 
@@ -404,7 +427,7 @@ export function timeline(collection, options) {
         if (!scroller) {
           throw new Error(`${warningLabel} .timeline__items ${errorPart} .timeline__wrap`);
         } else {
-          items = [].slice.call(scroller.children, 0);
+          items = Array.from(scroller.children);
           // If there are no items yet (e.g. JSON timeline not rendered yet), skip initialization.
           if (!items || items.length === 0) {
             return;
@@ -450,7 +473,7 @@ export function timeline(collection, options) {
       }
 
       if (defaultSettings[key].type === 'integer') {
-        if (!settings[key] || !testValues(settings[key], key)) {
+        if (!settings[key] || !validateInteger(settings[key], key)) {
           settings[key] = defaultSettings[key].defaultValue;
         }
       } else if (defaultSettings[key].type === 'string') {
@@ -461,30 +484,14 @@ export function timeline(collection, options) {
       }
     });
 
-    (function applyColorParity(){
-      const data = timelineEl.dataset;
-      const getData = function(k){
-        return data[k] !== undefined ? data[k] : (data[k && k.toLowerCase()] !== undefined ? data[k.toLowerCase()] : undefined);
-      };
-      let nodeColor = getData('nodeColor');
-      let lineColor = getData('lineColor');
-      let navColor = getData('navColor');
-      if (options) {
-        if (options.nodeColor !== undefined) nodeColor = options.nodeColor;
-        if (options.lineColor !== undefined) lineColor = options.lineColor;
-        if (options.navColor !== undefined) navColor = options.navColor;
-      }
-      if (nodeColor || lineColor || navColor) {
-        applyTimelineColors(timelineEl, { nodeColor, lineColor, navColor });
-      }
-    })();
+    applyColorParity(timelineEl, options);
 
     const defaultTrigger = defaultSettings.verticalTrigger.defaultValue.match(/(\d*\.?\d*)(.*)/);
     const triggerArray = settings.verticalTrigger.match(/(\d*\.?\d*)(.*)/);
     let [, triggerValue, triggerUnit] = triggerArray;
     let triggerValid = true;
     if (!triggerValue) {
-      console.warn(`${warningLabel} No numercial value entered for the 'verticalTrigger' setting.`);
+      console.warn(`${warningLabel} No numerical value entered for the 'verticalTrigger' setting.`);
       triggerValid = false;
     }
     if (triggerUnit !== 'px' && triggerUnit !== '%') {
@@ -538,7 +545,7 @@ export function timeline(collection, options) {
     enhanceInlineItems(timelineEl, items);
 
     if (!timelineEl.id) {
-      timelineEl.setAttribute('data-timeline-id', 'timeline-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
+      timelineEl.setAttribute('data-timeline-id', generateUniqueId('timeline'));
     }
 
     // Mark as initialized to avoid duplicate initialisation attempts
@@ -560,7 +567,13 @@ export function timeline(collection, options) {
   }
 
   if (collection.length) {
-    Array.from(collection).forEach(createTimelines);
+    Array.from(collection).forEach((timelineEl) => {
+      try {
+        createTimelines(timelineEl);
+      } catch (error) {
+        console.warn(`${warningLabel} Failed to initialize timeline:`, error);
+      }
+    });
   }
 
   function setHeightandWidths(tl) {
@@ -876,7 +889,7 @@ export function timeline(collection, options) {
     });
   }
 
-  function setUpHorinzontalTimeline(tl) {
+  function setUpHorizontalTimeline(tl) {
     tl.timelineEl.classList.add('timeline--horizontal');
     // Calculate responsive scaling before layout calculations
     calculateHorizontalScale(tl.timelineEl);
@@ -1121,7 +1134,7 @@ export function timeline(collection, options) {
       }
       
       if (useHorizontalMode) {
-        setUpHorinzontalTimeline(tl);
+        setUpHorizontalTimeline(tl);
       } else {
         setUpVerticalTimeline(tl);
       }

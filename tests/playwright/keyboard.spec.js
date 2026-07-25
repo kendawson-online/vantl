@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test.describe('Keyboard navigation - inline horizontal', () => {
   test('sequential tab order and hotkeys work', async ({ page }) => {
@@ -110,7 +111,7 @@ test.describe('ARIA sr-only labels', () => {
 test.describe('Vertical mode Up/Down navigation', () => {
   test('Up/Down navigation in vertical mode', async ({ page }) => {
     await page.goto('/demo/inline/vertical/index.html');
-    const tl = page.locator('.timeline');
+    const tl = page.locator('[data-test="inline-vertical"]');
     await expect(tl).toBeVisible();
     await page.waitForSelector('.timeline__item');
 

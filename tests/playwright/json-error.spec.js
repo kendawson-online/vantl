@@ -1,4 +1,5 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+
 
 test('json error demo shows friendly error UI with icon', async ({ page }) => {
   await page.goto('/demo/json/error.html');
